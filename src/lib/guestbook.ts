@@ -1,4 +1,4 @@
-import { useWallet } from "@/contexts/near";
+import { useWallet } from "@/lib/providers/near";
 import { getProviderByNetwork, view } from "@near-js/client";
 import { parseNearAmount } from "@near-js/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";

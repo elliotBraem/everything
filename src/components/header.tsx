@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import { useWallet } from "@/contexts/near";
+import { useWallet } from "@/lib/providers/near";
 import { Link } from "@tanstack/react-router";
 
 export default function Header() {

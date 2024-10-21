@@ -1,3 +1,7 @@
+import Header from "@/components/header";
+import { ThemeProvider } from "@/components/ui/theme-provider";
+import { JazzAuth } from "@/lib/providers/jazz";
+import NearProvider from "@/lib/providers/near";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -6,9 +10,6 @@ import {
   createRootRouteWithContext
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import Header from "@/components/header";
-import NearProvider from "@/contexts/near";
-import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -29,13 +30,15 @@ function RootComponent() {
     <>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <NearProvider>
-          <div className="min-h-screen">
-            <Header />
+          <JazzAuth>
+            <div className="min-h-screen">
+              <Header />
 
-            <main className="container mx-auto px-4 py-8">
-              <Outlet />
-            </main>
-          </div>
+              <main className="container mx-auto px-4 py-8">
+                <Outlet />
+              </main>
+            </div>
+          </JazzAuth>
         </NearProvider>
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <TanStackRouterDevtools position="bottom-right" />
