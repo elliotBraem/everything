@@ -1,8 +1,11 @@
-import { createJazzReactApp, DemoAuthBasicUI, useDemoAuth } from "jazz-react";
 import { useLocation } from "@tanstack/react-router";
+import { createJazzReactApp, DemoAuthBasicUI, useDemoAuth } from "jazz-react";
 import { AuthMethod } from "jazz-tools";
+import { UserAccount } from "../schema";
 
-const Jazz = createJazzReactApp();
+const Jazz = createJazzReactApp<UserAccount>({
+  AccountSchema: UserAccount
+});
 
 export const { useAccount, useAccountOrGuest, useCoState, useAcceptInvite } =
   Jazz;
