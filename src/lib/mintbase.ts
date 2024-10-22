@@ -35,24 +35,23 @@ export function getImageData(event: ChangeEvent<HTMLInputElement>) {
 
 const formSchema = z.object({
   title: z.string().min(2, {
-    message: "title must be at least 2 characters.",
+    message: "title must be at least 2 characters."
   }),
   description: z.string().min(2, {
-    message: "description must be at least 2 characters.",
+    message: "description must be at least 2 characters."
   }),
   media: z
     .custom<FileList>()
     .transform((file) => file.length > 0 && file.item(0))
     .refine((file) => !file || (!!file && file.size <= 10 * 1024 * 1024), {
-      message: "The media must be a maximum of 10MB.",
+      message: "The media must be a maximum of 10MB."
     })
     .refine((file) => !file || (!!file && file.type?.startsWith("image")), {
-      message: "Only images are allowed to be sent.",
-    }),
+      message: "Only images are allowed to be sent."
+    })
 });
 
-
-export { formSchema }
+export { formSchema };
 
 interface SubmitData {
   title: string;
@@ -65,28 +64,24 @@ export const useMintImage = () => {
   const [preview, setPreview] = useState<string | File>("");
 
   const onSubmit = async (data: SubmitData) => {
-
     const reference = await uploadReference({
       title: typeof data?.title === "string" ? data.title : "",
-      media: data?.media as unknown as File,
+      media: data?.media as unknown as File
     });
 
     const file = uploadFile(data?.media as unknown as File);
 
-    await handleMint(
-      reference.id,
-      file
-    );
+    await handleMint(reference.id, file);
   };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { description: "", media: null, title: "" },
+    defaultValues: { description: "", media: null, title: "" }
   });
 
   async function handleMint(
     reference: string,
-    media: Promise<ArweaveResponse>,
+    media: Promise<ArweaveResponse>
   ) {
     if (reference) {
       await wallet!.signAndSendTransaction({
@@ -100,15 +95,15 @@ export const useMintImage = () => {
                 owner_id: signedAccountId,
                 metadata: JSON.stringify({
                   reference,
-                  media: (await media).id,
+                  media: (await media).id
                 }),
                 num_to_mint: 1
               },
               gas: "200000000000000",
-              deposit: "10000000000000000000000",
-            },
-          },
-        ],
+              deposit: "10000000000000000000000"
+            }
+          }
+        ]
       });
     }
   }

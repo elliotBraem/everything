@@ -50,9 +50,7 @@ export const deleteItem = (item: Thing) => {
     item.inventory?.things?.splice(found, 1);
 };
 
-export const mintItem = (item: Thing) => {
- 
-};
+export const mintItem = (item: Thing) => {};
 
 export const getInventories = (me: UserAccount) => {
   return useCoState(InventoryList, me.root?._refs.inventories?.id, [
