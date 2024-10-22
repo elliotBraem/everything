@@ -90,7 +90,7 @@ export const useMintImage = () => {
   ) {
     if (reference) {
       await wallet!.signAndSendTransaction({
-        contractId: "everything.mintspace2.testnet",
+        contractId: "everything.mintspace2.testnet", // mintbase store contract
         actions: [
           {
             type: "FunctionCall",
@@ -98,10 +98,10 @@ export const useMintImage = () => {
               methodName: "nft_batch_mint",
               args: {
                 owner_id: signedAccountId,
-                metadata: JSON.stringify({
+                metadata: {
                   reference,
                   media: (await media).id,
-                }),
+                },
                 num_to_mint: 1
               },
               gas: "200000000000000",
