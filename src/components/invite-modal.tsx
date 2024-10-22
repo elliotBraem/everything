@@ -75,15 +75,16 @@ const InviteForm = ({
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue
-                      id={selectedInventory.id}
-                    >
+                    <SelectValue id={selectedInventory.id}>
                       {selectedInventory.name}
                     </SelectValue>
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem key={selectedInventory.id} value={selectedInventory.id}>
+                  <SelectItem
+                    key={selectedInventory.id}
+                    value={selectedInventory.id}
+                  >
                     {selectedInventory.name}
                   </SelectItem>
                 </SelectContent>
@@ -218,7 +219,10 @@ const InviteModal: React.FC<InviteModalProps> = ({
 
   const onSubmit = (values) => {
     if (!selectedInventory || !values.selectedPermission) return;
-    const inviteLink = shareInventory(selectedInventory, values.selectedPermission);
+    const inviteLink = shareInventory(
+      selectedInventory,
+      values.selectedPermission
+    );
     if (!inviteLink) return;
     setInviteLink(inviteLink);
   };

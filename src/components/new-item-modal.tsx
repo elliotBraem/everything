@@ -50,7 +50,12 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const NewItemForm = ({ inventories, initialValues, onSubmit, onClose }: any) => {
+const NewItemForm = ({
+  inventories,
+  initialValues,
+  onSubmit,
+  onClose
+}: any) => {
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: initialValues
