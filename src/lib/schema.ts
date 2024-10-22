@@ -7,14 +7,14 @@ export class Thing extends CoMap {
   deleted = co.boolean;
 }
 
-export class ThingList extends CoList.Of(co.ref(Thing)) { }
+export class ThingList extends CoList.Of(co.ref(Thing)) {}
 
 export class Inventory extends CoMap {
   name = co.string;
   things = co.ref(ThingList);
 }
 
-export class InventoryList extends CoList.Of(co.ref(Inventory)) { }
+export class InventoryList extends CoList.Of(co.ref(Inventory)) {}
 
 export class UserAccountRoot extends CoMap {
   inventories = co.ref(InventoryList);
@@ -32,7 +32,7 @@ export class UserAccount extends Account {
       const firstInventory = Inventory.create(
         {
           name: "Default",
-          things: ThingList.create([], { owner: group }),
+          things: ThingList.create([], { owner: group })
         },
         { owner: group }
       );
@@ -43,7 +43,7 @@ export class UserAccount extends Account {
             data: "random data",
             type: "string",
             inventory: firstInventory,
-            deleted: false,
+            deleted: false
           },
           { owner: group }
         )
@@ -52,8 +52,8 @@ export class UserAccount extends Account {
       this.root = UserAccountRoot.create(
         {
           inventories: InventoryList.create([firstInventory], {
-            owner: this,
-          }),
+            owner: this
+          })
         },
         { owner: this }
       );

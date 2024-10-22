@@ -96,8 +96,7 @@ const NewItemModal: React.FC<NewItemModalProps> = ({
             </Alert>
           )}
         </div>
-        
-        
+
         <div>
           <label
             htmlFor="inventory"

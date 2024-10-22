@@ -3,7 +3,15 @@ import NewItemModal, { ThingFormValues } from "@/components/new-item-modal";
 import { columns } from "@/components/things/columns";
 import { DataTable } from "@/components/things/data-table";
 import { Button } from "@/components/ui/button";
-import { createInventory, createItem, deleteInventory, getInventories, getThings, getThingsByInventory, updateItem } from "@/lib/inventory";
+import {
+  createInventory,
+  createItem,
+  deleteInventory,
+  getInventories,
+  getThings,
+  getThingsByInventory,
+  updateItem
+} from "@/lib/inventory";
 import { useAccount, useCoState } from "@/lib/providers/jazz";
 import {
   Inventory,
@@ -41,7 +49,6 @@ export default function HomePage() {
     // We want to trigger this only on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const inventories = getInventories(me);
 

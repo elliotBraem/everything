@@ -24,7 +24,7 @@ export const shareInventory = (
 const InviteModal: React.FC<InviteModalProps> = ({
   isOpen,
   onClose,
-  selectedInventory,
+  selectedInventory
 }) => {
   const [selectedPermission, setSelectedPermission] = useState<
     "reader" | "writer" | "admin"
@@ -57,7 +57,7 @@ const InviteModal: React.FC<InviteModalProps> = ({
           </label>
           <select
             id="inventory"
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           >
             <option key={selectedInventory?.id} value={selectedInventory?.id}>
               {selectedInventory?.name}
@@ -73,7 +73,7 @@ const InviteModal: React.FC<InviteModalProps> = ({
           </label>
           <select
             id="permission"
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             value={selectedPermission}
             onChange={(e) =>
               setSelectedPermission(
@@ -86,14 +86,14 @@ const InviteModal: React.FC<InviteModalProps> = ({
           </select>
         </div>
         <div>
-          <h3 className="text-lg font-medium mb-2">Existing Shared Users</h3>
-          <div className="max-h-40 overflow-y-auto bg-gray-100 rounded-md p-2">
+          <h3 className="mb-2 text-lg font-medium">Existing Shared Users</h3>
+          <div className="max-h-40 overflow-y-auto rounded-md bg-gray-100 p-2">
             {invitedMembers?.length > 0 ? (
-              <ul className="list-disc list-inside">
+              <ul className="list-inside list-disc">
                 {invitedMembers.map((user) => (
                   <li
                     key={user?.id}
-                    className="text-sm flex justify-between items-center"
+                    className="flex items-center justify-between text-sm"
                   >
                     <span>{user?.profile?.name}</span>
                     <button
@@ -103,7 +103,7 @@ const InviteModal: React.FC<InviteModalProps> = ({
                           .castAs(Group)
                           ._raw.removeMember(user?._raw);
                       }}
-                      className="ml-4 bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600"
+                      className="ml-4 rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-600"
                     >
                       Remove
                     </button>
@@ -132,13 +132,13 @@ const InviteModal: React.FC<InviteModalProps> = ({
               <input
                 type="text"
                 id="inviteLink"
-                className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md text-sm border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                className="block w-full min-w-0 flex-1 rounded-none rounded-l-md border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
                 value={inviteLink}
                 readOnly
               />
               <Button
                 type="button"
-                className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 text-gray-500 text-sm"
+                className="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 px-3 text-sm text-gray-500"
                 onClick={() => navigator.clipboard.writeText(inviteLink)}
               >
                 Copy

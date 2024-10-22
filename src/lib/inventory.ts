@@ -1,29 +1,37 @@
 import { ThingFormValues } from "@/components/new-item-modal";
 import { CoMapInit, Group } from "jazz-tools";
 import { useCoState } from "./providers/jazz";
-import { Inventory, InventoryList, Thing, ThingList, UserAccount } from "./schema";
+import {
+  Inventory,
+  InventoryList,
+  Thing,
+  ThingList,
+  UserAccount
+} from "./schema";
 
 export const getThings = (me: UserAccount) => {
-  return me.root?.inventories?.flatMap(
-    (inventory) =>
-      inventory?.things?.filter(
-        (thing): thing is Exclude<typeof thing, null> => !!thing
-      ) || []
-  ) || [];
-}
+  return (
+    me.root?.inventories?.flatMap(
+      (inventory) =>
+        inventory?.things?.filter(
+          (thing): thing is Exclude<typeof thing, null> => !!thing
+        ) || []
+    ) || []
+  );
+};
 
 export const getThingsByInventory = (me: UserAccount, inventory: Inventory) => {
   const things = getThings(me);
   return inventory
-  ? things?.filter(
-      (item) => item?.inventory?.id === inventory.id && !item.deleted
-    )
-  : things?.filter((item) => !item?.deleted);
-}
+    ? things?.filter(
+        (item) => item?.inventory?.id === inventory.id && !item.deleted
+      )
+    : things?.filter((item) => !item?.deleted);
+};
 
 export const createItem = (item: CoMapInit<Thing>): Thing => {
   const thing = Thing.create(item, {
-    owner: item.inventory!._owner,
+    owner: item.inventory!._owner
   });
   thing.inventory?.things?.push(thing);
   return thing;
@@ -35,21 +43,18 @@ export const updateItem = (item: Thing, values: ThingFormValues): Thing => {
 };
 
 export const deleteItem = (item: Thing) => {
-  const found = item.inventory?.things?.findIndex(
-    (it) => {
-      return it?.id === item.id
-    }
-  );
-  if (found !== undefined && found > -1) item.inventory?.things?.splice(found, 1);
-}
+  const found = item.inventory?.things?.findIndex((it) => {
+    return it?.id === item.id;
+  });
+  if (found !== undefined && found > -1)
+    item.inventory?.things?.splice(found, 1);
+};
 
 export const getInventories = (me: UserAccount) => {
-  return useCoState(
-    InventoryList,
-    me.root?._refs.inventories?.id,
-    [{ things: [{}] }]
-  );
-}
+  return useCoState(InventoryList, me.root?._refs.inventories?.id, [
+    { things: [{}] }
+  ]);
+};
 
 export const createInventory = (
   inventoryName: string,
@@ -73,4 +78,4 @@ export const deleteInventory = (
   );
   if (inventoryIndex !== undefined && inventoryIndex > -1)
     me.root?.inventories?.splice(inventoryIndex, 1);
-}
+};
