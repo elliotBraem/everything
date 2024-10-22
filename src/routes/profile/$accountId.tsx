@@ -17,7 +17,7 @@ export default function ProfilePage() {
         <h2 className="text-2xl font-bold">{accountId}'s profile</h2>
         {accountId === signedAccountId ? (
           <Button
-            className="w-full bg-blue-600 text-white transition-all hover:bg-blue-700 focus:scale-95"
+            className="w-full transition-all focus:scale-95"
             onClick={() => wallet!.signOut()}
           ></Button>
         ) : null}

@@ -1,4 +1,4 @@
-import { deleteItem } from "@/lib/inventory";
+import { deleteItem, mintItem } from "@/lib/inventory";
 import { Thing } from "@/lib/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { Group } from "jazz-tools";
@@ -61,7 +61,7 @@ export const columns: ColumnDef<unknown>[] = [
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => deleteItem(thing)}>
-              delete
+              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

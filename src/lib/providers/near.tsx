@@ -30,7 +30,8 @@ type NearProviderProps = {
   children: React.ReactNode;
 };
 
-const getNearContract = (networkId: NetworkId) => GUESTBOOK_CONTRACT[networkId];
+// const getNearContract = (networkId: NetworkId) => GUESTBOOK_CONTRACT[networkId];
+const getNearContract = (networkId: NetworkId) => "everything.mintspace2.testnet";
 
 export default function NearProvider({ children }: NearProviderProps) {
   const { setWallet, setSignedAccountId, networkId } = useWallet();

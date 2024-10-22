@@ -1,4 +1,5 @@
 import InviteModal from "@/components/invite-modal";
+import { MintModal } from "@/components/mint-modal";
 import NewItemModal, { ThingFormValues } from "@/components/new-item-modal";
 import { columns } from "@/components/things/columns";
 import { DataTable } from "@/components/things/data-table";
@@ -13,14 +14,8 @@ import {
   getThingsByInventory,
   updateItem
 } from "@/lib/inventory";
-import { useAccount, useCoState } from "@/lib/providers/jazz";
-import {
-  Inventory,
-  InventoryList,
-  Thing,
-  ThingList,
-  UserAccount
-} from "@/lib/schema";
+import { useAccount } from "@/lib/providers/jazz";
+import { Inventory, Thing } from "@/lib/schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { CoMapInit, Group, ID } from "jazz-tools";
 import { useEffect, useState } from "react";
@@ -57,6 +52,7 @@ export default function HomePage() {
     Inventory | undefined
   >();
   const [isNewItemModalOpen, setIsNewItemModalOpen] = useState(false);
+  const [isMintItemModalOpen, setIsMintItemModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isNewInventoryInputVisible, setIsNewInventoryInputVisible] =
     useState(false);
@@ -183,6 +179,9 @@ export default function HomePage() {
           >
             New Item
           </Button>
+          <Button onClick={() => setIsMintItemModalOpen(true)}>
+            Mint Item
+          </Button>
           <Button
             onClick={() => setIsInviteModalOpen(true)}
             disabled={
@@ -226,6 +225,10 @@ export default function HomePage() {
           selectedInventory={selectedInventory}
         />
       ) : null}
+      <MintModal
+        isOpen={isMintItemModalOpen}
+        onClose={() => setIsMintItemModalOpen(false)}
+      />
     </div>
   );
 }
