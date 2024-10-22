@@ -50,7 +50,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const MyForm = ({ inventories, initialValues, onSubmit, onClose }: any) => {
+const NewItemForm = ({ inventories, initialValues, onSubmit, onClose }: any) => {
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: initialValues
@@ -180,7 +180,7 @@ const NewItemModal: React.FC<NewItemModalProps> = ({
       onClose={onClose}
       title={initialValues ? "Edit Password" : "Add New Password"}
     >
-      <MyForm
+      <NewItemForm
         initialValues={initialValues}
         inventories={inventories}
         onSubmit={onSubmit}

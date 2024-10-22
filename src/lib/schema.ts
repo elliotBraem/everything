@@ -27,7 +27,6 @@ export class UserAccount extends Account {
   migrate(this: UserAccount, creationProps?: { name: string }) {
     super.migrate(creationProps);
     if (!this._refs.root) {
-      console.log("doing first");
       const group = Group.create({ owner: this });
       const firstInventory = Inventory.create(
         {

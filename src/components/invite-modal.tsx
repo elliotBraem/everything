@@ -5,6 +5,24 @@ import { Group } from "jazz-tools";
 import { Inventory } from "@/lib/schema";
 import { createInviteLink } from "jazz-react";
 import { Input } from "./ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "./ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "./ui/select";
 
 interface InviteModalProps {
   isOpen: boolean;
@@ -12,80 +30,96 @@ interface InviteModalProps {
   selectedInventory: Inventory | undefined;
 }
 
-export const shareInventory = (
-  inventory: Inventory,
-  permission: "reader" | "writer" | "admin"
-): string | undefined => {
-  if (inventory._owner && inventory.id) {
-    return createInviteLink(inventory, permission);
+// Define Zod schema for form validation
+const schema = z.object({
+  inventory: z.string().min(1, { message: "Must select an inventory" }),
+  permission: z.string().min(1, { message: "Must select a permission" })
+});
+
+type FormData = z.infer<typeof schema>;
+
+const availablePermissions = [
+  {
+    id: "reader",
+    name: "reader"
+  },
+  {
+    id: "writer",
+    name: "writer"
+  },
+  {
+    id: "admin",
+    name: "admin"
   }
-  return undefined;
-};
+];
 
-const InviteModal: React.FC<InviteModalProps> = ({
-  isOpen,
-  onClose,
-  selectedInventory
-}) => {
-  const [selectedPermission, setSelectedPermission] = useState<
-    "reader" | "writer" | "admin"
-  >("reader");
-  const [inviteLink, setInviteLink] = useState("");
-
-  const members = selectedInventory?._owner.castAs(Group).members;
-  const invitedMembers = members
-    ? members
-        .filter((m) => !m.account?.isMe && m.role !== "revoked")
-        .map((m) => m.account)
-    : [];
-
-  const handleCreateInviteLink = () => {
-    if (!selectedInventory || !selectedPermission) return;
-    const inviteLink = shareInventory(selectedInventory, selectedPermission);
-    if (!inviteLink) return;
-    setInviteLink(inviteLink);
-  };
-
+const InviteForm = ({
+  selectedInventory,
+  invitedMembers,
+  onSubmit,
+  onClose
+}: any) => {
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema)
+  });
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} title="Invite Users">
-      <div className="space-y-4">
-        <div>
-          <label
-            htmlFor="inventory"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Select Inventory to Share
-          </label>
-          <select
-            id="inventory"
-            className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-          >
-            <option key={selectedInventory?.id} value={selectedInventory?.id}>
-              {selectedInventory?.name}
-            </option>
-          </select>
-        </div>
-        <div>
-          <label
-            htmlFor="permission"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Select Permission
-          </label>
-          <select
-            id="permission"
-            className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-            value={selectedPermission}
-            onChange={(e) =>
-              setSelectedPermission(
-                e.target.value as "reader" | "writer" | "admin"
-              )
-            }
-          >
-            <option value="reader">Reader</option>
-            <option value="writer">Writer</option>
-          </select>
-        </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Inventory Field */}
+        <FormField
+          name="inventory"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Inventory</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue
+                      id={selectedInventory.id}
+                    >
+                      {selectedInventory.name}
+                    </SelectValue>
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem key={selectedInventory.id} value={selectedInventory.id}>
+                    {selectedInventory.name}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Permission Field */}
+        <FormField
+          name="permission"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Inventory</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select permission" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {availablePermissions.map(
+                    (permission: { id: string; name: string }) => (
+                      <SelectItem key={permission.id} value={permission.id}>
+                        {permission.name}
+                      </SelectItem>
+                    )
+                  )}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Invited Members */}
         <div>
           <h3 className="mb-2 text-lg font-medium">Existing Shared Users</h3>
           <div className="max-h-40 overflow-y-auto rounded-md bg-gray-100 p-2">
@@ -118,10 +152,9 @@ const InviteModal: React.FC<InviteModalProps> = ({
             )}
           </div>
         </div>
-        <Button onClick={handleCreateInviteLink} className="w-full">
-          Create Invite Link
-        </Button>
-        {inviteLink && (
+
+        <Button type="submit">Create Invite Link</Button>
+        {/* {inviteLink && (
           <div className="mt-4">
             <label
               htmlFor="inviteLink"
@@ -146,8 +179,58 @@ const InviteModal: React.FC<InviteModalProps> = ({
               </Button>
             </div>
           </div>
-        )}
-      </div>
+        )} */}
+
+        {/* Actions */}
+        <div className="flex justify-end space-x-2">
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+};
+
+export const shareInventory = (
+  inventory: Inventory,
+  permission: "reader" | "writer" | "admin"
+): string | undefined => {
+  if (inventory._owner && inventory.id) {
+    return createInviteLink(inventory, permission);
+  }
+  return undefined;
+};
+
+const InviteModal: React.FC<InviteModalProps> = ({
+  isOpen,
+  onClose,
+  selectedInventory
+}) => {
+  const [inviteLink, setInviteLink] = useState("");
+
+  const members = selectedInventory?._owner.castAs(Group).members;
+  const invitedMembers = members
+    ? members
+        .filter((m) => !m.account?.isMe && m.role !== "revoked")
+        .map((m) => m.account)
+    : [];
+
+  const onSubmit = (values) => {
+    if (!selectedInventory || !values.selectedPermission) return;
+    const inviteLink = shareInventory(selectedInventory, values.selectedPermission);
+    if (!inviteLink) return;
+    setInviteLink(inviteLink);
+  };
+
+  return (
+    <BaseModal isOpen={isOpen} onClose={onClose} title="Invite Users">
+      <InviteForm
+        selectedInventory={selectedInventory}
+        onSubmit={onSubmit}
+        invitedMembers={invitedMembers}
+        onClose={onClose}
+      />
     </BaseModal>
   );
 };
