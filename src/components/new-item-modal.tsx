@@ -1,11 +1,29 @@
 import React, { useEffect } from "react";
-import { SubmitHandler, useForm, FieldValues } from "react-hook-form";
-import BaseModal from "./base-modal";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "./ui/button";
+import BaseModal from "./ui/modal";
 // import { Alert, AlertDescription } from "./alert";
 import { Inventory } from "@/lib/schema";
 import { CoMap } from "jazz-tools";
-import { Alert, AlertDescription } from "./ui/alert";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "./ui/form";
+import { Input } from "./ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "./ui/select";
 
 export interface ThingFormValues extends FieldValues {
   data?: string;
@@ -22,6 +40,92 @@ interface NewItemModalProps {
   inventories: Inventory[];
   selectedInventory: Inventory | undefined;
 }
+
+// Define Zod schema for form validation
+const schema = z.object({
+  data: z.string().min(1, { message: "Data is required" }),
+  type: z.string().min(1, { message: "Type is required" }),
+  inventory: z.string().min(1, { message: "Must select an inventory" })
+});
+
+type FormData = z.infer<typeof schema>;
+
+const MyForm = ({ inventories, initialValues, onSubmit, onClose }: any) => {
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: initialValues
+  });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Data Field */}
+        <FormField
+          name="data"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Data</FormLabel>
+              <FormControl>
+                <Input {...field} id="data" placeholder="Enter your data" />
+              </FormControl>
+              {/* <FormMessage>{form.data?.message}</FormMessage> */}
+            </FormItem>
+          )}
+        />
+
+        {/* Type Field */}
+        <FormField
+          name="type"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Type</FormLabel>
+              <FormControl>
+                <Input {...field} id="type" placeholder="Enter your type" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Inventory Field */}
+        <FormField
+          name="inventory"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Inventory</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select inventory" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {inventories.map((inventory: Inventory) => (
+                    <SelectItem key={inventory.id} value={inventory.id}>
+                      {inventory.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Actions */}
+        <div className="flex justify-end space-x-2">
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit">{initialValues ? "Update" : "Save"}</Button>
+        </div>
+      </form>
+    </Form>
+  );
+};
 
 const NewItemModal: React.FC<NewItemModalProps> = ({
   isOpen,
@@ -76,67 +180,12 @@ const NewItemModal: React.FC<NewItemModalProps> = ({
       onClose={onClose}
       title={initialValues ? "Edit Password" : "Add New Password"}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label
-            htmlFor="data"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Data
-          </label>
-          <input
-            type="text"
-            {...register("data", { required: "Data is required" })}
-            id="data"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          />
-          {errors.name && (
-            <Alert variant="destructive">
-              <AlertDescription>{errors.name.message}</AlertDescription>
-            </Alert>
-          )}
-        </div>
-
-        <div>
-          <label
-            htmlFor="inventory"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Inventory
-          </label>
-          <select
-            {...register("inventory", { required: "Must select a inventory" })}
-            id="inventory"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          >
-            <option value="">Select a inventory</option>
-            {inventories.map((inventory: Inventory) => (
-              <option
-                key={inventory.id}
-                value={inventory.id}
-                selected={
-                  initialValues
-                    ? initialValues?.inventory?.id === inventory.id
-                    : selectedInventory?.id === inventory.id
-                }
-              >
-                {inventory.name}
-              </option>
-            ))}
-          </select>
-          {errors.inventory && (
-            <Alert variant="destructive">
-              <AlertDescription>{errors.inventory.message}</AlertDescription>
-            </Alert>
-          )}
-        </div>
-        <div className="flex justify-end space-x-2">
-          <Button type="button" variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button type="submit">{initialValues ? "Update" : "Save"}</Button>
-        </div>
-      </form>
+      <MyForm
+        initialValues={initialValues}
+        inventories={inventories}
+        onSubmit={onSubmit}
+        onClose={onClose}
+      />
     </BaseModal>
   );
 };

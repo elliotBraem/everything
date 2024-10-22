@@ -3,6 +3,7 @@ import NewItemModal, { ThingFormValues } from "@/components/new-item-modal";
 import { columns } from "@/components/things/columns";
 import { DataTable } from "@/components/things/data-table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   createInventory,
   createItem,
@@ -158,11 +159,10 @@ export default function HomePage() {
           ))}
           {isNewInventoryInputVisible ? (
             <div className="flex gap-2">
-              <input
+              <Input
                 type="text"
                 value={newInventoryName}
                 onChange={(e) => setNewInventoryName(e.target.value)}
-                className="rounded border px-2 py-1"
               />
               <Button onClick={handleCreateInventory}>Save</Button>
             </div>

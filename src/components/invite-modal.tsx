@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import BaseModal from "./base-modal";
+import BaseModal from "./ui/modal";
 import { Button } from "./ui/button";
 import { Group } from "jazz-tools";
 import { Inventory } from "@/lib/schema";
 import { createInviteLink } from "jazz-react";
+import { Input } from "./ui/input";
 
 interface InviteModalProps {
   isOpen: boolean;
@@ -129,10 +130,10 @@ const InviteModal: React.FC<InviteModalProps> = ({
               Invite Link
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <input
+              <Input
                 type="text"
                 id="inviteLink"
-                className="block w-full min-w-0 flex-1 rounded-none rounded-l-md border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                // className="block w-full min-w-0 flex-1 rounded-none rounded-l-md border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
                 value={inviteLink}
                 readOnly
               />
