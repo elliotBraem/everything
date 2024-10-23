@@ -1,3 +1,4 @@
+import AIAssistantComponent from "@/components/ai-assistant";
 import { Inspect } from "@/components/inspect";
 import { CreateThing } from "@/components/thing/create";
 import { createItem, getInventories } from "@/lib/inventory";
@@ -61,7 +62,8 @@ function LayoutComponent() {
             //     allowFullScreen
             //   />
             // </div>
-            <CreateThing availableTypes={["thing"]} onSubmit={handleSubmit} />
+            <AIAssistantComponent />
+            // <CreateThing availableTypes={["thing"]} onSubmit={handleSubmit} />
           }
           // mode="dialog"
         />
