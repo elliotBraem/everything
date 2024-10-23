@@ -15,7 +15,7 @@ function JazzAndAuth({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {state.errors.map(error => (
+      {state.errors.map((error) => (
         <div key={error}>{error}</div>
       ))}
       {auth ? (

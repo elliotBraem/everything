@@ -115,7 +115,7 @@ const AIAssistantComponent: React.FC = () => {
 
       // If create or update intent is found, handle accordingly
       if (createIntent || updateIntent) {
-        const inventory =  inventories?.at(0); // Get default inventory or from user's context
+        const inventory = inventories?.at(0); // Get default inventory or from user's context
         const thing = handleCreateOrUpdateThing(
           { createIntent, updateIntent, parsedData },
           inventory
