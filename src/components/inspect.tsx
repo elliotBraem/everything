@@ -44,13 +44,13 @@ export function Inspect({ trigger, content, mode = "sheet" }) {
               {trigger}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
+              {/* <DialogHeader>
                 <DialogTitle>Edit profile</DialogTitle>
                 <DialogDescription>
                   Make changes to your profile here. Click save when you're
                   done.
                 </DialogDescription>
-              </DialogHeader>
+              </DialogHeader> */}
               {content}
             </DialogContent>
           </Dialog>
@@ -64,13 +64,13 @@ export function Inspect({ trigger, content, mode = "sheet" }) {
             <SheetContent className="w-full max-w-[768px]">
               {" "}
               {/* Sheet content size adjustments */}
-              <SheetHeader>
+              {/* <SheetHeader>
                 <SheetTitle>Edit profile</SheetTitle>
                 <SheetDescription>
                   Make changes to your profile here. Click save when you're
                   done.
                 </SheetDescription>
-              </SheetHeader>
+              </SheetHeader> */}
               {content}
               <SheetFooter className="pt-2">
                 <SheetClose asChild>
@@ -89,12 +89,12 @@ export function Inspect({ trigger, content, mode = "sheet" }) {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left">
+        {/* <DrawerHeader className="text-left">
           <DrawerTitle>Edit profile</DrawerTitle>
           <DrawerDescription>
             Make changes to your profile here. Click save when you're done.
           </DrawerDescription>
-        </DrawerHeader>
+        </DrawerHeader> */}
         <div className="px-4">{content}</div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
