@@ -20,11 +20,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CoMapInit, Group, ID } from "jazz-tools";
 import { useEffect, useState } from "react";
 
-export const Route = createFileRoute("/")({
-  component: HomePage
+export const Route = createFileRoute("/inventory")({
+  component: InventoryPage
 });
 
-export default function HomePage() {
+export default function InventoryPage() {
   const { me } = useAccount();
 
   const [inventoryId, setInventoryId] = useState<ID<Inventory> | undefined>(
@@ -132,6 +132,7 @@ export default function HomePage() {
         </Alert>
       )} */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+        {/* REPLACE WITH TABS */}
         <div className="flex flex-wrap gap-2">
           <Button
             key={"Inventory-all"}

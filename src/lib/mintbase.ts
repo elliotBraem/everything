@@ -17,6 +17,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { uploadFile, uploadReference } from "@mintbase-js/storage";
 import { ArweaveResponse } from "@mintbase-js/storage/lib/types";
 import { useWallet } from "./providers/near";
+import { NETWORK_ID } from "@/config";
+
+const MINTBASE_STORE_CONTRACT = {
+  "mainnet": "",
+  "testnet": "everything.mintspace2.testnet"
+}
 
 export function getImageData(event: ChangeEvent<HTMLInputElement>) {
   // FileList is immutable, so we need to create a new one
@@ -90,7 +96,7 @@ export const useMintImage = () => {
   ) {
     if (reference) {
       await wallet!.signAndSendTransaction({
-        contractId: "everything.mintspace2.testnet", // mintbase store contract
+        contractId: MINTBASE_STORE_CONTRACT[NETWORK_ID] as string, // your mintbase store contract
         actions: [
           {
             type: "FunctionCall",
