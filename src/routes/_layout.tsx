@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_layout")({
 function LayoutComponent() {
   const { me } = useAccount();
 
-  const inventories = getInventories(me)
+  const inventories = getInventories(me);
 
   const handleSubmit = (formData: {
     type: string;
@@ -22,7 +22,6 @@ function LayoutComponent() {
     json: string;
   }) => {
     try {
-      
       // const inventoryId = data?.inventory as unknown as string;
       // const selectedInventory = inventories.find(
       //   (inventory) => inventory.id === inventoryId

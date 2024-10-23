@@ -40,9 +40,7 @@ export function Inspect({ trigger, content, mode = "sheet" }) {
       case "dialog": {
         return (
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              {trigger}
-            </DialogTrigger>
+            <DialogTrigger asChild>{trigger}</DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               {/* <DialogHeader>
                 <DialogTitle>Edit profile</DialogTitle>

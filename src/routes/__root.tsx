@@ -29,7 +29,6 @@ export const Route = createRootRouteWithContext<{
 });
 
 function RootComponent() {
-
   return (
     <>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
