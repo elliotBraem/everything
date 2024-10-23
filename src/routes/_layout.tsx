@@ -53,9 +53,17 @@ function LayoutComponent() {
             </div>
           }
           content={
-            <CreateThing availableTypes={["Thing"]} onSubmit={handleSubmit} />
+            // <div className="h-full w-full">
+            //   <iframe
+            //     src="https://near.social/embed/every.near/widget/thing?path=efiz.near/thing/core"
+            //     title="Embedded Content"
+            //     className="h-full w-full border-none"
+            //     allowFullScreen
+            //   />
+            // </div>
+            <CreateThing availableTypes={["thing"]} onSubmit={handleSubmit} />
           }
-          mode="dialog"
+          // mode="dialog"
         />
       </div>
     </>

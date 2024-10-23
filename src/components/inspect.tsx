@@ -59,7 +59,7 @@ export function Inspect({ trigger, content, mode = "sheet" }) {
         return (
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>{trigger}</SheetTrigger>
-            <SheetContent className="w-full max-w-[768px]">
+            <SheetContent className="w-full min-w-[768px]">
               {" "}
               {/* Sheet content size adjustments */}
               {/* <SheetHeader>
