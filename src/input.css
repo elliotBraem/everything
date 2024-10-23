@@ -55,3 +55,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+/* custom elements */
+
+.black-sphere {
+  background: radial-gradient(circle at 30% 30%, #4a4949, #000000);
+}
+
+.black-sphere:hover {
+  background: radial-gradient(circle at 30% 25%, #4a4949, #000000);
+}

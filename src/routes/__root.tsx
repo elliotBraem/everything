@@ -1,7 +1,10 @@
 import Header from "@/components/header";
+import { Inspect } from "@/components/inspect";
+import { CreateThing } from "@/components/thing/create";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { JazzAuth } from "@/lib/providers/jazz";
 import NearProvider from "@/lib/providers/near";
+import { BlackSphere } from "@/tangible/black-sphere";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -26,6 +29,14 @@ export const Route = createRootRouteWithContext<{
 });
 
 function RootComponent() {
+  const handleSubmit = (formData: {
+    type: string;
+    images: File[];
+    json: string;
+  }) => {
+    console.log("Form submitted:", formData);
+  };
+
   return (
     <>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
@@ -39,6 +50,22 @@ function RootComponent() {
               </main>
             </div>
           </JazzAuth>
+          <div className="fixed bottom-10 right-3 sm:bottom-16 sm:right-4 md:bottom-20 md:right-5">
+            <Inspect
+              trigger={
+                <div className="h-20 w-20 sm:h-28 sm:w-28 md:h-40 md:w-40">
+                  <BlackSphere />
+                </div>
+              }
+              content={
+                <CreateThing
+                  availableTypes={["Thing"]}
+                  onSubmit={handleSubmit}
+                />
+              }
+              mode="dialog"
+            />
+          </div>
         </NearProvider>
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <TanStackRouterDevtools position="bottom-right" />
