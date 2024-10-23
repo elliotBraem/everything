@@ -1,10 +1,8 @@
 import Header from "@/components/header";
-import { Inspect } from "@/components/inspect";
-import { CreateThing } from "@/components/thing/create";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { JazzAuth } from "@/lib/providers/jazz";
 import NearProvider from "@/lib/providers/near";
-import { BlackSphere } from "@/tangible/black-sphere";
+import { ClerkProvider } from "@clerk/clerk-react";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -33,15 +31,20 @@ function RootComponent() {
     <>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <NearProvider>
-          <JazzAuth>
-            <div className="min-h-screen">
-              <Header />
+          <ClerkProvider
+            publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
+            afterSignOutUrl="/"
+          >
+            <JazzAuth>
+              <div className="min-h-screen">
+                <Header />
 
-              <main className="container mx-auto px-4 py-8">
-                <Outlet />
-              </main>
-            </div>
-          </JazzAuth>
+                <main className="container mx-auto px-4 py-8">
+                  <Outlet />
+                </main>
+              </div>
+            </JazzAuth>
+          </ClerkProvider>
         </NearProvider>
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <TanStackRouterDevtools position="bottom-right" />

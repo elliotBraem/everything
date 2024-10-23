@@ -2,6 +2,8 @@ import { useLocation } from "@tanstack/react-router";
 import { createJazzReactApp, DemoAuthBasicUI, useDemoAuth } from "jazz-react";
 import { AuthMethod } from "jazz-tools";
 import { UserAccount } from "../schema";
+import { ClerkProvider, SignInButton, useClerk } from "@clerk/clerk-react";
+import { useJazzClerkAuth } from "jazz-react-auth-clerk";
 
 const Jazz = createJazzReactApp<UserAccount>({
   AccountSchema: UserAccount
@@ -48,12 +50,21 @@ export function JazzAuth({ children }: ChildrenProps) {
   // if (!isSignedIn) return <JazzGuest>{children}</JazzGuest>
   // if (!authMethod) return null
 
-  const [auth, authState] = useDemoAuth();
+  const clerk = useClerk();
+  const [auth, state] = useJazzClerkAuth(clerk);
 
   return (
     <>
-      <JazzProvider auth={auth}>{children}</JazzProvider>
-      <DemoAuthBasicUI appName="Circular" state={authState} />
+      {state.errors.map((error) => (
+        <div key={error}>{error}</div>
+      ))}
+      {auth ? (
+        <JazzProvider auth={auth}>{children}</JazzProvider>
+      ) : (
+        <>
+          <SignInButton />
+        </>
+      )}
     </>
   );
 }

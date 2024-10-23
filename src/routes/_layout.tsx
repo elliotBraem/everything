@@ -1,3 +1,4 @@
+import AIAssistantComponent from "@/components/ai-assistant";
 import { Inspect } from "@/components/inspect";
 import { CreateThing } from "@/components/thing/create";
 import { createItem, getInventories } from "@/lib/inventory";
@@ -53,9 +54,18 @@ function LayoutComponent() {
             </div>
           }
           content={
-            <CreateThing availableTypes={["Thing"]} onSubmit={handleSubmit} />
+            // <div className="h-full w-full">
+            //   <iframe
+            //     src="https://near.social/embed/every.near/widget/thing?path=efiz.near/thing/core"
+            //     title="Embedded Content"
+            //     className="h-full w-full border-none"
+            //     allowFullScreen
+            //   />
+            // </div>
+            <AIAssistantComponent />
+            // <CreateThing availableTypes={["thing"]} onSubmit={handleSubmit} />
           }
-          mode="dialog"
+          // mode="dialog"
         />
       </div>
     </>
