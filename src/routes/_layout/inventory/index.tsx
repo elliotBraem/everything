@@ -6,6 +6,8 @@ import {
 import { useAccount } from "@/lib/providers/jazz";
 import { createFileRoute } from "@tanstack/react-router";
 
+// shows all things across all inventories
+
 export const Route = createFileRoute("/_layout/inventory/")({
   component: InventoryPage
 });

@@ -1,13 +1,14 @@
 import { ThingFormValues } from "@/components/new-item-modal";
+import { createInviteLink } from "jazz-react";
 import {
   Account,
+  CoMapInit,
   CoValue,
   CoValueClass,
   DepthsIn,
-  ID,
-  subscribeToCoValue,
   Group,
-  CoMapInit
+  ID,
+  subscribeToCoValue
 } from "jazz-tools";
 import { useCoState } from "./providers/jazz";
 import {
@@ -17,7 +18,6 @@ import {
   ThingList,
   UserAccount
 } from "./schema";
-import { createInviteLink } from "jazz-react";
 
 export const getThings = (me: UserAccount) => {
   return (
@@ -92,11 +92,11 @@ export const createInventory = (
 };
 
 export const deleteInventory = (
-  inventory: Inventory,
+  inventoryId: ID<Inventory>,
   me: UserAccount
 ): void => {
   const inventoryIndex = me.root?.inventories?.findIndex(
-    (it) => it?.id === inventory?.id
+    (it) => it?.id === inventoryId
   );
   if (inventoryIndex !== undefined && inventoryIndex > -1)
     me.root?.inventories?.splice(inventoryIndex, 1);

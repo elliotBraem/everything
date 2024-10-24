@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import BaseModal from "./ui/modal";
-import { Button } from "./ui/button";
-import { Group } from "jazz-tools";
 import { Inventory } from "@/lib/schema";
-import { createInviteLink } from "jazz-react";
-import { Input } from "./ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { createInviteLink } from "jazz-react";
+import { Group } from "jazz-tools";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "./ui/button";
 import {
   Form,
   FormControl,
@@ -25,8 +23,6 @@ import {
 } from "./ui/select";
 
 interface InviteModalProps {
-  isOpen: boolean;
-  onClose: () => void;
   selectedInventory: Inventory | undefined;
 }
 
@@ -203,11 +199,7 @@ export const shareInventory = (
   return undefined;
 };
 
-const InviteModal: React.FC<InviteModalProps> = ({
-  isOpen,
-  onClose,
-  selectedInventory
-}) => {
+const InviteModal: React.FC<InviteModalProps> = ({ selectedInventory }) => {
   const [inviteLink, setInviteLink] = useState("");
 
   const members = selectedInventory?._owner.castAs(Group).members;
@@ -228,14 +220,11 @@ const InviteModal: React.FC<InviteModalProps> = ({
   };
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} title="Invite Users">
-      <InviteForm
-        selectedInventory={selectedInventory}
-        onSubmit={onSubmit}
-        invitedMembers={invitedMembers}
-        onClose={onClose}
-      />
-    </BaseModal>
+    <InviteForm
+      selectedInventory={selectedInventory}
+      onSubmit={onSubmit}
+      invitedMembers={invitedMembers}
+    />
   );
 };
 
