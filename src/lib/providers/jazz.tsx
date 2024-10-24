@@ -1,9 +1,9 @@
+import { SignInButton, useClerk } from "@clerk/clerk-react";
 import { useLocation } from "@tanstack/react-router";
-import { createJazzReactApp, DemoAuthBasicUI, useDemoAuth } from "jazz-react";
+import { createJazzReactApp } from "jazz-react";
+import { useJazzClerkAuth } from "jazz-react-auth-clerk";
 import { AuthMethod } from "jazz-tools";
 import { UserAccount } from "../schema";
-import { ClerkProvider, SignInButton, useClerk } from "@clerk/clerk-react";
-import { useJazzClerkAuth } from "jazz-react-auth-clerk";
 
 const Jazz = createJazzReactApp<UserAccount>({
   AccountSchema: UserAccount

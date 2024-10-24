@@ -7,9 +7,9 @@ export const Route = createFileRoute("/_layout/")({
 export default function HomePage() {
   // I want to create types
   // then I want to be able to describe an item with pictures and provide it to the agent
-  // to populate 
+  // to populate
 
-  // 
+  //
 
   return <p>Hello!</p>;
 
@@ -149,11 +149,11 @@ export default function HomePage() {
   //     </div>
 
   //     {inventories ? (
-        // <InviteModal
-        //   isOpen={isInviteModalOpen}
-        //   onClose={() => setIsInviteModalOpen(false)}
-        //   selectedInventory={selectedInventory}
-        // />
+  // <InviteModal
+  //   isOpen={isInviteModalOpen}
+  //   onClose={() => setIsInviteModalOpen(false)}
+  //   selectedInventory={selectedInventory}
+  // />
   //     ) : null}
   //   </div>
   // );

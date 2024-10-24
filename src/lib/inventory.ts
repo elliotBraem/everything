@@ -34,8 +34,8 @@ export const getThingsByInventory = (me: UserAccount, inventory: Inventory) => {
   const things = getThings(me);
   return inventory
     ? things?.filter(
-      (item) => item?.inventory?.id === inventory.id && !item.deleted
-    )
+        (item) => item?.inventory?.id === inventory.id && !item.deleted
+      )
     : things?.filter((item) => !item?.deleted);
 };
 
@@ -44,9 +44,7 @@ export const getThingsByInventory2 = (inventory: Inventory) => {
 };
 
 export const getInventory = (inventoryId: ID<Inventory>) => {
-  return useCoState(Inventory, inventoryId,
-    { things: [{}] }
-  );
+  return useCoState(Inventory, inventoryId, { things: [{}] });
 };
 
 export const createItem = (item: CoMapInit<Thing>): Thing => {
@@ -70,7 +68,7 @@ export const deleteItem = (item: Thing) => {
     item.inventory?.things?.splice(found, 1);
 };
 
-export const mintItem = (item: Thing) => { };
+export const mintItem = (item: Thing) => {};
 
 export const getInventories = (me: UserAccount) => {
   return useCoState(InventoryList, me.root?._refs.inventories?.id, [
@@ -145,19 +143,22 @@ export function waitForCoValue<T extends CoValue>(
 
 export async function addSharedInventory(
   sharedInventoryId: ID<Inventory>,
-  me: UserAccount) {
+  me: UserAccount
+) {
   const [sharedInventory, account] = await Promise.all([
     await waitForCoValue(Inventory, sharedInventoryId, me, Boolean, {}),
     await waitForCoValue(UserAccount, me.id, me, Boolean, {
       root: {
-        inventories: [],
-      },
-    }),
+        inventories: []
+      }
+    })
   ]);
 
   if (!account.root?.inventories) return;
 
-  const found = account.root.inventories.some((f) => f?.id === sharedInventory.id);
+  const found = account.root.inventories.some(
+    (f) => f?.id === sharedInventory.id
+  );
 
   if (!found) {
     account.root.inventories.push(sharedInventory);

@@ -3,7 +3,7 @@ import { atom, useAtom } from "jotai";
 /**
  * easy to stack sheets, renders a drawer on mobile
  * ships with @/components/common/sheet-stack.tsx
- * 
+ *
  * usage:
  */
 

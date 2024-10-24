@@ -1,8 +1,6 @@
 import { DataTable } from "@/components/common/data-table";
 import { columns } from "@/components/things/columns";
-import {
-  getThings
-} from "@/lib/inventory";
+import { getThings } from "@/lib/inventory";
 import { useAccount } from "@/lib/providers/jazz";
 import { createFileRoute } from "@tanstack/react-router";
 

@@ -1,6 +1,6 @@
 import { BlackSphere } from "@/components/common/black-sphere";
 import { useSheetStack } from "@/hooks/use-sheet-stack";
-import { createItem, getInventories } from "@/lib/inventory";
+import { createItem, getInventories, getThings } from "@/lib/inventory";
 import { useAccount } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
 import { CoMapInit } from "jazz-tools";
@@ -12,29 +12,18 @@ export const ActionButton = () => {
 
   const inventories = getInventories(me);
 
-  const handleSubmit = (formData: {
-    type: string;
-    images: File[];
-    json: string;
-  }) => {
+  const handleSubmit = ({ data, type }) => {
     try {
-      // const inventoryId = data?.inventory as unknown as string;
-      // const selectedInventory = inventories.find(
-      //   (inventory) => inventory.id === inventoryId
-      // );
-      // if (selectedInventory) {
-      //   data.inventory = selectedInventory;
-      // }
       createItem({
         inventory: inventories?.at(0),
         deleted: false,
-        data: formData.json,
-        type: formData.type
+        data: data,
+        type: type
       } as CoMapInit<Thing>);
     } catch (err: any) {
       throw new Error(err);
     }
-    console.log("Form submitted:", formData);
+    console.log("Form submitted:", data);
   };
 
   // <div className="h-full w-full">
@@ -47,10 +36,13 @@ export const ActionButton = () => {
   // </div>
   // <CreateThing availableTypes={["thing"]} onSubmit={handleSubmit} />
 
+  const things = getThings(me);
+  const types = things.filter((thing) => thing.type === "type" || []);
+
   const handleActionClick = () => {
     // openSheet(AIAssistantComponent);
     openSheet(CreateThing, {
-      availableTypes: ["type"],
+      availableTypes: types,
       onSubmit: handleSubmit
     });
   };

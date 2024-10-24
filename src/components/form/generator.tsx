@@ -4,6 +4,17 @@ import validator from "@rjsf/validator-ajv8";
 import { templates } from "./templates";
 import { widgets } from "./widgets";
 
+const uiSchema = {
+  // globals for determining what to render
+  schema: {
+    // ("schema" property will resolve to a JsonEditorWidget)
+    "ui:widget": "JsonEditorWidget"
+  },
+  media: {
+    "ui:widget": "ImageUploadWidget"
+  }
+};
+
 export const FormGenerator = ({
   schema,
   onSubmit
@@ -11,14 +22,6 @@ export const FormGenerator = ({
   schema: RJSFSchema;
   onSubmit: () => void;
 }) => {
-  const uiSchema = {
-    // globals for determining what to render
-    schema: {
-      // (schema property will resolve to a textarea widget)
-      "ui:widget": "textarea"
-    }
-  };
-
   return (
     <Form
       schema={schema}
@@ -27,6 +30,7 @@ export const FormGenerator = ({
       widgets={widgets}
       templates={templates}
       onSubmit={onSubmit}
+      showErrorList="top"
     />
   );
 };

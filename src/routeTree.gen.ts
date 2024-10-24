@@ -10,218 +10,218 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as LoginImport } from './routes/login'
-import { Route as LayoutImport } from './routes/_layout'
-import { Route as LayoutIndexImport } from './routes/_layout/index'
-import { Route as ProfileAccountIdImport } from './routes/profile/$accountId'
-import { Route as LayoutInventoryImport } from './routes/_layout/inventory'
-import { Route as LayoutInventoryIndexImport } from './routes/_layout/inventory/index'
-import { Route as LayoutInventoryInventoryIdImport } from './routes/_layout/inventory/$inventoryId'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as LoginImport } from "./routes/login";
+import { Route as LayoutImport } from "./routes/_layout";
+import { Route as LayoutIndexImport } from "./routes/_layout/index";
+import { Route as ProfileAccountIdImport } from "./routes/profile/$accountId";
+import { Route as LayoutInventoryImport } from "./routes/_layout/inventory";
+import { Route as LayoutInventoryIndexImport } from "./routes/_layout/inventory/index";
+import { Route as LayoutInventoryInventoryIdImport } from "./routes/_layout/inventory/$inventoryId";
 
 // Create/Update Routes
 
 const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
+  id: "/login",
+  path: "/login",
+  getParentRoute: () => rootRoute
+} as any);
 
 const LayoutRoute = LayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => rootRoute,
-} as any)
+  id: "/_layout",
+  getParentRoute: () => rootRoute
+} as any);
 
 const LayoutIndexRoute = LayoutIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LayoutRoute,
-} as any)
+  id: "/",
+  path: "/",
+  getParentRoute: () => LayoutRoute
+} as any);
 
 const ProfileAccountIdRoute = ProfileAccountIdImport.update({
-  id: '/profile/$accountId',
-  path: '/profile/$accountId',
-  getParentRoute: () => rootRoute,
-} as any)
+  id: "/profile/$accountId",
+  path: "/profile/$accountId",
+  getParentRoute: () => rootRoute
+} as any);
 
 const LayoutInventoryRoute = LayoutInventoryImport.update({
-  id: '/inventory',
-  path: '/inventory',
-  getParentRoute: () => LayoutRoute,
-} as any)
+  id: "/inventory",
+  path: "/inventory",
+  getParentRoute: () => LayoutRoute
+} as any);
 
 const LayoutInventoryIndexRoute = LayoutInventoryIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LayoutInventoryRoute,
-} as any)
+  id: "/",
+  path: "/",
+  getParentRoute: () => LayoutInventoryRoute
+} as any);
 
 const LayoutInventoryInventoryIdRoute = LayoutInventoryInventoryIdImport.update(
   {
-    id: '/$inventoryId',
-    path: '/$inventoryId',
-    getParentRoute: () => LayoutInventoryRoute,
-  } as any,
-)
+    id: "/$inventoryId",
+    path: "/$inventoryId",
+    getParentRoute: () => LayoutInventoryRoute
+  } as any
+);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/_layout': {
-      id: '/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof LayoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/_layout/inventory': {
-      id: '/_layout/inventory'
-      path: '/inventory'
-      fullPath: '/inventory'
-      preLoaderRoute: typeof LayoutInventoryImport
-      parentRoute: typeof LayoutImport
-    }
-    '/profile/$accountId': {
-      id: '/profile/$accountId'
-      path: '/profile/$accountId'
-      fullPath: '/profile/$accountId'
-      preLoaderRoute: typeof ProfileAccountIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/_layout/': {
-      id: '/_layout/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof LayoutIndexImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/inventory/$inventoryId': {
-      id: '/_layout/inventory/$inventoryId'
-      path: '/$inventoryId'
-      fullPath: '/inventory/$inventoryId'
-      preLoaderRoute: typeof LayoutInventoryInventoryIdImport
-      parentRoute: typeof LayoutInventoryImport
-    }
-    '/_layout/inventory/': {
-      id: '/_layout/inventory/'
-      path: '/'
-      fullPath: '/inventory/'
-      preLoaderRoute: typeof LayoutInventoryIndexImport
-      parentRoute: typeof LayoutInventoryImport
-    }
+    "/_layout": {
+      id: "/_layout";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof LayoutImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/login": {
+      id: "/login";
+      path: "/login";
+      fullPath: "/login";
+      preLoaderRoute: typeof LoginImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/_layout/inventory": {
+      id: "/_layout/inventory";
+      path: "/inventory";
+      fullPath: "/inventory";
+      preLoaderRoute: typeof LayoutInventoryImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/profile/$accountId": {
+      id: "/profile/$accountId";
+      path: "/profile/$accountId";
+      fullPath: "/profile/$accountId";
+      preLoaderRoute: typeof ProfileAccountIdImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/_layout/": {
+      id: "/_layout/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof LayoutIndexImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/inventory/$inventoryId": {
+      id: "/_layout/inventory/$inventoryId";
+      path: "/$inventoryId";
+      fullPath: "/inventory/$inventoryId";
+      preLoaderRoute: typeof LayoutInventoryInventoryIdImport;
+      parentRoute: typeof LayoutInventoryImport;
+    };
+    "/_layout/inventory/": {
+      id: "/_layout/inventory/";
+      path: "/";
+      fullPath: "/inventory/";
+      preLoaderRoute: typeof LayoutInventoryIndexImport;
+      parentRoute: typeof LayoutInventoryImport;
+    };
   }
 }
 
 // Create and export the route tree
 
 interface LayoutInventoryRouteChildren {
-  LayoutInventoryInventoryIdRoute: typeof LayoutInventoryInventoryIdRoute
-  LayoutInventoryIndexRoute: typeof LayoutInventoryIndexRoute
+  LayoutInventoryInventoryIdRoute: typeof LayoutInventoryInventoryIdRoute;
+  LayoutInventoryIndexRoute: typeof LayoutInventoryIndexRoute;
 }
 
 const LayoutInventoryRouteChildren: LayoutInventoryRouteChildren = {
   LayoutInventoryInventoryIdRoute: LayoutInventoryInventoryIdRoute,
-  LayoutInventoryIndexRoute: LayoutInventoryIndexRoute,
-}
+  LayoutInventoryIndexRoute: LayoutInventoryIndexRoute
+};
 
 const LayoutInventoryRouteWithChildren = LayoutInventoryRoute._addFileChildren(
-  LayoutInventoryRouteChildren,
-)
+  LayoutInventoryRouteChildren
+);
 
 interface LayoutRouteChildren {
-  LayoutInventoryRoute: typeof LayoutInventoryRouteWithChildren
-  LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutInventoryRoute: typeof LayoutInventoryRouteWithChildren;
+  LayoutIndexRoute: typeof LayoutIndexRoute;
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutInventoryRoute: LayoutInventoryRouteWithChildren,
-  LayoutIndexRoute: LayoutIndexRoute,
-}
+  LayoutIndexRoute: LayoutIndexRoute
+};
 
 const LayoutRouteWithChildren =
-  LayoutRoute._addFileChildren(LayoutRouteChildren)
+  LayoutRoute._addFileChildren(LayoutRouteChildren);
 
 export interface FileRoutesByFullPath {
-  '': typeof LayoutRouteWithChildren
-  '/login': typeof LoginRoute
-  '/inventory': typeof LayoutInventoryRouteWithChildren
-  '/profile/$accountId': typeof ProfileAccountIdRoute
-  '/': typeof LayoutIndexRoute
-  '/inventory/$inventoryId': typeof LayoutInventoryInventoryIdRoute
-  '/inventory/': typeof LayoutInventoryIndexRoute
+  "": typeof LayoutRouteWithChildren;
+  "/login": typeof LoginRoute;
+  "/inventory": typeof LayoutInventoryRouteWithChildren;
+  "/profile/$accountId": typeof ProfileAccountIdRoute;
+  "/": typeof LayoutIndexRoute;
+  "/inventory/$inventoryId": typeof LayoutInventoryInventoryIdRoute;
+  "/inventory/": typeof LayoutInventoryIndexRoute;
 }
 
 export interface FileRoutesByTo {
-  '/login': typeof LoginRoute
-  '/profile/$accountId': typeof ProfileAccountIdRoute
-  '/': typeof LayoutIndexRoute
-  '/inventory/$inventoryId': typeof LayoutInventoryInventoryIdRoute
-  '/inventory': typeof LayoutInventoryIndexRoute
+  "/login": typeof LoginRoute;
+  "/profile/$accountId": typeof ProfileAccountIdRoute;
+  "/": typeof LayoutIndexRoute;
+  "/inventory/$inventoryId": typeof LayoutInventoryInventoryIdRoute;
+  "/inventory": typeof LayoutInventoryIndexRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/_layout': typeof LayoutRouteWithChildren
-  '/login': typeof LoginRoute
-  '/_layout/inventory': typeof LayoutInventoryRouteWithChildren
-  '/profile/$accountId': typeof ProfileAccountIdRoute
-  '/_layout/': typeof LayoutIndexRoute
-  '/_layout/inventory/$inventoryId': typeof LayoutInventoryInventoryIdRoute
-  '/_layout/inventory/': typeof LayoutInventoryIndexRoute
+  __root__: typeof rootRoute;
+  "/_layout": typeof LayoutRouteWithChildren;
+  "/login": typeof LoginRoute;
+  "/_layout/inventory": typeof LayoutInventoryRouteWithChildren;
+  "/profile/$accountId": typeof ProfileAccountIdRoute;
+  "/_layout/": typeof LayoutIndexRoute;
+  "/_layout/inventory/$inventoryId": typeof LayoutInventoryInventoryIdRoute;
+  "/_layout/inventory/": typeof LayoutInventoryIndexRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | ''
-    | '/login'
-    | '/inventory'
-    | '/profile/$accountId'
-    | '/'
-    | '/inventory/$inventoryId'
-    | '/inventory/'
-  fileRoutesByTo: FileRoutesByTo
+    | ""
+    | "/login"
+    | "/inventory"
+    | "/profile/$accountId"
+    | "/"
+    | "/inventory/$inventoryId"
+    | "/inventory/";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/login'
-    | '/profile/$accountId'
-    | '/'
-    | '/inventory/$inventoryId'
-    | '/inventory'
+    | "/login"
+    | "/profile/$accountId"
+    | "/"
+    | "/inventory/$inventoryId"
+    | "/inventory";
   id:
-    | '__root__'
-    | '/_layout'
-    | '/login'
-    | '/_layout/inventory'
-    | '/profile/$accountId'
-    | '/_layout/'
-    | '/_layout/inventory/$inventoryId'
-    | '/_layout/inventory/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/_layout"
+    | "/login"
+    | "/_layout/inventory"
+    | "/profile/$accountId"
+    | "/_layout/"
+    | "/_layout/inventory/$inventoryId"
+    | "/_layout/inventory/";
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  LayoutRoute: typeof LayoutRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  ProfileAccountIdRoute: typeof ProfileAccountIdRoute
+  LayoutRoute: typeof LayoutRouteWithChildren;
+  LoginRoute: typeof LoginRoute;
+  ProfileAccountIdRoute: typeof ProfileAccountIdRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
   LoginRoute: LoginRoute,
-  ProfileAccountIdRoute: ProfileAccountIdRoute,
-}
+  ProfileAccountIdRoute: ProfileAccountIdRoute
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* prettier-ignore-end */
 

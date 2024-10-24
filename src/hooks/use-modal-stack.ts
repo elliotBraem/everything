@@ -3,7 +3,7 @@ import { atom, useAtom } from "jotai";
 /**
  * easy to stack modals, just provide the content with props
  * ships with @/components/common/modal-stack.tsx
- * 
+ *
  * usage:
  */
 
