@@ -34,14 +34,18 @@ const StackItem = memo(
     if (isMobile) {
       return (
         <Drawer open={true} onOpenChange={closeSheet}>
-          <DrawerContent>
-            <DrawerHeader className="text-left">
-              <DrawerTitle>Edit profile</DrawerTitle>
-              <DrawerDescription>
-                Make changes to your profile here. Click save when you're done.
-              </DrawerDescription>
-            </DrawerHeader>
-            <div className="px-4">{children}</div>
+          <DrawerContent className="flex h-screen max-h-screen flex-col justify-between">
+            {/* <div className="h-full flex-1"> */}
+            <div className="flex-1 overflow-y-auto">
+              <DrawerHeader className="text-left">
+                <DrawerTitle>Edit profile</DrawerTitle>
+                <DrawerDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </DrawerDescription>
+              </DrawerHeader>
+              <div className="flex h-full flex-col">{children}</div>
+            </div>
             <DrawerFooter className="pt-2">
               <DrawerClose asChild>
                 <Button variant="outline">Cancel</Button>
@@ -53,14 +57,17 @@ const StackItem = memo(
     } else {
       return (
         <Sheet open={true} onOpenChange={closeSheet}>
-          <SheetContent className="w-full min-w-[768px]">
-            <SheetHeader>
-              <SheetTitle>Edit profile</SheetTitle>
-              <SheetDescription>
-                Make changes to your profile here. Click save when you're done.
-              </SheetDescription>
-            </SheetHeader>
-            {children}
+          <SheetContent className="flex h-screen max-h-screen w-full min-w-[768px] flex-col justify-between">
+            <div className="flex-1 overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle>Edit profile</SheetTitle>
+                <SheetDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="flex h-full flex-col">{children}</div>
+            </div>
             <SheetFooter className="pt-2">
               <SheetClose asChild>
                 <Button variant="outline">Cancel</Button>

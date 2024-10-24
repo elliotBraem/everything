@@ -1,10 +1,10 @@
+import { BlackSphere } from "@/components/common/black-sphere";
 import { useSheetStack } from "@/hooks/use-sheet-stack";
 import { createItem, getInventories } from "@/lib/inventory";
 import { useAccount } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
-import { BlackSphere } from "@/tangible/black-sphere";
 import { CoMapInit } from "jazz-tools";
-import AIAssistantComponent from "./ai-assistant";
+import { CreateThing } from "./thing/create";
 
 export const ActionButton = () => {
   const { openSheet } = useSheetStack();
@@ -48,7 +48,11 @@ export const ActionButton = () => {
   // <CreateThing availableTypes={["thing"]} onSubmit={handleSubmit} />
 
   const handleActionClick = () => {
-    openSheet(AIAssistantComponent);
+    // openSheet(AIAssistantComponent);
+    openSheet(CreateThing, {
+      availableTypes: ["type"],
+      onSubmit: handleSubmit
+    });
   };
 
   return (

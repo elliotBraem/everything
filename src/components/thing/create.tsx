@@ -16,11 +16,7 @@ interface CreateThingProps {
   onSubmit: (formData: { type: string; images: File[]; json: string }) => void;
 }
 
-export const CreateThing: React.FC<CreateThingProps> = ({
-  availableTypes,
-  onSubmit
-}) => {
-  const [selectedType, setSelectedType] = React.useState<string | null>(null);
+const ThingForm = ({ type, onSubmit }) => {
   const [jsonData, setJsonData] = React.useState<string>("");
   const [files, setFiles] = React.useState<File[]>([]);
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -46,88 +42,94 @@ export const CreateThing: React.FC<CreateThingProps> = ({
   };
 
   const handleSubmit = () => {
-    if (selectedType && jsonData && files.length > 0) {
-      onSubmit({ type: selectedType, images: files, json: jsonData });
-    }
+    onSubmit();
   };
 
   return (
-    <div className="flex h-full w-full flex-col space-y-4 p-4">
-      {/* Select Type Dropdown */}
-      <div className="flex flex-col">
-        <Select onValueChange={setSelectedType}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select a type" />
-          </SelectTrigger>
-          <SelectContent>
-            {availableTypes.map((type) => (
-              <SelectItem key={type} value={type}>
-                {type}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+    <>
+      <div className="flex flex-grow flex-col">
+        <div
+          {...getRootProps({
+            className: `w-full h-20 border-2 border-dashed rounded-md flex justify-center items-center cursor-pointer ${files.length >= 6 ? "pointer-events-none opacity-50" : ""}`
+          })}
+        >
+          <input {...getInputProps()} />
+          <LucideImage className="mr-2 h-6 w-6" />
+          <span>
+            {files.length < 6
+              ? "Drag and drop images, or click to select"
+              : "Maximum of 6 images"}
+          </span>
+        </div>
 
-      {/* Image Dropzone */}
-      {selectedType && (
-        <div className="flex flex-col">
-          <div
-            {...getRootProps({
-              className: `w-full h-20 border-2 border-dashed rounded-md flex justify-center items-center cursor-pointer ${files.length >= 6 ? "pointer-events-none opacity-50" : ""}`
-            })}
-          >
-            <input {...getInputProps()} />
-            <LucideImage className="mr-2 h-6 w-6" />
-            <span>
-              {files.length < 6
-                ? "Drag and drop images, or click to select"
-                : "Maximum of 6 images"}
-            </span>
-          </div>
-
-          {/* Image Count and Toggle Collapse */}
-          <div className="mt-2 flex items-center justify-between">
-            <span>{files.length} / 6 images added</span>
-            {files.length > 0 && (
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => setIsExpanded(!isExpanded)}
-              >
-                {isExpanded ? "Hide Images" : "View Images"}
-              </Button>
-            )}
-          </div>
-
-          {/* Collapsible Image Preview */}
-          {isExpanded && (
-            <ImagePreview files={files} onDelete={handleDeleteImage} />
+        <div className="mt-2 flex items-center justify-between">
+          <span>{files.length} / 6 images added</span>
+          {files.length > 0 && (
+            <Button
+              variant="link"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? "Hide Images" : "View Images"}
+            </Button>
           )}
         </div>
-      )}
 
+        {isExpanded && (
+          <ImagePreview files={files} onDelete={handleDeleteImage} />
+        )}
+      </div>
       {/* JSON Textarea */}
-      {selectedType && (
-        <div className="flex flex-grow flex-col">
-          <Textarea
-            placeholder="Paste your JSON data here..."
-            className="h-full"
-            value={jsonData}
-            onChange={(e) => setJsonData(e.target.value)}
-          />
-        </div>
-      )}
-
-      {/* Footer with "Create" Button */}
-      <div className="flex items-center justify-end pt-4">
+      <Textarea
+        placeholder="Paste your JSON data here..."
+        className="h-full flex-grow"
+        value={jsonData}
+        onChange={(e) => setJsonData(e.target.value)}
+      />
+      <div className="flex-shrink-0 items-center justify-end pt-4">
         <Button
           className="w-full"
           onClick={handleSubmit}
-          disabled={!selectedType || !jsonData || files.length === 0}
+          disabled={!type || !jsonData || files.length === 0}
         >
           Create
         </Button>
+      </div>
+    </>
+  );
+};
+
+export const CreateThing: React.FC<CreateThingProps> = ({
+  availableTypes,
+  onSubmit
+}) => {
+  const [selectedType, setSelectedType] = React.useState<string | null>(null);
+
+  const handleSubmit = () => {
+    // if (selectedType && jsonData && files.length > 0) {
+    //   onSubmit({ type: selectedType, images: files, json: jsonData });
+    // }
+  };
+
+  return (
+    <div className="flex h-full flex-grow flex-col">
+      <div className="flex h-full w-full flex-col space-y-4 overflow-y-auto p-4">
+        {/* Select Type Dropdown */}
+        <div className="flex-shrink-0">
+          <Select onValueChange={setSelectedType}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a type" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableTypes.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        {selectedType ? <ThingForm type={selectedType} /> : <p>please select a type</p>}
       </div>
     </div>
   );
