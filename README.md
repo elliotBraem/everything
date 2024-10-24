@@ -5,13 +5,66 @@
 
 <div align="center">
 
-<h1 style="font-size: 2.5rem; font-weight: bold;">near-vite-starter</h1>
+<h1 style="font-size: 2.5rem; font-weight: bold;">everything</h1>
 
   <p>
-    <strong>Near + Vite + TypeScript + Tanstack + Tailwind + Playwright </strong>
+    <strong>concepts for defining the world around us</strong>
   </p>
 
+"infrastructure for the user owned internet"
+
 </div>
+
+look at the canvas: [keypom]
+
+key drop
+
+it's a way to put it all together
+
+- every.near : redeploy of the social contract, stores things and types
+- near-bos-webcomponent : (thing), has the VM and definitions. Takes data and type.
+- every.near/widget/thing 
+- every.near.page 
+
+
+jsinrust
+
+learn-anything, can I just use their app?
+He sounds like a cracked dev and would probably appreciate it...
+
+everything.dev
+everything.market
+everythingproject.org
+
+mega proposal along with the Keypom app
+
+
+Editor - what does this do?
+
+On each build, publish the json scehma of your types to your page. We can derive this from the data.
+
+# Future
+
+If everything can happen in the browser,
+then everything can happen in a WASM environment.
+
+It doesn't matter how this app is built. There are numerous ways to build it better.
+
+This is your opportunity to integrate into it.
+
+What is the goal that we want projects to do?
+
+Race of sloths - create a pull request
+
+everything is built for everyone.
+
+Send for feedback.
+
+## Acknowledgements
+
+- learn-anything
+- web4
+- final form builder demo https://github.com/final-form/builder-demo
 
 <details>
   <summary>Table of Contents</summary>

@@ -1,6 +1,6 @@
 import AIAssistantComponent from "@/components/ai-assistant";
 import { Inspect } from "@/components/inspect";
-import { CreateThing } from "@/components/thing/create";
+import { ModalStack } from "@/components/modal-stack";
 import { createItem, getInventories } from "@/lib/inventory";
 import { useAccount } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
@@ -45,7 +45,7 @@ function LayoutComponent() {
   return (
     <>
       <Outlet />
-
+      <ModalStack />
       <div className="fixed bottom-10 right-3 sm:bottom-16 sm:right-4 md:bottom-20 md:right-5">
         <Inspect
           trigger={

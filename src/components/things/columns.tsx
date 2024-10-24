@@ -1,8 +1,10 @@
-import { deleteItem, mintItem } from "@/lib/inventory";
+import { useModalStack } from "@/hooks/use-modal-stack";
+import { deleteItem } from "@/lib/inventory";
 import { Thing } from "@/lib/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { Group } from "jazz-tools";
 import { MoreHorizontal } from "lucide-react";
+import { EditThing } from "../thing/edit";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -20,17 +22,22 @@ export const columns: ColumnDef<unknown>[] = [
     header: "ID"
   },
   {
-    accessorKey: "data",
-    header: "Data"
-  },
-  {
     accessorKey: "type",
     header: "Type"
+  },
+  {
+    accessorKey: "data",
+    header: "Data"
   },
   {
     id: "actions",
     cell: ({ row }) => {
       const thing = row.original as Thing;
+      const { openModal, closeModal } = useModalStack();
+
+      const handleEditClick = () => {
+        openModal(EditThing, { thing });
+      };
 
       return (
         <DropdownMenu>
@@ -52,7 +59,7 @@ export const columns: ColumnDef<unknown>[] = [
               onClick={() => deleteItem(thing)}
             ></DropdownMenuItem>
             <DropdownMenuItem
-              // onClick={() => setEditingItem(item)}
+              onClick={handleEditClick}
               disabled={
                 thing._owner.castAs(Group).myRole() !== "admin" &&
                 thing._owner.castAs(Group).myRole() !== "writer"

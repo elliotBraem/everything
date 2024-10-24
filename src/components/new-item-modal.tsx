@@ -50,7 +50,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const NewItemForm = ({
+export const NewItemForm = ({
   inventories,
   initialValues,
   onSubmit,
@@ -140,32 +140,6 @@ const NewItemModal: React.FC<NewItemModalProps> = ({
   inventories,
   selectedInventory
 }) => {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    reset
-    // @ts-expect-error error
-  } = useForm<ThingFormValues>({
-    defaultValues: initialValues || {
-      data: "",
-      type: "",
-      deleted: false,
-      inventory: selectedInventory
-    }
-  });
-
-  useEffect(() => {
-    if (initialValues) {
-      Object.entries(initialValues).forEach(([key, value]) => {
-        const valueToSet = value instanceof CoMap ? value.id : value;
-        setValue(key as keyof ThingFormValues & string, valueToSet);
-      });
-    } else {
-      reset();
-    }
-  }, [initialValues, setValue, reset]);
 
   const onSubmit: SubmitHandler<ThingFormValues> = (data) => {
     const inventoryId = data?.inventory as unknown as string;
