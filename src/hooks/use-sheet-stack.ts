@@ -1,11 +1,14 @@
-import { sheetStackAtom } from '@/atoms/sheet';
-import { useAtom } from 'jotai';
+import { sheetStackAtom } from "@/atoms/sheet";
+import { useAtom } from "jotai";
 
 export const useSheetStack = () => {
   const [sheetStack, setSheetStack] = useAtom(sheetStackAtom);
 
   // Pushes a new sheet onto the stack
-  const openSheet = (component: React.FC<any>, props: Record<string, any> = {}) => {
+  const openSheet = (
+    component: React.FC<any>,
+    props: Record<string, any> = {}
+  ) => {
     setSheetStack((prevStack) => [...prevStack, { component, props }]);
   };
 
@@ -23,6 +26,6 @@ export const useSheetStack = () => {
     sheetStack,
     openSheet,
     closeSheet,
-    closeAllSheets,
+    closeAllSheets
   };
 };

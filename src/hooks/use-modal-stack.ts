@@ -1,11 +1,14 @@
-import { useAtom } from 'jotai';
-import { modalStackAtom } from '@/atoms/modal';
+import { useAtom } from "jotai";
+import { modalStackAtom } from "@/atoms/modal";
 
 export const useModalStack = () => {
   const [modalStack, setModalStack] = useAtom(modalStackAtom);
 
   // Pushes a new modal onto the stack
-  const openModal = (component: React.FC<any>, props: Record<string, any> = {}) => {
+  const openModal = (
+    component: React.FC<any>,
+    props: Record<string, any> = {}
+  ) => {
     setModalStack((prevStack) => [...prevStack, { component, props }]);
   };
 
@@ -23,6 +26,6 @@ export const useModalStack = () => {
     modalStack,
     openModal,
     closeModal,
-    closeAllModals,
+    closeAllModals
   };
 };

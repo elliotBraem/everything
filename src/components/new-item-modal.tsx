@@ -140,7 +140,6 @@ const NewItemModal: React.FC<NewItemModalProps> = ({
   inventories,
   selectedInventory
 }) => {
-
   const onSubmit: SubmitHandler<ThingFormValues> = (data) => {
     const inventoryId = data?.inventory as unknown as string;
     const selectedInventory = inventories.find(

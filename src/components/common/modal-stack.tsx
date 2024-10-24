@@ -1,6 +1,6 @@
 // /src/components/ModalStack.tsx
-import { useModalStack } from '@/hooks/use-modal-stack';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { useModalStack } from "@/hooks/use-modal-stack";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export const ModalStack = () => {
   const { modalStack, closeModal } = useModalStack();
@@ -10,11 +10,7 @@ export const ModalStack = () => {
   return (
     <>
       {modalStack.map(({ component: Component, props }, index) => (
-        <Dialog
-          key={index}
-          open={true}
-          onOpenChange={closeModal}
-        >
+        <Dialog key={index} open={true} onOpenChange={closeModal}>
           <DialogContent>
             <Component {...props} />
           </DialogContent>
