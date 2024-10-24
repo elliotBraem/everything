@@ -1,24 +1,4 @@
-import InviteModal from "@/components/invite-modal";
-import { MintModal } from "@/components/mint-modal";
-import NewItemModal, { ThingFormValues } from "@/components/new-item-modal";
-import { columns } from "@/components/things/columns";
-import { DataTable } from "@/components/common/data-table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  createInventory,
-  createItem,
-  deleteInventory,
-  getInventories,
-  getThings,
-  getThingsByInventory,
-  updateItem
-} from "@/lib/inventory";
-import { useAccount } from "@/lib/providers/jazz";
-import { Inventory, Thing } from "@/lib/schema";
 import { createFileRoute } from "@tanstack/react-router";
-import { CoMapInit, Group, ID } from "jazz-tools";
-import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/_layout/")({
   component: HomePage
@@ -26,6 +6,7 @@ export const Route = createFileRoute("/_layout/")({
 
 export default function HomePage() {
   const { me } = useAccount();
+  const navigate = Route.useNavigate();
 
   const [inventoryId, setInventoryId] = useState<ID<Inventory> | undefined>(
     (window.location.search?.replace("?inventory=", "") || undefined) as
@@ -132,42 +113,6 @@ export default function HomePage() {
         </Alert>
       )} */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap gap-2">
-          <Button
-            key={"Inventory-all"}
-            onClick={() => setSelectedInventory(undefined)}
-            variant={!selectedInventory ? "default" : "secondary"}
-          >
-            All
-          </Button>
-          {inventories?.map((inventory) => (
-            <Button
-              key={inventory.id}
-              onClick={() => setSelectedInventory(inventory)}
-              variant={
-                selectedInventory?.name === inventory?.name
-                  ? "default"
-                  : "secondary"
-              }
-            >
-              {inventory?.name}
-            </Button>
-          ))}
-          {isNewInventoryInputVisible ? (
-            <div className="flex gap-2">
-              <Input
-                type="text"
-                value={newInventoryName}
-                onChange={(e) => setNewInventoryName(e.target.value)}
-              />
-              <Button onClick={handleCreateInventory}>Save</Button>
-            </div>
-          ) : (
-            <Button onClick={() => setIsNewInventoryInputVisible(true)}>
-              New Inventory
-            </Button>
-          )}
-        </div>
         <div className="flex gap-2">
           <Button
             onClick={() => setIsNewItemModalOpen(true)}
@@ -178,9 +123,6 @@ export default function HomePage() {
             }
           >
             New Item
-          </Button>
-          <Button onClick={() => setIsMintItemModalOpen(true)}>
-            Mint Item
           </Button>
           <Button
             onClick={() => setIsInviteModalOpen(true)}
@@ -196,9 +138,6 @@ export default function HomePage() {
             Delete Inventory
           </Button>
         </div>
-      </div>
-      <div className="overflow-x-auto">
-        <DataTable columns={columns} data={filteredThings} />
       </div>
       {inventories ? (
         <NewItemModal
@@ -225,10 +164,6 @@ export default function HomePage() {
           selectedInventory={selectedInventory}
         />
       ) : null}
-      <MintModal
-        isOpen={isMintItemModalOpen}
-        onClose={() => setIsMintItemModalOpen(false)}
-      />
     </div>
   );
 }

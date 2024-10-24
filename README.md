@@ -23,7 +23,7 @@ it's a way to put it all together
 
 - every.near : redeploy of the social contract, stores things and types
 - near-bos-webcomponent : (thing), has the VM and definitions. Takes data and type.
-- every.near/widget/thing 
+- 
 - every.near.page 
 
 
@@ -38,10 +38,20 @@ everythingproject.org
 
 mega proposal along with the Keypom app
 
-
 Editor - what does this do?
 
 On each build, publish the json scehma of your types to your page. We can derive this from the data.
+
+# Features
+
+Local-first, decentralized data storage using Jazz
+AI agent to create typed data from natural language
+AI agent to ask questions about your inventory
+AI agent to generate UI for data?
+Private compute with Naptha?
+Peer sharing via Calimero?
+Deploy a custom marketplace
+Sign transactions with OAuth OR login to session via NEAR wallet (web4?)
 
 # Future
 
