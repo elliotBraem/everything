@@ -1,73 +1,28 @@
 import AIAssistantComponent from "@/components/ai-assistant";
 import { Inspect } from "@/components/inspect";
-import { ModalStack } from "@/components/modal-stack";
+import { ModalStack } from "@/components/common/modal-stack";
+import { SheetStack } from "@/components/common/sheet-stack";
 import { createItem, getInventories } from "@/lib/inventory";
 import { useAccount } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
 import { BlackSphere } from "@/tangible/black-sphere";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { CoMapInit } from "jazz-tools";
+import { ActionButton } from "@/components/action-button";
 
 export const Route = createFileRoute("/_layout")({
   component: LayoutComponent
 });
 
 function LayoutComponent() {
-  const { me } = useAccount();
-
-  const inventories = getInventories(me);
-
-  const handleSubmit = (formData: {
-    type: string;
-    images: File[];
-    json: string;
-  }) => {
-    try {
-      // const inventoryId = data?.inventory as unknown as string;
-      // const selectedInventory = inventories.find(
-      //   (inventory) => inventory.id === inventoryId
-      // );
-      // if (selectedInventory) {
-      //   data.inventory = selectedInventory;
-      // }
-      createItem({
-        inventory: inventories?.at(0),
-        deleted: false,
-        data: formData.json,
-        type: formData.type
-      } as CoMapInit<Thing>);
-    } catch (err: any) {
-      throw new Error(err);
-    }
-    console.log("Form submitted:", formData);
-  };
-
   return (
     <>
+      {/* main content */}
       <Outlet />
+      {/* absolute positioned */}
+      <ActionButton />
+      <SheetStack />
       <ModalStack />
-      <div className="fixed bottom-10 right-3 sm:bottom-16 sm:right-4 md:bottom-20 md:right-5">
-        <Inspect
-          trigger={
-            <div className="h-20 w-20 sm:h-28 sm:w-28 md:h-40 md:w-40">
-              <BlackSphere />
-            </div>
-          }
-          content={
-            // <div className="h-full w-full">
-            //   <iframe
-            //     src="https://near.social/embed/every.near/widget/thing?path=efiz.near/thing/core"
-            //     title="Embedded Content"
-            //     className="h-full w-full border-none"
-            //     allowFullScreen
-            //   />
-            // </div>
-            <AIAssistantComponent />
-            // <CreateThing availableTypes={["thing"]} onSubmit={handleSubmit} />
-          }
-          // mode="dialog"
-        />
-      </div>
     </>
   );
 }

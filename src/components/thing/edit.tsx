@@ -19,8 +19,7 @@ export const EditThing: React.FC<EditThingProps> = ({ thing }) => {
       onConfirm: () => {
         console.log("Confirmed!");
       },
-      onCancel: () =>{
-      }
+      onCancel: () => {}
     });
   };
 

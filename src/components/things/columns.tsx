@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "../ui/dropdown-menu";
+import { useSheetStack } from "@/hooks/use-sheet-stack";
 
 // We can't really know
 export const columns: ColumnDef<unknown>[] = [
@@ -33,10 +34,10 @@ export const columns: ColumnDef<unknown>[] = [
     id: "actions",
     cell: ({ row }) => {
       const thing = row.original as Thing;
-      const { openModal, closeModal } = useModalStack();
+      const { openSheet } = useSheetStack();
 
       const handleEditClick = () => {
-        openModal(EditThing, { thing });
+        openSheet(EditThing, { thing });
       };
 
       return (

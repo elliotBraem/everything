@@ -1,4 +1,3 @@
-// /src/hooks/useModalStack.ts
 import { useAtom } from 'jotai';
 import { modalStackAtom } from '@/atoms/modal';
 
