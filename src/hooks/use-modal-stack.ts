@@ -13,9 +13,15 @@ import { atom, useAtom } from "jotai";
 
 // closeModal(); // closes top of stack
 
+export interface Metadata {
+  title: string;
+  description?: string;
+}
+
 interface Modal {
   component: React.FC<any>;
   props: Record<string, any>;
+  metadata: Metadata;
 }
 
 // keeps track of a stack of atoms
@@ -27,9 +33,10 @@ export const useModalStack = () => {
   // Pushes a new modal onto the stack
   const openModal = (
     component: React.FC<any>,
-    props: Record<string, any> = {}
+    props: Record<string, any> = {},
+    metadata: Metadata
   ) => {
-    setModalStack((prevStack) => [...prevStack, { component, props }]);
+    setModalStack((prevStack) => [...prevStack, { component, props, metadata }]);
   };
 
   // Pops the top modal off the stack

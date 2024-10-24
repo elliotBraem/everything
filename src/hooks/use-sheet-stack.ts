@@ -1,4 +1,5 @@
 import { atom, useAtom } from "jotai";
+import { Metadata } from "./use-modal-stack";
 
 /**
  * easy to stack sheets, renders a drawer on mobile
@@ -15,6 +16,7 @@ import { atom, useAtom } from "jotai";
 interface Sheet {
   component: React.FC<any>;
   props: Record<string, any>;
+  metadata: Metadata;
 }
 
 // keeps track of a stack of atoms
@@ -26,9 +28,10 @@ export const useSheetStack = () => {
   // Pushes a new sheet onto the stack
   const openSheet = (
     component: React.FC<any>,
-    props: Record<string, any> = {}
+    props: Record<string, any> = {},
+    metadata: Metadata
   ) => {
-    setSheetStack((prevStack) => [...prevStack, { component, props }]);
+    setSheetStack((prevStack) => [...prevStack, { component, props, metadata }]);
   };
 
   // Pops the top sheet off the stack

@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger
 } from "../ui/dropdown-menu";
 import { useSheetStack } from "@/hooks/use-sheet-stack";
+import { ConfirmationModal } from "../confirmation-modal";
 
 // We can't really know
 export const columns: ColumnDef<unknown>[] = [
@@ -35,9 +36,34 @@ export const columns: ColumnDef<unknown>[] = [
     cell: ({ row }) => {
       const thing = row.original as Thing;
       const { openSheet } = useSheetStack();
+      const { openModal } = useModalStack();
 
       const handleEditClick = () => {
-        openSheet(EditThing, { thing });
+        openSheet(
+          EditThing,
+          { thing },
+          {
+            title: "Edit Thing",
+            description: "Select confirm when you're done"
+          }
+        );
+      };
+
+      const handleDeleteClick = () => {
+        console.log("deleting...");
+        openModal(
+          ConfirmationModal,
+          {
+            onConfirm: () => {
+              deleteItem(thing);
+            },
+            onCancel: () => {}
+          },
+          {
+            title: "Are you sure you want to delete this?",
+            description: "Please confirm your selection."
+          }
+        );
       };
 
       return (
@@ -57,9 +83,6 @@ export const columns: ColumnDef<unknown>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => deleteItem(thing)}
-            ></DropdownMenuItem>
-            <DropdownMenuItem
               onClick={handleEditClick}
               disabled={
                 thing._owner.castAs(Group).myRole() !== "admin" &&
@@ -68,7 +91,13 @@ export const columns: ColumnDef<unknown>[] = [
             >
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => deleteItem(thing)}>
+            <DropdownMenuItem
+              onClick={handleDeleteClick}
+              disabled={
+                thing._owner.castAs(Group).myRole() !== "admin" &&
+                thing._owner.castAs(Group).myRole() !== "writer"
+              }
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

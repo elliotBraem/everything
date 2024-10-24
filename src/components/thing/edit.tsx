@@ -14,13 +14,20 @@ export const EditThing: React.FC<EditThingProps> = ({ thing }) => {
   const { openModal, closeModal } = useModalStack();
 
   const handleConfirmClick = () => {
-    openModal(ConfirmationModal, {
-      message: "Are you sure?",
-      onConfirm: () => {
-        console.log("Confirmed!");
+    openModal(
+      ConfirmationModal,
+      {
+        // could be pulled out to "openConfirmationModal"
+        onConfirm: () => {
+          console.log("Confirmsed!");
+        },
+        onCancel: () => {}
       },
-      onCancel: () => {}
-    });
+      {
+        title: "Are you sure?",
+        description: "Please confirm your selection."
+      }
+    );
   };
 
   const handleSubmit = () => {

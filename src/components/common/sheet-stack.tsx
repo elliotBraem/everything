@@ -18,6 +18,7 @@ import {
   SheetTitle
 } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { Metadata } from "@/hooks/use-modal-stack";
 import { useSheetStack } from "@/hooks/use-sheet-stack";
 import { ReactNode, memo } from "react";
 
@@ -25,11 +26,13 @@ const StackItem = memo(
   ({
     isMobile,
     children,
-    closeSheet
+    closeSheet,
+    metadata
   }: {
     isMobile: boolean;
     children: ReactNode;
     closeSheet: () => void;
+    metadata: Metadata;
   }) => {
     if (isMobile) {
       return (
@@ -38,11 +41,8 @@ const StackItem = memo(
             {/* <div className="h-full flex-1"> */}
             <div className="flex-1 overflow-y-auto">
               <DrawerHeader className="text-left">
-                <DrawerTitle>Edit profile</DrawerTitle>
-                <DrawerDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
-                </DrawerDescription>
+                <DrawerTitle>{metadata.title}</DrawerTitle>
+                <DrawerDescription>{metadata.description}</DrawerDescription>
               </DrawerHeader>
               <div className="flex h-full flex-col">{children}</div>
             </div>
@@ -60,11 +60,8 @@ const StackItem = memo(
           <SheetContent className="flex h-screen max-h-screen w-full min-w-[768px] flex-col justify-between">
             <div className="flex-1 overflow-y-auto">
               <SheetHeader>
-                <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
-                </SheetDescription>
+                <SheetTitle>{metadata.title}</SheetTitle>
+                <SheetDescription>{metadata.description}</SheetDescription>
               </SheetHeader>
               <div className="flex h-full flex-col">{children}</div>
             </div>
@@ -88,8 +85,13 @@ export const SheetStack = () => {
 
   return (
     <>
-      {sheetStack.map(({ component: Component, props }, index) => (
-        <StackItem key={index} isMobile={isMobile} closeSheet={closeSheet}>
+      {sheetStack.map(({ component: Component, props, metadata }, index) => (
+        <StackItem
+          key={index}
+          isMobile={isMobile}
+          closeSheet={closeSheet}
+          metadata={metadata}
+        >
           <Component {...props} />
         </StackItem>
       ))}

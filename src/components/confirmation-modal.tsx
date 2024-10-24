@@ -24,7 +24,6 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 
   return (
     <div>
-      <h2>Are you sure?</h2>
       <div className="flex justify-end space-x-2">
         <Button onClick={handleConfirm}>Yes</Button>
         <Button onClick={handleCancel} variant="ghost">

@@ -44,6 +44,9 @@ export const ActionButton = () => {
     openSheet(CreateThing, {
       availableTypes: types,
       onSubmit: handleSubmit
+    }, {
+      title: "Create thing",
+      description: "Select a type and then select confirm when you're done"
     });
   };
 
