@@ -2,7 +2,7 @@ import { useCoState } from "@/lib/providers/jazz";
 import { Inventory, Thing } from "@/lib/schema";
 import { ID } from "jazz-tools";
 import { columns } from "../things/columns";
-import { DataTable } from "../things/data-table";
+import { DataTable } from "../common/data-table";
 
 export function InventoryBrowser({
   inventoryId

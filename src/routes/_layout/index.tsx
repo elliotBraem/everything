@@ -2,7 +2,7 @@ import InviteModal from "@/components/invite-modal";
 import { MintModal } from "@/components/mint-modal";
 import NewItemModal, { ThingFormValues } from "@/components/new-item-modal";
 import { columns } from "@/components/things/columns";
-import { DataTable } from "@/components/things/data-table";
+import { DataTable } from "@/components/common/data-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

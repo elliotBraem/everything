@@ -1,5 +1,24 @@
-import { sheetStackAtom } from "@/atoms/sheet";
-import { useAtom } from "jotai";
+import { atom, useAtom } from "jotai";
+
+/**
+ * easy to stack sheets, renders a drawer on mobile
+ * ships with @/components/common/sheet-stack.tsx
+ * 
+ * usage:
+ */
+
+// const { openSheet, closeSheet, closeAllSheets } = useSheetStack();
+// function Content(props) { return <p>{props.message}</p> }
+// openSheet(Content, "hello");
+
+// closeSheet(); // closes top of stack
+interface Sheet {
+  component: React.FC<any>;
+  props: Record<string, any>;
+}
+
+// keeps track of a stack of atoms
+export const sheetStackAtom = atom<Sheet[]>([]);
 
 export const useSheetStack = () => {
   const [sheetStack, setSheetStack] = useAtom(sheetStackAtom);

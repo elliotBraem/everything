@@ -1,5 +1,25 @@
-import { useAtom } from "jotai";
-import { modalStackAtom } from "@/atoms/modal";
+import { atom, useAtom } from "jotai";
+
+/**
+ * easy to stack modals, just provide the content with props
+ * ships with @/components/common/modal-stack.tsx
+ * 
+ * usage:
+ */
+
+// const { openModal, closeModal, closeAllModals } = useModalStack();
+// function Content(props) { return <p>{props.message}</p> }
+// openModal(Content, "hello");
+
+// closeModal(); // closes top of stack
+
+interface Modal {
+  component: React.FC<any>;
+  props: Record<string, any>;
+}
+
+// keeps track of a stack of atoms
+export const modalStackAtom = atom<Modal[]>([]);
 
 export const useModalStack = () => {
   const [modalStack, setModalStack] = useAtom(modalStackAtom);
