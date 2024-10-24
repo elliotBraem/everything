@@ -7,14 +7,59 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+
+import { RJSFSchema } from "@rjsf/utils";
 import { LucideImage, LucideX } from "lucide-react";
 import * as React from "react";
 import { useDropzone } from "react-dropzone";
+import { FormGenerator } from "../form/generator";
 
+const schema: RJSFSchema = {
+  // $schema: "http://json-schema.org/draft-2020-12/schema",
+  type: "object",
+  // definitions: {
+  //   schema: {
+  //     $id: "/schemas/type",
+  //     type: "string"
+  //   }
+  // },
+  properties: {
+    id: { // do we need this?
+      type: "string",
+      description: "Unique identifier for the type."
+    },
+    name: {
+      type: "string",
+      description: "Human-readable name for the type."
+    },
+    description: {
+      type: "string",
+      description: "Optional description of the type."
+    },
+    schema: {
+      // $ref: "#/definitions/schema",
+      type: "string",
+      description: "JSON schema that describes the data for this type.",
+      additionalProperties: true
+    }
+  },
+  required: ["id", "name", "schema"],
+  additionalProperties: false
+};
 interface CreateThingProps {
   availableTypes: string[];
   onSubmit: (formData: { type: string; images: File[]; json: string }) => void;
 }
+
+const ThingForm2 = ({ type, onSubmit }) => {
+  // convert type to schema
+  
+
+  return (
+    <FormGenerator schema={schema} onSubmit={onSubmit} />
+    // onSubmit={log("submitted")}
+  );
+};
 
 const ThingForm = ({ type, onSubmit }) => {
   const [jsonData, setJsonData] = React.useState<string>("");
@@ -99,10 +144,7 @@ const ThingForm = ({ type, onSubmit }) => {
   );
 };
 
-export const CreateThing: React.FC<CreateThingProps> = ({
-  availableTypes,
-  onSubmit
-}) => {
+export const CreateThing = ({ availableTypes, onSubmit }) => {
   const [selectedType, setSelectedType] = React.useState<string | null>(null);
 
   const handleSubmit = () => {
@@ -129,7 +171,11 @@ export const CreateThing: React.FC<CreateThingProps> = ({
             </SelectContent>
           </Select>
         </div>
-        {selectedType ? <ThingForm type={selectedType} /> : <p>please select a type</p>}
+        {selectedType ? (
+          <ThingForm2 type={selectedType} />
+        ) : (
+          <p>please select a type</p>
+        )}
       </div>
     </div>
   );

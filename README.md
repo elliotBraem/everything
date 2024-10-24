@@ -75,6 +75,8 @@ Send for feedback.
 - learn-anything
 - web4
 - final form builder demo https://github.com/final-form/builder-demo
+- tailwind rjsf https://github.com/m6io/rjsf-tailwind
+
 
 <details>
   <summary>Table of Contents</summary>
