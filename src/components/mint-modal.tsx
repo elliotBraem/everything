@@ -1,5 +1,5 @@
-import { Button } from "./ui/button";
-import BaseModal from "./ui/modal";
+import { Button } from "@/components/ui/button";
+import BaseModal from "@/components/ui/modal";
 
 import {
   Form,

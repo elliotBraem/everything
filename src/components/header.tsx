@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/ui/mode-toggle";
+import { ModeToggle } from "@/components/common/mode-toggle";
 import { useWallet } from "@/lib/providers/near";
 import { Link } from "@tanstack/react-router";
 

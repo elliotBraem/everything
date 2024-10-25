@@ -6,14 +6,14 @@ import { RegistryWidgetsType, WidgetProps } from "@rjsf/utils";
 import { LucideImage, LucideX } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from "../ui/select";
+} from "@/components/ui/select";
 import { useAccount } from "@/lib/providers/jazz";
 import { getThings } from "@/lib/inventory";
 

@@ -1,5 +1,5 @@
 import Header from "@/components/header";
-import { ThemeProvider } from "@/components/ui/theme-provider";
+import { ThemeProvider } from "@/lib/providers/theme";
 import { JazzAuth } from "@/lib/providers/jazz";
 import NearProvider from "@/lib/providers/near";
 import { ClerkProvider } from "@clerk/clerk-react";

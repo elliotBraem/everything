@@ -4,8 +4,8 @@ import { Thing } from "@/lib/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { Group } from "jazz-tools";
 import { MoreHorizontal } from "lucide-react";
-import { EditThing } from "../thing/edit";
-import { Button } from "../ui/button";
+import { EditThing } from "@/components/thing/edit";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +13,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { useSheetStack } from "@/hooks/use-sheet-stack";
-import { ConfirmationModal } from "../confirmation-modal";
+import { ConfirmationModal } from "@/components/confirmation-modal";
 
 // We can't really know
 export const columns: ColumnDef<unknown>[] = [

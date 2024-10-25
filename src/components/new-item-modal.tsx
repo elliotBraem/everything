@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { Button } from "./ui/button";
-import BaseModal from "./ui/modal";
+import { Button } from "@/components/ui/button";
+import BaseModal from "@/components/ui/modal";
 // import { Alert, AlertDescription } from "./alert";
 import { Inventory } from "@/lib/schema";
 import { CoMap } from "jazz-tools";
@@ -15,15 +15,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from "./ui/form";
-import { Input } from "./ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from "./ui/select";
+} from "@/components/ui/select";
 
 export interface ThingFormValues extends FieldValues {
   data?: string;

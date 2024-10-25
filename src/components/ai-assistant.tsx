@@ -1,15 +1,15 @@
 import React, { useState, useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAccount } from "@/lib/providers/jazz";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from "./ui/select";
+} from "@/components/ui/select";
 import {
   getThings,
   getThingsByInventory,

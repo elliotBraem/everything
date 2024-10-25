@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useWallet } from "../../lib/providers/near";
+import { useWallet } from "@/lib/providers/near";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/profile/$accountId")({

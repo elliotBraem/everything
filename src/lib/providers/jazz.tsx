@@ -3,7 +3,7 @@ import { useLocation } from "@tanstack/react-router";
 import { createJazzReactApp } from "jazz-react";
 import { useJazzClerkAuth } from "jazz-react-auth-clerk";
 import { AuthMethod } from "jazz-tools";
-import { UserAccount } from "../schema";
+import { UserAccount } from "@/lib/schema";
 
 const Jazz = createJazzReactApp<UserAccount>({
   AccountSchema: UserAccount

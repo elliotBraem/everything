@@ -18,8 +18,8 @@ import { RJSFSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
 import { ID } from "jazz-tools";
 import { useEffect, useState } from "react";
-import { FormGenerator } from "../form/generator";
-import { Textarea } from "../ui/textarea";
+import { FormGenerator } from "@/components/form/generator";
+import { Textarea } from "@/components/ui/textarea";
 import { useAccount } from "@/lib/providers/jazz";
 
 interface CreateThingProps {

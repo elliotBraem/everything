@@ -1,8 +1,8 @@
 import { useModalStack } from "@/hooks/use-modal-stack";
 import { Thing } from "@/lib/schema";
 import { useState } from "react";
-import { ConfirmationModal } from "../confirmation-modal";
-import { Button } from "../ui/button";
+import { ConfirmationModal } from "@/components/confirmation-modal";
+import { Button } from "@/components/ui/button";
 
 interface EditThingProps {
   thing: Thing;
