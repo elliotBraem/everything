@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/common/mode-toggle";
+import { ThemeToggle } from "@/components/common/theme-toggle";
 import { useWallet } from "@/lib/providers/near";
 import { Link } from "@tanstack/react-router";
 
@@ -13,7 +13,7 @@ export default function Header() {
           inventory management
         </Link>
         <nav>
-          <ModeToggle />
+          <ThemeToggle />
           {signedAccountId ? (
             <Button asChild>
               <Link to={`/profile/${signedAccountId}`}>{signedAccountId}</Link>

@@ -17,7 +17,6 @@ import {
 import { useSheetStack } from "@/hooks/use-sheet-stack";
 import { ConfirmationModal } from "@/components/confirmation-modal";
 
-// We can't really know
 export const columns: ColumnDef<unknown>[] = [
   {
     accessorKey: "id",
