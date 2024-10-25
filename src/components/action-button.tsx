@@ -5,6 +5,7 @@ import { useAccount } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
 import { CoMapInit } from "jazz-tools";
 import { CreateThing } from "./thing/create";
+import AIAssistantComponent from "./ai-assistant";
 
 export const ActionButton = () => {
   const { openSheet } = useSheetStack();
@@ -36,18 +37,18 @@ export const ActionButton = () => {
   // </div>
   // <CreateThing availableTypes={["thing"]} onSubmit={handleSubmit} />
 
-  const things = getThings(me);
-  const types = things.filter((thing) => thing.type === "type" || []);
-
   const handleActionClick = () => {
     // openSheet(AIAssistantComponent);
-    openSheet(CreateThing, {
-      availableTypes: types,
-      onSubmit: handleSubmit
-    }, {
-      title: "Create thing",
-      description: "Select a type and then select confirm when you're done"
-    });
+    openSheet(
+      CreateThing,
+      {
+        onSubmit: handleSubmit
+      },
+      {
+        title: "Create thing",
+        description: "Select a type and then select confirm when you're done"
+      }
+    );
   };
 
   return (

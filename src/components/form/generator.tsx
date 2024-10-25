@@ -12,6 +12,12 @@ const uiSchema = {
   },
   media: {
     "ui:widget": "ImageUploadWidget"
+  },
+  type: {
+    "ui:widget": "SelectTypeWidget",
+  },
+  data: {
+    "ui:widget": "JsonEditorWidget"
   }
 };
 
