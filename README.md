@@ -8,10 +8,8 @@
 <h1 style="font-size: 2.5rem; font-weight: bold;">everything</h1>
 
   <p>
-    <strong>concepts for defining the world around us</strong>
+    <strong>apps and packages for creating and defining things</strong>
   </p>
-
-"infrastructure for the user owned internet"
 
 </div>
 
@@ -236,3 +234,15 @@ If you're interested in contributing to this project, please read the [contribut
 />
 </a>
 </div>
+
+
+
+### Checklist
+
+- favicon, title, description, open graph share link
+- expand to monorepo? apps, packages (marketplace)
+- tests?
+- auth vs unauth routes
+- create thing from ai (structured outputs)
+- clearer ai environment
+- everything header
