@@ -20,7 +20,7 @@ import { ID } from "jazz-tools";
 import { useEffect, useState } from "react";
 import { FormGenerator } from "@/components/form/generator";
 import { Textarea } from "@/components/ui/textarea";
-import { useAccount } from "@/lib/providers/jazz";
+import { useAccountOrGuest } from "@/lib/providers/jazz";
 
 interface CreateThingProps {
   availableTypes: string[];
@@ -131,7 +131,7 @@ const ThingForm = ({
   type?: Thing;
   onSubmit: (data: any) => void;
 }) => {
-  const { me } = useAccount();
+  const { me } = useAccountOrGuest();
   const things = getThings(me);
   const types = things.filter((thing) => thing.type === "type" || []);
 

@@ -21,6 +21,18 @@ export class UserAccountRoot extends CoMap {
   inventories = co.ref(InventoryList);
 }
 
+// we could start with some things...
+// they are all types
+// Thing
+// Type
+// Inventory
+// User
+// Metadata
+
+// On each update of the app, what if it grabbed the types and published the schema?
+// posted it to Graph("root.allthethings.testnet").set("every.near/type/user")
+// then, when you fork it, it will set to your account.
+// it will pull from the bos.config.json
 export const schema: RJSFSchema = {
   type: "object",
   properties: {

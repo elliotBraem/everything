@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useAccount } from "@/lib/providers/jazz";
+import { useAccountOrGuest } from "@/lib/providers/jazz";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +21,7 @@ import {
 import { Inventory, Thing } from "@/lib/schema";
 
 const AIAssistantComponent: React.FC = () => {
-  const { me } = useAccount();
+  const { me } = useAccountOrGuest();
 
   const parseIntent = (question: string) => {
     // Basic intent parsing for creating or updating a "Thing"

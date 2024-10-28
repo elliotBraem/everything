@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createInventory, getInventories } from "@/lib/inventory";
-import { useAccount } from "@/lib/providers/jazz";
+import { useAccountOrGuest } from "@/lib/providers/jazz";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_layout/inventory")({
 });
 
 export default function InventoryBrowser() {
-  const { me } = useAccount();
+  const { me } = useAccountOrGuest();
   const inventories = getInventories(me);
   const navigate = Route.useNavigate();
   const [isNewInventoryInputVisible, setIsNewInventoryInputVisible] =

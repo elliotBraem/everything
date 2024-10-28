@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { useAccount } from "@/lib/providers/jazz";
+import { useAccountOrGuest } from "@/lib/providers/jazz";
 import { getThings } from "@/lib/inventory";
 
 // for reference, see https://github.com/m6io/rjsf-tailwind/blob/main/src/components/rjsf/Widgets/Widgets.ts
@@ -178,7 +178,7 @@ export const widgets: RegistryWidgetsType = {
     );
   },
   SelectTypeWidget: function (props: WidgetProps) {
-    const { me } = useAccount(); 
+    const { me } = useAccountOrGuest(); 
     const things = getThings(me);
     const types = things.filter((thing) => thing.type === "type" || []);
     return (

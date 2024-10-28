@@ -11,9 +11,9 @@ export default function HomePage() {
 
   //
 
-  return <p>Hello!</p>;
+  return <p>landing page</p>;
 
-  // const { me } = useAccount();
+  // const { me } = useAccountOrGuest();
   // const navigate = Route.useNavigate();
 
   // const [inventoryId, setInventoryId] = useState<ID<Inventory> | undefined>(

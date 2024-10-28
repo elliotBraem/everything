@@ -9,7 +9,7 @@ import {
   getInventory,
   getThingsByInventory2
 } from "@/lib/inventory";
-import { useAccount } from "@/lib/providers/jazz";
+import { useAccountOrGuest } from "@/lib/providers/jazz";
 import { Inventory } from "@/lib/schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { Group, ID } from "jazz-tools";
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_layout/inventory/$inventoryId")({
 // parameter type checking for inventoryId so no need to cast?
 
 export default function InventoryPage() {
-  const { me } = useAccount();
+  const { me } = useAccountOrGuest();
   const { inventoryId } = Route.useParams();
   const inventory = getInventory(inventoryId as ID<Inventory>);
   const filteredThings = inventory ? getThingsByInventory2(inventory) : [];

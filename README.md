@@ -34,6 +34,8 @@ everything.dev
 everything.market
 everythingproject.org
 
+graph.every.near - deploy socialdb contract
+
 mega proposal along with the Keypom app
 
 Editor - what does this do?
@@ -246,3 +248,6 @@ If you're interested in contributing to this project, please read the [contribut
 - create thing from ai (structured outputs)
 - clearer ai environment
 - everything header
+- how to handle offline?
+- hide dev tools in production
+- edit thing, wrapper around ThingForm

@@ -2,13 +2,13 @@ import { BlackSphere } from "@/components/common/black-sphere";
 import { CreateThing } from "@/components/thing/create";
 import { useSheetStack } from "@/hooks/use-sheet-stack";
 import { createItem, getInventories } from "@/lib/inventory";
-import { useAccount } from "@/lib/providers/jazz";
+import { useAccountOrGuest } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
 import { CoMapInit } from "jazz-tools";
 
 export const ActionButton = () => {
   const { openSheet } = useSheetStack();
-  const { me } = useAccount();
+  const { me } = useAccountOrGuest();
 
   const inventories = getInventories(me);
 

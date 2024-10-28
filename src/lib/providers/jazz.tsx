@@ -1,4 +1,4 @@
-import { SignInButton, useClerk } from "@clerk/clerk-react";
+import { SignInButton, useAuth, useClerk } from "@clerk/clerk-react";
 import { useLocation } from "@tanstack/react-router";
 import { createJazzReactApp } from "jazz-react";
 import { useJazzClerkAuth } from "jazz-react-auth-clerk";
@@ -42,29 +42,17 @@ export function JazzAndAuth({ children }: ChildrenProps) {
 }
 
 export function JazzAuth({ children }: ChildrenProps) {
-  // const clerk = useClerk()
-  // const { isLoaded, isSignedIn } = useAuth()
-  // const [authMethod] = useJazzClerkAuth(clerk)
-
-  // if (!isLoaded) return null
-  // if (!isSignedIn) return <JazzGuest>{children}</JazzGuest>
-  // if (!authMethod) return null
-
   const clerk = useClerk();
+  const { isLoaded, isSignedIn } = useAuth();
   const [auth, state] = useJazzClerkAuth(clerk);
+
+  // if (!isLoaded) return <p>loading...</p>;
+  if (!isSignedIn) return <JazzGuest>{children}</JazzGuest>;
+  if (!auth) return <p>no auth!</p>;
 
   return (
     <>
-      {state.errors.map((error) => (
-        <div key={error}>{error}</div>
-      ))}
-      {auth ? (
-        <JazzProvider auth={auth}>{children}</JazzProvider>
-      ) : (
-        <>
-          <SignInButton />
-        </>
-      )}
+      <JazzProvider auth={auth}>{children}</JazzProvider>
     </>
   );
 }

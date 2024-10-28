@@ -1,10 +1,3 @@
-import { Inventory } from "@/lib/schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createInviteLink } from "jazz-react";
-import { Group } from "jazz-tools";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,6 +14,13 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { shareInventory } from "@/lib/inventory";
+import { Inventory } from "@/lib/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Group } from "jazz-tools";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface InviteModalProps {
   selectedInventory: Inventory | undefined;
@@ -187,16 +187,6 @@ const InviteForm = ({
       </form>
     </Form>
   );
-};
-
-export const shareInventory = (
-  inventory: Inventory,
-  permission: "reader" | "writer" | "admin"
-): string | undefined => {
-  if (inventory._owner && inventory.id) {
-    return createInviteLink(inventory, permission);
-  }
-  return undefined;
 };
 
 const InviteModal: React.FC<InviteModalProps> = ({ selectedInventory }) => {
