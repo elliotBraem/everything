@@ -1,0 +1,130 @@
+import { useWallet } from "@/lib/providers/near";
+import { getProviderByNetwork, view } from "@near-js/client";
+import { parseNearAmount } from "@near-js/utils";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { NO_DEPOSIT, THIRTY_TGAS } from "@/wallets/near-wallet";
+import { queryClient } from "@/main";
+
+export interface GuestBookMessage {
+  premium: boolean;
+  sender: string;
+  text: string;
+}
+
+export const GRAPH_CONTRACT = {
+  mainnet: "social.near",
+  testnet: "v1.social08.testnet"
+};
+
+export function useGetTypes() {
+  const { networkId } = useWallet();
+
+  return useQuery({
+    queryKey: ["get-types"],
+    queryFn: async () => {
+
+      const args = {
+        keys: ["efiz.testnet/type/*"],
+      };
+
+      const allTypes = await view<number>({
+        account: GRAPH_CONTRACT[networkId],
+        method: "keys",
+        deps: { rpcProvider: getProviderByNetwork(networkId) },
+        args
+      });
+      return buildObjects(allTypes);
+    }
+  });
+}
+
+export function useCreateType() {
+  const { networkId, wallet } = useWallet();
+
+  return useMutation({
+    onSuccess: () => {
+      // Invalidate and refetch the "get-types" query
+      queryClient.invalidateQueries({ queryKey: ["get-types"] });
+    },
+    mutationFn: async ({
+      message,
+      donationAmount
+    }: {
+      message: string;
+      donationAmount?: string;
+    }) => {
+      try {
+        const deposit = parseNearAmount(donationAmount);
+
+        const result = wallet?.signAndSendTransaction({
+          contractId: GRAPH_CONTRACT[networkId],
+          actions: [
+            {
+              type: "FunctionCall",
+              params: {
+                methodName: "add_message",
+                args: { text: message },
+                gas: THIRTY_TGAS,
+                deposit: deposit ? deposit : NO_DEPOSIT
+              }
+            }
+          ]
+        });
+        return result; // Make sure the function returns a value/promise
+      } catch (error) {
+        console.error("Error in mutation:", error);
+        throw error;
+      }
+    }
+  });
+}
+
+
+// This will just condense into a single path
+const getPaths = (obj) => {
+  const paths = [];
+
+  // Iterate over L1 keys
+  for (const l1Key in obj) {
+      const l2Obj = obj[l1Key];
+
+      // Iterate over L2 keys
+      for (const l2Key in l2Obj) {
+          const l3Obj = l2Obj[l2Key];
+
+          // Iterate over L3 keys
+          for (const l3Key in l3Obj) {
+              paths.push(`${l1Key}/${l2Key}/${l3Key}`);
+          }
+      }
+  }
+
+  return paths;
+};
+
+// This builds an object 
+const buildObjects = (obj) => {
+  const result = [];
+
+  // Iterate over L1 keys
+  for (const accountId in obj) {
+      const l2Obj = obj[accountId];
+
+      // Iterate over L2 keys
+      for (const type in l2Obj) {
+          const l3Obj = l2Obj[type];
+
+          // Iterate over L3 keys
+          for (const key in l3Obj) {
+              result.push({
+                  accountId: accountId,
+                  type: type,
+                  key: key,
+                  id: `${accountId}/${type}/${key}`
+              });
+          }
+      }
+  }
+
+  return result;
+};

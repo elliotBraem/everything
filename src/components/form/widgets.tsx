@@ -180,7 +180,9 @@ export const widgets: RegistryWidgetsType = {
   SelectTypeWidget: function (props: WidgetProps) {
     const { me } = useAccountOrGuest(); 
     const things = getThings(me);
-    const types = things.filter((thing) => thing.type === "type" || []);
+    const types = things.filter((thing) => {
+      return thing.type.toLowerCase() === "type" || []
+  });
     return (
       <Select onValueChange={props.onChange} defaultValue={props.value}>
         <SelectTrigger className="w-full">
@@ -188,10 +190,9 @@ export const widgets: RegistryWidgetsType = {
         </SelectTrigger>
         <SelectContent>
           {types.map((type: Thing) => {
-            const typeData = JSON.parse(type.data);
             return (
               <SelectItem key={type.id} value={type.id}>
-                {typeData.name}
+                Type
               </SelectItem>
             );
           })}

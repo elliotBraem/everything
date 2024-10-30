@@ -1,0 +1,63 @@
+import { AnimatePresence, motion } from "framer-motion";
+import { ReactNode, useState } from "react";
+
+export const WindowControls = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const menuItems = [
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" }
+  ];
+
+  return (
+    <div className="relative border-b-2 border-gray-800 px-4 pb-3 pt-3">
+      <div className="flex items-center justify-end">
+        <div
+          className="h-4 w-4 cursor-pointer rounded-full bg-black transition-opacity hover:opacity-80"
+          onClick={() => setIsOpen(!isOpen)}
+        />
+      </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute right-4 top-8 z-50 w-48 border-2 border-gray-800 bg-white shadow-[2px_2px_0_rgba(0,0,0,1)]"
+          >
+            {menuItems.map((item) => (
+              <button
+                key={item.path}
+                className="w-full px-4 py-2 text-left font-mono transition-colors hover:bg-gray-100"
+                onClick={() => {
+                  // navigate({ to: `/${item.path}` });
+                  setIsOpen(false);
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+interface WindowContainerProps {
+  children: ReactNode;
+}
+
+export default function WindowContainer({ children }: WindowContainerProps) {
+  return (
+    <motion.div
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="mx-auto max-w-4xl border-2 border-gray-800 bg-white shadow-[4px_4px_0_rgba(0,0,0,1)]"
+    >
+      <WindowControls />
+      <div className="p-8">{children}</div>
+    </motion.div>
+  );
+}

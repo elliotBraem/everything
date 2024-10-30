@@ -142,8 +142,8 @@ const ThingForm = ({
     if (selectedType) {
       console.log("yes", selectedType);
       const typeData = JSON.parse(selectedType.data);
-      const schemaData = JSON.parse(typeData.schema);
-      setSchemaData(schemaData);
+      // const schemaData = JSON.parse(typeData.schema);
+      setSchemaData(typeData);
     }
   }, [selectedType]);
 
@@ -155,10 +155,10 @@ const ThingForm = ({
         </SelectTrigger>
         <SelectContent>
           {types.map((type: Thing) => {
-            const typeData = JSON.parse(type.data);
+            // const typeData = JSON.parse(type.data);
             return (
               <SelectItem key={type.id} value={type}>
-                {typeData.name}
+                Type
               </SelectItem>
             );
           })}
