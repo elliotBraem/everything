@@ -1,9 +1,4 @@
-import { useModalStack } from "@/hooks/use-modal-stack";
-import { deleteItem } from "@/lib/inventory";
-import { Thing } from "@/lib/schema";
-import { ColumnDef } from "@tanstack/react-table";
-import { Group } from "jazz-tools";
-import { MoreHorizontal } from "lucide-react";
+import { ConfirmationModal } from "@/components/confirmation-modal";
 import { EditThing } from "@/components/thing/edit";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,8 +9,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useModalStack } from "@/hooks/use-modal-stack";
 import { useSheetStack } from "@/hooks/use-sheet-stack";
-import { ConfirmationModal } from "@/components/confirmation-modal";
+import { deleteItem } from "@/lib/inventory";
+import { Thing } from "@/lib/schema";
+import { ColumnDef } from "@tanstack/react-table";
+import { Group } from "jazz-tools";
+import { MoreHorizontal } from "lucide-react";
+import { InspectThing } from "../thing/inspect";
 
 export const columns: ColumnDef<unknown>[] = [
   {
@@ -92,9 +93,7 @@ export const columns: ColumnDef<unknown>[] = [
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={handleInspectClick}
-            >
+            <DropdownMenuItem onClick={handleInspectClick}>
               Inspect
             </DropdownMenuItem>
             <DropdownMenuItem
