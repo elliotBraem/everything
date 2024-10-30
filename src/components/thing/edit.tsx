@@ -1,8 +1,8 @@
-import { useModalStack } from "@/hooks/use-modal-stack";
-import { Thing } from "@/lib/schema";
-import { useState } from "react";
 import { ConfirmationModal } from "@/components/confirmation-modal";
 import { Button } from "@/components/ui/button";
+import { useModalStack } from "@/hooks/use-modal-stack";
+import { Thing, ThingSchema, TypeSchema } from "@/lib/schema";
+import { FormGenerator } from "../form/generator";
 
 interface EditThingProps {
   thing: Thing;
@@ -10,7 +10,6 @@ interface EditThingProps {
 }
 
 export const EditThing: React.FC<EditThingProps> = ({ thing }) => {
-  const [formData, setFormData] = useState();
   const { openModal, closeModal } = useModalStack();
 
   const handleConfirmClick = () => {
@@ -35,10 +34,11 @@ export const EditThing: React.FC<EditThingProps> = ({ thing }) => {
     console.log("Updating thing:", formData);
   };
 
+  // console.log("data", data);
+
   return (
     <div>
-      <h2>{thing.id}</h2>
-      {/* form logic */}
+      <FormGenerator data={thing} schema={ThingSchema} />
       <Button onClick={handleConfirmClick}>Open Confirmation</Button>
     </div>
   );

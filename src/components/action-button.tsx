@@ -7,25 +7,8 @@ import { Thing } from "@/lib/schema";
 import { CoMapInit } from "jazz-tools";
 
 export const ActionButton = () => {
-  const { openSheet } = useSheetStack();
-  const { me } = useAccountOrGuest();
-
-  const inventories = getInventories(me);
-
-  const handleSubmit = ({ data, type }) => {
-    try {
-      createItem({
-        inventory: inventories?.at(0),
-        deleted: false,
-        data: data,
-        type: type
-      } as CoMapInit<Thing>);
-    } catch (err: any) {
-      throw new Error(err);
-    }
-    console.log("Form submitted:", data);
-  };
-
+  const { openSheet, closeSheet } = useSheetStack();
+  
   // <div className="h-full w-full">
   //   <iframe
   //     src="https://near.social/embed/every.near/widget/thing?path=efiz.near/thing/core"
@@ -41,7 +24,10 @@ export const ActionButton = () => {
     openSheet(
       CreateThing,
       {
-        onSubmit: handleSubmit
+        onCreateCallback: () => {
+          // it could toast, success or so
+          closeSheet();
+        }
       },
       {
         title: "Create thing",

@@ -72,6 +72,7 @@ export const widgets: RegistryWidgetsType = {
     );
   },
   JsonEditorWidget: function (props: WidgetProps) {
+
     const [error, setError] = useState<string | null>(null);
     const formatJsonKeys = (value: string): string => {
       try {
@@ -178,6 +179,8 @@ export const widgets: RegistryWidgetsType = {
     );
   },
   SelectTypeWidget: function (props: WidgetProps) {
+    console.log("the props", props)
+    
     const { me } = useAccountOrGuest(); 
     const things = getThings(me);
     const types = things.filter((thing) => {

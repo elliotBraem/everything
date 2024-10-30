@@ -14,7 +14,7 @@ const uiSchema = {
     "ui:widget": "ImageUploadWidget"
   },
   type: {
-    "ui:widget": "SelectTypeWidget",
+    "ui:widget": "SelectTypeWidget"
   },
   data: {
     "ui:widget": "JsonEditorWidget"
@@ -22,20 +22,32 @@ const uiSchema = {
 };
 
 export const FormGenerator = ({
+  data,
   schema,
-  onSubmit
+  readonly = false,
+  onChange,
+  onSubmit,
+  onError
 }: {
+  data?: any;
   schema: RJSFSchema;
-  onSubmit: () => void;
+  readonly?: boolean;
+  onChange?: () => void;
+  onSubmit?: () => void;
+  onError?: () => void;
 }) => {
   return (
     <Form
       schema={schema}
+      formData={JSON.parse(JSON.stringify(data))}
       validator={validator}
       uiSchema={uiSchema}
       widgets={widgets}
       templates={templates}
-      onSubmit={onSubmit}
+      readonly={readonly}
+      onChange={() => onChange?.()}
+      onSubmit={() => onSubmit?.()}
+      onError={() => onError?.()}
       showErrorList="top"
     />
   );

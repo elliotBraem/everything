@@ -4,6 +4,7 @@ import { Account, co, CoList, CoMap, Group, Profile } from "jazz-tools";
 export class Thing extends CoMap {
   data = co.string;
   type = co.string;
+  metadata = co.string;
   inventory = co.ref(Inventory);
   deleted = co.boolean;
 }
@@ -33,7 +34,7 @@ export class UserAccountRoot extends CoMap {
 // posted it to Graph("root.allthethings.testnet").set("every.near/type/user")
 // then, when you fork it, it will set to your account.
 // it will pull from the bos.config.json
-export const schema: RJSFSchema = {
+export const TypeSchema: RJSFSchema = {
   type: "object",
   properties: {
     name: {
@@ -45,15 +46,44 @@ export const schema: RJSFSchema = {
       description: "Optional description of the type."
     },
     schema: {
-      // $ref: "#/definitions/schema",
       type: "string",
       description: "JSON schema that describes the data for this type.",
+    }
+  },
+  required: ["name", "description", "schema"],
+  additionalProperties: false
+};
+
+export const ThingSchema: RJSFSchema = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      description: "Unique identifier for the Thing."
+    },
+    type: {
+      type: "string",
+      description: "Reference to the Type schema ID defining this Thing's structure."
+    },
+    metadata: {
+      type: "object",
+      description: "Additional metadata about the Thing.",
+      properties: {
+        name: { type: "string"  },
+        description: { type: "string" },
+      },
+      additionalProperties: true
+    },
+    data: {
+      type: "string",
+      description: "Structured JSON following the schema defined by Type.",
       additionalProperties: true
     }
   },
-  required: ["name", "schema"],
+  required: ["id", "type", "metadata", "data"],
   additionalProperties: false
 };
+
 
 export class UserAccount extends Account {
   profile = co.ref(Profile);
@@ -74,8 +104,19 @@ export class UserAccount extends Account {
       firstInventory.things?.push(
         Thing.create(
           {
-            data: JSON.stringify(schema),
+            data: JSON.stringify(TypeSchema),
             type: "Type",
+            metadata: JSON.stringify({}),
+            inventory: firstInventory,
+            deleted: false
+          },
+          { owner: group }
+        ),
+        Thing.create(
+          {
+            data: JSON.stringify(ThingSchema),
+            type: "Thing",
+            metadata: JSON.stringify({}),
             inventory: firstInventory,
             deleted: false
           },

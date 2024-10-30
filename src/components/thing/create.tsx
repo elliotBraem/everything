@@ -1,3 +1,4 @@
+import { FormGenerator } from "@/components/form/generator";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -12,19 +13,22 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getThing, getThings } from "@/lib/inventory";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  createItem,
+  getInventories,
+  getThing,
+  getThings
+} from "@/lib/inventory";
+import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
 import { RJSFSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
-import { ID } from "jazz-tools";
+import { CoMapInit, ID } from "jazz-tools";
 import { useEffect, useState } from "react";
-import { FormGenerator } from "@/components/form/generator";
-import { Textarea } from "@/components/ui/textarea";
-import { useAccountOrGuest } from "@/lib/providers/jazz";
 
 interface CreateThingProps {
-  availableTypes: string[];
-  onSubmit: (formData: { type: string; data: string }) => void;
+  onCreateCallback: () => void;
 }
 
 const jsonEditorSchema: RJSFSchema = {
@@ -36,17 +40,28 @@ const jsonEditorSchema: RJSFSchema = {
   required: ["type", "data"]
 };
 
-export const CreateThing = ({ onSubmit }: CreateThingProps) => {
+export const CreateThing = ({ onCreateCallback }: CreateThingProps) => {
+  const { me } = useAccount();
+
+  const inventories = getInventories(me);
+
   const [selectedType, setSelectedType] = useState<Thing | null>(null);
   const [activeTab, setActiveTab] = useState("form");
   const [validationErrors, setValidationErrors] = useState<string>("");
   const [isErrorsOpen, setIsErrorsOpen] = useState(false);
 
-  const handleSubmit = (data: any) => {
-    onSubmit({
-      type: selectedType?.type || "easy-prompt",
-      data: JSON.stringify(data.formData)
-    });
+  const handleSubmit = ({ data, type }) => {
+    try {
+      createItem({
+        inventory: inventories?.at(0),
+        deleted: false,
+        data: JSON.stringify(data.formData),
+        type: selectedType?.type
+      } as CoMapInit<Thing>);
+    } catch (err: any) {
+      throw new Error(err);
+    }
+    console.log("Form submitted:", data);
   };
 
   const validateData = (data: any) => {
