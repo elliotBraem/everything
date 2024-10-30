@@ -83,6 +83,8 @@
     "@playwright/test": "^1.46.1",
     "@tanstack/router-devtools": "^1.69.1",
     "@tanstack/router-plugin": "^1.69.1",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.7.5",
     "@types/react": "^18.3.3",

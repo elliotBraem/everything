@@ -139,13 +139,27 @@ const AIAssistantComponent: React.FC = () => {
         return;
       }
 
+      // const requestBody = JSON.stringify({
+      //   model,
+      //   messages: [...messages, { role: "user", content: newQuestion }],
+      //   stream: true
+      // });
+
       const requestBody = JSON.stringify({
-        model,
-        messages: [...messages, { role: "user", content: newQuestion }],
-        stream: true
+        prompt: "Generate a data object with information about a new product",
+        model: "gpt-4o-mini",
+        schema: {
+          type: "object",
+          properties: {
+            productName: { type: "string" },
+            price: { type: "number" },
+            inStock: { type: "boolean" }
+          },
+          required: ["productName", "price", "inStock"]
+        }
       });
 
-      const response = await fetch("http://127.0.0.1:3000/proxy-openai", {
+      const response = await fetch("/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: requestBody

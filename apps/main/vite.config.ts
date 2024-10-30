@@ -23,6 +23,7 @@ export default defineConfig({
       cert: fs.readFileSync('./_wildcard.near.page.pem'),
     },
     proxy: {
+      '/ai': 'http://localhost:3005',
       '/web4': {
         target: 'https://localhost:3000',
         secure: false,

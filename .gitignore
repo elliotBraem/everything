@@ -41,3 +41,6 @@ package-lock.json
 # Certs
 
 _wildcard.*
+
+
+.env
