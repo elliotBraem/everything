@@ -48,6 +48,17 @@ export const columns: ColumnDef<unknown>[] = [
         );
       };
 
+      const handleInspectClick = () => {
+        openSheet(
+          InspectThing,
+          { thing },
+          {
+            title: "Inspect Thing",
+            description: "Select confirm when you're done"
+          }
+        );
+      };
+
       const handleDeleteClick = () => {
         console.log("deleting...");
         openModal(
@@ -81,6 +92,11 @@ export const columns: ColumnDef<unknown>[] = [
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={handleInspectClick}
+            >
+              Inspect
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleEditClick}
               disabled={

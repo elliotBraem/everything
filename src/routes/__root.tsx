@@ -1,21 +1,46 @@
 import Header from "@/components/header";
-import { ThemeProvider } from "@/lib/providers/theme";
 import { JazzAuth } from "@/lib/providers/jazz";
 import NearProvider from "@/lib/providers/near";
-import { ClerkProvider } from "@clerk/clerk-react";
+import { ThemeProvider } from "@/lib/providers/theme";
 import { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   Link,
   Outlet,
   createRootRouteWithContext
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import Cookies from "js-cookie";
+import React from "react";
+
+export const TanStackRouterDevtools =
+  process.env.NODE_ENV === "production"
+    ? () => null
+    : React.lazy(() =>
+        import("@tanstack/router-devtools").then((res) => ({
+          default: res.TanStackRouterDevtools
+        }))
+      );
+
+export const ReactQueryDevtools =
+  process.env.NODE_ENV === "production"
+    ? () => null
+    : React.lazy(() =>
+        import("@tanstack/react-query-devtools").then((d) => ({
+          default: d.ReactQueryDevtools
+        }))
+      );
 
 export const Route = createRootRouteWithContext<{
+  auth: { userId: string };
   queryClient: QueryClient;
 }>()({
   component: RootComponent,
+  beforeLoad: async ({ context }) => {
+    if (context.auth) {
+      return { auth: context.auth };
+    }
+    const auth = !!Cookies.get("web4_account_id");
+    return { auth };
+  },
   notFoundComponent: () => {
     return (
       <div>
@@ -29,25 +54,23 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
   return (
     <>
+      {/* <AuthDebugger /> */}
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <NearProvider>
-          <ClerkProvider
-            publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
-            afterSignOutUrl="/"
-          >
-            <JazzAuth>
-              <div className="min-h-screen">
-                <Header />
+          <JazzAuth>
+            <div className="min-h-screen">
+              <Header />
 
-                <main className="container mx-auto px-4 py-8">
-                  <Outlet />
-                </main>
-              </div>
-            </JazzAuth>
-          </ClerkProvider>
+              <main className="container mx-auto px-4 py-8">
+                <Outlet />
+              </main>
+            </div>
+          </JazzAuth>
         </NearProvider>
-        <ReactQueryDevtools buttonPosition="bottom-left" />
-        <TanStackRouterDevtools position="bottom-right" />
+        <React.Suspense>
+          <TanStackRouterDevtools position="bottom-right" />
+          <ReactQueryDevtools buttonPosition="bottom-right" />
+        </React.Suspense>
       </ThemeProvider>
     </>
   );

@@ -251,3 +251,30 @@ If you're interested in contributing to this project, please read the [contribut
 - how to handle offline?
 - hide dev tools in production
 - edit thing, wrapper around ThingForm
+
+
+
+# Running locally
+
+1. Install [mkcert](https://mkcert.dev/).
+2. Install local certificate authority (this allows browser to trust self-signed certificates):
+    ```bash
+    mkcert -install
+    ```
+3. Create `*.near.page` SSL certificate:
+    ```bash
+    mkcert "*.near.page"
+    ```
+3. Run `web4` man-in-the-middle proxy locally:
+    ```bash
+    IPFS_GATEWAY_URL=https://ipfs.near.social NODE_ENV=mainnet WEB4_KEY_FILE=./_wildcard.near.page-key.pem WEB4_CERT_FILE=./_wildcard.near.page.pem npx web4-near
+    ```
+4. Setup browser to use [automatic proxy configuration file](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) at `http://localhost:8080/` or to use `localhost:8080` as an HTTPS proxy server.
+
+I had to do:
+
+`sudo sh -c 'echo "127.0.0.1 every.near.page" >> /etc/hosts'`
+
+and 
+
+`pnpm run dev --host every.near.page`

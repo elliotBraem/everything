@@ -1,9 +1,8 @@
-import { SignInButton, useAuth, useClerk } from "@clerk/clerk-react";
+import { useJazzWeb4Auth } from "@/hooks/use-web4-auth";
+import { UserAccount } from "@/lib/schema";
 import { useLocation } from "@tanstack/react-router";
 import { createJazzReactApp } from "jazz-react";
-import { useJazzClerkAuth } from "jazz-react-auth-clerk";
 import { AuthMethod } from "jazz-tools";
-import { UserAccount } from "@/lib/schema";
 
 const Jazz = createJazzReactApp<UserAccount>({
   AccountSchema: UserAccount
@@ -24,9 +23,7 @@ function assertPeerUrl(
 }
 
 const JAZZ_PEER_URL = (() => {
-  // const rawUrl = getEnvVariable("VITE_JAZZ_PEER_URL")
-
-  const rawUrl = "wss://cloud.jazz.tools/?key=you@example.com";
+  const rawUrl = "wss://cloud.jazz.tools/?key=elliot@nearbuilders.org";
   assertPeerUrl(rawUrl);
   return rawUrl;
 })();
@@ -42,13 +39,10 @@ export function JazzAndAuth({ children }: ChildrenProps) {
 }
 
 export function JazzAuth({ children }: ChildrenProps) {
-  const clerk = useClerk();
-  const { isLoaded, isSignedIn } = useAuth();
-  const [auth, state] = useJazzClerkAuth(clerk);
+  const [auth, state] = useJazzWeb4Auth();
 
   // if (!isLoaded) return <p>loading...</p>;
-  if (!isSignedIn) return <JazzGuest>{children}</JazzGuest>;
-  if (!auth) return <p>no auth!</p>;
+  if (!auth) return <JazzGuest>{children}</JazzGuest>;
 
   return (
     <>
