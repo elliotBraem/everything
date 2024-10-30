@@ -1,13 +1,10 @@
 import Header from "@/components/header";
+import { NotFound } from "@/components/not-found";
 import { JazzAuth } from "@/lib/providers/jazz";
 import NearProvider from "@/lib/providers/near";
 import { ThemeProvider } from "@/lib/providers/theme";
 import { QueryClient } from "@tanstack/react-query";
-import {
-  Link,
-  Outlet,
-  createRootRouteWithContext
-} from "@tanstack/react-router";
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import Cookies from "js-cookie";
 import React from "react";
 
@@ -41,14 +38,7 @@ export const Route = createRootRouteWithContext<{
     const auth = !!Cookies.get("web4_account_id");
     return { auth };
   },
-  notFoundComponent: () => {
-    return (
-      <div>
-        <p>404 not found</p>
-        <Link to="/">Go home</Link>
-      </div>
-    );
-  }
+  notFoundComponent: NotFound
 });
 
 function RootComponent() {
@@ -56,20 +46,15 @@ function RootComponent() {
     <>
       {/* <AuthDebugger /> */}
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <NearProvider>
+        {/* May not need Near Provider, and Jazz Provider maybe should be combined */}
+        <NearProvider> 
           <JazzAuth>
-            <div className="min-h-screen">
-              <Header />
-
-              <main className="container mx-auto px-4 py-8">
-                <Outlet />
-              </main>
-            </div>
+            <Outlet />
           </JazzAuth>
         </NearProvider>
         <React.Suspense>
-          <TanStackRouterDevtools position="bottom-right" />
-          <ReactQueryDevtools buttonPosition="bottom-right" />
+          <TanStackRouterDevtools position="bottom-left" />
+          <ReactQueryDevtools buttonPosition="bottom-left" />
         </React.Suspense>
       </ThemeProvider>
     </>

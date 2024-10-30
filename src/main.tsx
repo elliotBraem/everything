@@ -13,6 +13,7 @@ const router = createRouter({
   // This will ensure that the loader is always called when the route is preloaded or visited
   defaultPreloadStaleTime: 0,
   context: {
+    auth: undefined!,
     queryClient
   }
 });

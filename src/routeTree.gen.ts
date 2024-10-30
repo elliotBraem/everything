@@ -14,10 +14,11 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as ProfileAccountIdImport } from './routes/profile/$accountId'
-import { Route as LayoutInventoryImport } from './routes/_layout/inventory'
-import { Route as LayoutInventoryIndexImport } from './routes/_layout/inventory/index'
+import { Route as LayoutAuthImport } from './routes/_layout/_auth'
 import { Route as LayoutlandingIndexImport } from './routes/_layout/(landing)/index'
-import { Route as LayoutInventoryInventoryIdImport } from './routes/_layout/inventory/$inventoryId'
+import { Route as LayoutAuthInventoryImport } from './routes/_layout/_auth/inventory'
+import { Route as LayoutAuthInventoryIndexImport } from './routes/_layout/_auth/inventory/index'
+import { Route as LayoutAuthInventoryInventoryIdImport } from './routes/_layout/_auth/inventory/$inventoryId'
 
 // Create/Update Routes
 
@@ -38,16 +39,9 @@ const ProfileAccountIdRoute = ProfileAccountIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LayoutInventoryRoute = LayoutInventoryImport.update({
-  id: '/inventory',
-  path: '/inventory',
+const LayoutAuthRoute = LayoutAuthImport.update({
+  id: '/_auth',
   getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutInventoryIndexRoute = LayoutInventoryIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LayoutInventoryRoute,
 } as any)
 
 const LayoutlandingIndexRoute = LayoutlandingIndexImport.update({
@@ -56,13 +50,24 @@ const LayoutlandingIndexRoute = LayoutlandingIndexImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutInventoryInventoryIdRoute = LayoutInventoryInventoryIdImport.update(
-  {
+const LayoutAuthInventoryRoute = LayoutAuthInventoryImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => LayoutAuthRoute,
+} as any)
+
+const LayoutAuthInventoryIndexRoute = LayoutAuthInventoryIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutAuthInventoryRoute,
+} as any)
+
+const LayoutAuthInventoryInventoryIdRoute =
+  LayoutAuthInventoryInventoryIdImport.update({
     id: '/$inventoryId',
     path: '/$inventoryId',
-    getParentRoute: () => LayoutInventoryRoute,
-  } as any,
-)
+    getParentRoute: () => LayoutAuthInventoryRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -82,11 +87,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/inventory': {
-      id: '/_layout/inventory'
-      path: '/inventory'
-      fullPath: '/inventory'
-      preLoaderRoute: typeof LayoutInventoryImport
+    '/_layout/_auth': {
+      id: '/_layout/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutAuthImport
       parentRoute: typeof LayoutImport
     }
     '/profile/$accountId': {
@@ -96,12 +101,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileAccountIdImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/inventory/$inventoryId': {
-      id: '/_layout/inventory/$inventoryId'
-      path: '/$inventoryId'
-      fullPath: '/inventory/$inventoryId'
-      preLoaderRoute: typeof LayoutInventoryInventoryIdImport
-      parentRoute: typeof LayoutInventoryImport
+    '/_layout/_auth/inventory': {
+      id: '/_layout/_auth/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof LayoutAuthInventoryImport
+      parentRoute: typeof LayoutAuthImport
     }
     '/_layout/(landing)/': {
       id: '/_layout/(landing)/'
@@ -110,39 +115,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutlandingIndexImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/inventory/': {
-      id: '/_layout/inventory/'
+    '/_layout/_auth/inventory/$inventoryId': {
+      id: '/_layout/_auth/inventory/$inventoryId'
+      path: '/$inventoryId'
+      fullPath: '/inventory/$inventoryId'
+      preLoaderRoute: typeof LayoutAuthInventoryInventoryIdImport
+      parentRoute: typeof LayoutAuthInventoryImport
+    }
+    '/_layout/_auth/inventory/': {
+      id: '/_layout/_auth/inventory/'
       path: '/'
       fullPath: '/inventory/'
-      preLoaderRoute: typeof LayoutInventoryIndexImport
-      parentRoute: typeof LayoutInventoryImport
+      preLoaderRoute: typeof LayoutAuthInventoryIndexImport
+      parentRoute: typeof LayoutAuthInventoryImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface LayoutInventoryRouteChildren {
-  LayoutInventoryInventoryIdRoute: typeof LayoutInventoryInventoryIdRoute
-  LayoutInventoryIndexRoute: typeof LayoutInventoryIndexRoute
+interface LayoutAuthInventoryRouteChildren {
+  LayoutAuthInventoryInventoryIdRoute: typeof LayoutAuthInventoryInventoryIdRoute
+  LayoutAuthInventoryIndexRoute: typeof LayoutAuthInventoryIndexRoute
 }
 
-const LayoutInventoryRouteChildren: LayoutInventoryRouteChildren = {
-  LayoutInventoryInventoryIdRoute: LayoutInventoryInventoryIdRoute,
-  LayoutInventoryIndexRoute: LayoutInventoryIndexRoute,
+const LayoutAuthInventoryRouteChildren: LayoutAuthInventoryRouteChildren = {
+  LayoutAuthInventoryInventoryIdRoute: LayoutAuthInventoryInventoryIdRoute,
+  LayoutAuthInventoryIndexRoute: LayoutAuthInventoryIndexRoute,
 }
 
-const LayoutInventoryRouteWithChildren = LayoutInventoryRoute._addFileChildren(
-  LayoutInventoryRouteChildren,
+const LayoutAuthInventoryRouteWithChildren =
+  LayoutAuthInventoryRoute._addFileChildren(LayoutAuthInventoryRouteChildren)
+
+interface LayoutAuthRouteChildren {
+  LayoutAuthInventoryRoute: typeof LayoutAuthInventoryRouteWithChildren
+}
+
+const LayoutAuthRouteChildren: LayoutAuthRouteChildren = {
+  LayoutAuthInventoryRoute: LayoutAuthInventoryRouteWithChildren,
+}
+
+const LayoutAuthRouteWithChildren = LayoutAuthRoute._addFileChildren(
+  LayoutAuthRouteChildren,
 )
 
 interface LayoutRouteChildren {
-  LayoutInventoryRoute: typeof LayoutInventoryRouteWithChildren
+  LayoutAuthRoute: typeof LayoutAuthRouteWithChildren
   LayoutlandingIndexRoute: typeof LayoutlandingIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutInventoryRoute: LayoutInventoryRouteWithChildren,
+  LayoutAuthRoute: LayoutAuthRouteWithChildren,
   LayoutlandingIndexRoute: LayoutlandingIndexRoute,
 }
 
@@ -150,32 +173,34 @@ const LayoutRouteWithChildren =
   LayoutRoute._addFileChildren(LayoutRouteChildren)
 
 export interface FileRoutesByFullPath {
-  '': typeof LayoutRouteWithChildren
+  '': typeof LayoutAuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/inventory': typeof LayoutInventoryRouteWithChildren
   '/profile/$accountId': typeof ProfileAccountIdRoute
-  '/inventory/$inventoryId': typeof LayoutInventoryInventoryIdRoute
+  '/inventory': typeof LayoutAuthInventoryRouteWithChildren
   '/': typeof LayoutlandingIndexRoute
-  '/inventory/': typeof LayoutInventoryIndexRoute
+  '/inventory/$inventoryId': typeof LayoutAuthInventoryInventoryIdRoute
+  '/inventory/': typeof LayoutAuthInventoryIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '': typeof LayoutAuthRouteWithChildren
   '/profile/$accountId': typeof ProfileAccountIdRoute
-  '/inventory/$inventoryId': typeof LayoutInventoryInventoryIdRoute
   '/': typeof LayoutlandingIndexRoute
-  '/inventory': typeof LayoutInventoryIndexRoute
+  '/inventory/$inventoryId': typeof LayoutAuthInventoryInventoryIdRoute
+  '/inventory': typeof LayoutAuthInventoryIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/login': typeof LoginRoute
-  '/_layout/inventory': typeof LayoutInventoryRouteWithChildren
+  '/_layout/_auth': typeof LayoutAuthRouteWithChildren
   '/profile/$accountId': typeof ProfileAccountIdRoute
-  '/_layout/inventory/$inventoryId': typeof LayoutInventoryInventoryIdRoute
+  '/_layout/_auth/inventory': typeof LayoutAuthInventoryRouteWithChildren
   '/_layout/(landing)/': typeof LayoutlandingIndexRoute
-  '/_layout/inventory/': typeof LayoutInventoryIndexRoute
+  '/_layout/_auth/inventory/$inventoryId': typeof LayoutAuthInventoryInventoryIdRoute
+  '/_layout/_auth/inventory/': typeof LayoutAuthInventoryIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -183,27 +208,29 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/login'
-    | '/inventory'
     | '/profile/$accountId'
-    | '/inventory/$inventoryId'
+    | '/inventory'
     | '/'
+    | '/inventory/$inventoryId'
     | '/inventory/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
+    | ''
     | '/profile/$accountId'
-    | '/inventory/$inventoryId'
     | '/'
+    | '/inventory/$inventoryId'
     | '/inventory'
   id:
     | '__root__'
     | '/_layout'
     | '/login'
-    | '/_layout/inventory'
+    | '/_layout/_auth'
     | '/profile/$accountId'
-    | '/_layout/inventory/$inventoryId'
+    | '/_layout/_auth/inventory'
     | '/_layout/(landing)/'
-    | '/_layout/inventory/'
+    | '/_layout/_auth/inventory/$inventoryId'
+    | '/_layout/_auth/inventory/'
   fileRoutesById: FileRoutesById
 }
 
@@ -239,35 +266,42 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
-        "/_layout/inventory",
+        "/_layout/_auth",
         "/_layout/(landing)/"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/_layout/inventory": {
-      "filePath": "_layout/inventory.tsx",
+    "/_layout/_auth": {
+      "filePath": "_layout/_auth.tsx",
       "parent": "/_layout",
       "children": [
-        "/_layout/inventory/$inventoryId",
-        "/_layout/inventory/"
+        "/_layout/_auth/inventory"
       ]
     },
     "/profile/$accountId": {
       "filePath": "profile/$accountId.tsx"
     },
-    "/_layout/inventory/$inventoryId": {
-      "filePath": "_layout/inventory/$inventoryId.tsx",
-      "parent": "/_layout/inventory"
+    "/_layout/_auth/inventory": {
+      "filePath": "_layout/_auth/inventory.tsx",
+      "parent": "/_layout/_auth",
+      "children": [
+        "/_layout/_auth/inventory/$inventoryId",
+        "/_layout/_auth/inventory/"
+      ]
     },
     "/_layout/(landing)/": {
       "filePath": "_layout/(landing)/index.tsx",
       "parent": "/_layout"
     },
-    "/_layout/inventory/": {
-      "filePath": "_layout/inventory/index.tsx",
-      "parent": "/_layout/inventory"
+    "/_layout/_auth/inventory/$inventoryId": {
+      "filePath": "_layout/_auth/inventory/$inventoryId.tsx",
+      "parent": "/_layout/_auth/inventory"
+    },
+    "/_layout/_auth/inventory/": {
+      "filePath": "_layout/_auth/inventory/index.tsx",
+      "parent": "/_layout/_auth/inventory"
     }
   }
 }

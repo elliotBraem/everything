@@ -1,17 +1,17 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-export const Route = createFileRoute('/_layout/(landing)/')({
-  component: LandingPage,
-})
+export const Route = createFileRoute("/_layout/(landing)/")({
+  component: RootComponent
+});
 
 interface FeatureProps {
-  title: string
-  icon: string
-  description: string
-  isSelected: boolean
-  onClick: () => void
+  title: string;
+  icon: string;
+  description: string;
+  isSelected: boolean;
+  onClick: () => void;
 }
 
 const Feature = ({
@@ -19,15 +19,15 @@ const Feature = ({
   icon,
   description,
   isSelected,
-  onClick,
+  onClick
 }: FeatureProps) => (
   <motion.button
     whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
     className={`relative flex flex-col items-center border border-gray-300 p-6 ${
       isSelected
-        ? 'z-20 -translate-y-1 bg-black text-white shadow-[2px_2px_0_rgba(0,0,0,1)]'
-        : 'z-10 bg-white text-black shadow-[1px_1px_0_rgba(0,0,0,0.2)] hover:shadow-[2px_2px_0_rgba(0,0,0,0.3)]'
+        ? "z-20 -translate-y-1 bg-black text-white shadow-[2px_2px_0_rgba(0,0,0,1)]"
+        : "z-10 bg-white text-black shadow-[1px_1px_0_rgba(0,0,0,0.2)] hover:shadow-[2px_2px_0_rgba(0,0,0,0.3)]"
     }`}
     onClick={onClick}
   >
@@ -35,19 +35,19 @@ const Feature = ({
     <h3 className="mb-2 font-mono text-lg lowercase">{title}</h3>
     <p className="font-mono text-sm opacity-80">{description}</p>
   </motion.button>
-)
+);
 
 const WindowControls = () => {
-  const navigate = Route.useNavigate()
-  const [isOpen, setIsOpen] = useState(false)
+  const navigate = Route.useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
-    { label: 'Home', path: '/' },
-    { label: 'About', path: '/about' },
-  ]
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" }
+  ];
 
   return (
-    <div className="relative -mx-6 -mt-6 border-b-2 border-gray-800 px-4 pb-3 pt-3">
+    <div className="relative border-b-2 border-gray-800 px-4 pb-3 pt-3">
       <div className="flex items-center justify-end">
         <div
           className="h-4 w-4 cursor-pointer rounded-full bg-black transition-opacity hover:opacity-80"
@@ -60,15 +60,15 @@ const WindowControls = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute right-4 top-10 z-50 w-48 border-2 border-gray-800 bg-white shadow-[2px_2px_0_rgba(0,0,0,1)]"
+            className="absolute right-4 top-8 z-50 w-48 border-2 border-gray-800 bg-white shadow-[2px_2px_0_rgba(0,0,0,1)]"
           >
             {menuItems.map((item) => (
               <button
                 key={item.path}
                 className="w-full px-4 py-2 text-left font-mono transition-colors hover:bg-gray-100"
                 onClick={() => {
-                  navigate({ to: `/${item.path}` })
-                  setIsOpen(false)
+                  navigate({ to: `/${item.path}` });
+                  setIsOpen(false);
                 }}
               >
                 {item.label}
@@ -78,56 +78,57 @@ const WindowControls = () => {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
+};
+
+export default function RootComponent() {
+  return (
+    <div className="min-h-screen bg-gray-100 py-16">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="mx-auto max-w-4xl border-2 border-gray-800 bg-white shadow-[4px_4px_0_rgba(0,0,0,1)]"
+      >
+        <WindowControls />
+        <div className="mb-16 p-6">
+          <LandingPage />
+        </div>
+      </motion.div>
+      {/* TODO, move footer to bottom right? */}
+      <footer className="mt-8 text-center font-mono text-gray-500">
+        <a
+          href={import.meta.url.replace("esm.town", "val.town")}
+          className="transition-colors hover:text-gray-700"
+        >
+          view source
+        </a>
+      </footer>
+    </div>
+  );
 }
 
-// const RootComponent = () => {
-//   return (
-//     <div className="min-h-screen bg-gray-100 p-8">
-//       <motion.div
-//         initial={{ scale: 0.9, opacity: 0 }}
-//         animate={{ scale: 1, opacity: 1 }}
-//         transition={{ duration: 0.5 }}
-//         className="max-w-4xl mx-auto bg-white border-2 border-gray-800 shadow-[4px_4px_0_rgba(0,0,0,1)]"
-//       >
-//         <WindowControls />
-//         <div className="p-6">
-//           <Outlet />
-//           <footer className="text-center text-gray-500 mt-16 font-mono">
-//             <a
-//               href={import.meta.url.replace("esm.town", "val.town")}
-//               className="hover:text-gray-700 transition-colors"
-//             >
-//               view source
-//             </a>
-//           </footer>
-//         </div>
-//       </motion.div>
-//     </div>
-//   );
-// };
-
-export default function LandingPage() {
-  const [selectedFeature, setSelectedFeature] = useState('create')
+function LandingPage() {
+  const [selectedFeature, setSelectedFeature] = useState("create");
 
   const features = {
     create: {
-      icon: '🤖',
-      description: 'ai agent to create typed data from natural language',
+      icon: "🤖",
+      description: "ai agent to create typed data from natural language"
     },
     store: {
-      icon: '💾',
-      description: 'local-first, decentralized data storage',
+      icon: "💾",
+      description: "local-first, decentralized data storage"
     },
     ask: {
-      icon: '❓',
-      description: 'ai agent to ask questions about your inventory',
+      icon: "❓",
+      description: "ai agent to ask questions about your inventory"
     },
     generate: {
-      icon: '✨',
-      description: 'ai agent to generate ui for your data structures',
-    },
-  }
+      icon: "✨",
+      description: "ai agent to generate ui for your data structures"
+    }
+  };
 
   return (
     <>
@@ -140,7 +141,7 @@ export default function LandingPage() {
           className="relative mb-4 inline-block cursor-pointer font-mono text-7xl font-bold lowercase"
           whileHover={{
             scale: 1.05,
-            transition: { duration: 0.2 },
+            transition: { duration: 0.2 }
           }}
         >
           everything
@@ -171,5 +172,5 @@ export default function LandingPage() {
         </AnimatePresence>
       </div>
     </>
-  )
+  );
 }

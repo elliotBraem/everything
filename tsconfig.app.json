@@ -23,5 +23,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/routes/_layout/inventory/inventory.tsx"]
+  "include": ["src", "src/routes/_layout/_auth/inventory/inventory.tsx"]
 }

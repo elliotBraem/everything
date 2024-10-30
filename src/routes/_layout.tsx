@@ -1,4 +1,3 @@
-import { ActionButton } from "@/components/action-button";
 import { ModalStack } from "@/components/common/modal-stack";
 import { SheetStack } from "@/components/common/sheet-stack";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
@@ -10,10 +9,10 @@ export const Route = createFileRoute("/_layout")({
 function LayoutComponent() {
   return (
     <>
-      {/* main content */}
-      <Outlet />
+      <div className="min-h-screen">
+        <Outlet />
+      </div>
       {/* absolute positioned */}
-      <ActionButton />
       <SheetStack />
       <ModalStack />
     </>
