@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { config } from 'dotenv';
 import express, { json, type Express, type Request, type Response } from 'express';
 
@@ -15,12 +15,45 @@ const port = process.env.PORT || 3005;
 // Middleware to parse JSON bodies
 app.use(json());
 
+app.use((_: Request, res: Response, next) => {
+  if (!process.env.OPENAI_API_KEY) {
+    console.error("⚠️ OpenAI API key is not set in environment variables");
+    return res.status(500).json({
+      error: "API key configuration error",
+      message: "The server is not properly configured with an API key"
+    });
+  }
+  next();
+});
+
+interface OpenAIError {
+  error?: {
+    message: string;
+    type?: string;
+    param?: string;
+    code?: string;
+  };
+}
+
 app.post('/ai', async (req: Request, res: Response) => {
   const { prompt, model, schema } = req.body;
 
   if (!prompt || !model || !schema) {
-    return res.status(400).json({ error: "Prompt, model, and schema are required" });
+    console.error("❌ Invalid request:", { prompt: Boolean(prompt), model: Boolean(model), schema: Boolean(schema) });
+    return res.status(400).json({
+      error: "Invalid request",
+      message: "Prompt, model, and schema are required",
+      missing: Object.entries({ prompt, model, schema })
+        .filter(([_, value]) => !value)
+        .map(([key]) => key)
+    });
   }
+
+  console.log("📡 Sending request to OpenAI:", {
+    model,
+    promptLength: prompt.length,
+    schemaProperties: Object.keys(schema.properties || {})
+  });
 
   try {
     // Forward the request to OpenAI
@@ -49,29 +82,73 @@ app.post('/ai', async (req: Request, res: Response) => {
       responseType: 'stream'
     });
 
+    console.log("✅ OpenAI connection established");
+
     // Forward the response headers
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
+
+    // Handle stream end before piping
+    openAIResponse.data.on('end', () => {
+      console.log("✅ Stream completed successfully");
+      // Only write DONE if the response hasn't been sent yet
+      if (!res.writableEnded) {
+        res.write("data: [DONE]\n\n");
+        res.end();
+      }
+    });
+
+    // Handle stream errors
+    openAIResponse.data.on('error', (err: any) => {
+      console.error("❌ Stream error:", err);
+      if (!res.writableEnded) {
+        res.end();
+      }
+    });
 
     // Pipe the OpenAI response directly to our response
     openAIResponse.data.pipe(res);
 
     // Handle the end of the stream
     openAIResponse.data.on('end', () => {
+      console.log("✅ Stream completed successfully");
       res.write("data: [DONE]\n\n");
       res.end();
     });
 
   } catch (error) {
-    console.error("Error proxying request to OpenAI:", error);
-    if (axios.isAxiosError(error)) {
-      const statusCode = error.response?.status || 500;
-      const errorMessage = error.response?.data?.error?.message || "Failed to process request";
-      res.status(statusCode).json({ error: errorMessage });
-    } else {
-      res.status(500).json({ error: "Internal server error" });
-    }
+    const axiosError = error as AxiosError<OpenAIError>;
+    console.error("❌ Error proxying request to OpenAI:", {
+      status: axiosError.response?.status,
+      statusText: axiosError.response?.statusText,
+      error: axiosError.response?.data,
+      config: {
+        url: axiosError.config?.url,
+        method: axiosError.config?.method,
+        headers: {
+          ...axiosError.config?.headers,
+          Authorization: axiosError.config?.headers?.Authorization ? '[REDACTED]' : undefined
+        }
+      }
+    });
+
+    const errorResponse = {
+      error: "OpenAI API Error",
+      status: axiosError.response?.status,
+      message: axiosError.response?.data.error?.message || axiosError.message,
+      type: axiosError.response?.data.error?.type,
+      code: axiosError.response?.data.error?.code,
+
+      // Add debugging information for development
+      debug: process.env.NODE_ENV === 'development' ? {
+        apiKeyPresent: Boolean(process.env.OPENAI_API_KEY),
+        apiKeyLength: process.env.OPENAI_API_KEY?.length,
+        requestedModel: model
+      } : undefined
+    };
+
+    res.status(axiosError.response?.status || 500).json(errorResponse);
   }
 });
 
