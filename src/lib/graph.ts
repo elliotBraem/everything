@@ -16,6 +16,50 @@ export const GRAPH_CONTRACT = {
   testnet: "v1.social08.testnet"
 };
 
+function transformToThing(input) {
+  const transformedThings = [];
+  
+  for (const [namespace, namespaceData] of Object.entries(input)) {
+    for (const [typeName, typeData] of Object.entries(namespaceData.type)) {
+      
+      // Create a new Thing with the mapped fields
+      const thing = {
+        id: `${namespace}/${typeName}`,  // Customize ID as needed
+        type: `${namespace}/type/${typeName}`,  // Build type path
+        metadata: JSON.stringify(typeData.metadata),  // Stringified metadata JSON
+        data: typeData[""]  // Raw data goes here
+      };
+
+      transformedThings.push(thing);
+    }
+  }
+
+  return transformedThings;
+}
+
+export function useType({ typeId }: { typeId: string }) {
+  const { networkId } = useWallet();
+
+  return useQuery({
+    queryKey: ["get-type", typeId],
+    queryFn: async () => {
+
+      const args = {
+        keys: [typeId, `${typeId}/metadata/**`],
+      };
+
+      const typeData = await view<number>({
+        account: GRAPH_CONTRACT[networkId],
+        method: "get",
+        deps: { rpcProvider: getProviderByNetwork(networkId) },
+        args
+      });
+
+      return transformToThing(typeData)[0];
+    }
+  });
+}
+
 export function useGetTypes() {
   const { networkId } = useWallet();
 
@@ -54,7 +98,8 @@ export function useCreateType() {
       donationAmount?: string;
     }) => {
       try {
-        const deposit = parseNearAmount(donationAmount);
+
+
 
         const result = wallet?.signAndSendTransaction({
           contractId: GRAPH_CONTRACT[networkId],
@@ -62,7 +107,7 @@ export function useCreateType() {
             {
               type: "FunctionCall",
               params: {
-                methodName: "add_message",
+                methodName: "set",
                 args: { text: message },
                 gas: THIRTY_TGAS,
                 deposit: deposit ? deposit : NO_DEPOSIT

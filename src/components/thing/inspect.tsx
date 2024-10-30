@@ -1,4 +1,5 @@
 import { Thing } from "@/lib/schema";
+import { ViewThing } from "./view";
 
 interface InspectThingProps {
   thing: Thing;
@@ -6,5 +7,5 @@ interface InspectThingProps {
 }
 
 export const InspectThing: React.FC<InspectThingProps> = ({ thing }) => {
-  return <p>{thing.id}</p>;
+  return <ViewThing thing={thing} />;
 };
