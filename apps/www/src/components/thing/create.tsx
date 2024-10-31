@@ -15,6 +15,7 @@ import { AIProcessor } from "../ai-processor";
 import { FormGenerator } from "../form/generator";
 import { SelectType } from "../form/select-type";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { safeJsonParse } from "@/lib/utils";
 
 // Types
 interface CreateThingProps {
@@ -92,6 +93,7 @@ type CreationMethod = (typeof CREATION_METHODS)[keyof typeof CREATION_METHODS];
 
 const ThingForm = ({ type, onSubmit }: FormProps) => {
   const { data, isLoading, isError } = useType({ typeId: type });
+
   const [creationMethod, setCreationMethod] = useState<CreationMethod>(
     CREATION_METHODS.AI
   );
@@ -112,8 +114,8 @@ const ThingForm = ({ type, onSubmit }: FormProps) => {
   // Parse the data and handle potential errors
   let schema;
   try {
-    const typeData = JSON.parse(data.data);
-    schema = JSON.parse(typeData.schema);
+    const typeData = safeJsonParse(data.data);
+    schema = safeJsonParse(typeData.schema);
     if (!schema) {
       return <ErrorState message="No schema available" />;
     }

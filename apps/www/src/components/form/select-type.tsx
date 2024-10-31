@@ -5,7 +5,10 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { useWeb4Auth } from "@/hooks/use-web4-auth";
 import { useGetTypes } from "@/lib/graph";
+import { getTypes } from "@/lib/inventory";
+import { useAccount } from "@/lib/providers/jazz";
 import { ErrorSchema, WidgetProps } from "@rjsf/utils";
 
 export function SelectTypeWidget(props: WidgetProps) {
@@ -23,7 +26,9 @@ export function SelectType({
     id?: string | undefined
   ) => void;
 }) {
-  const { data: types, isLoading, isError } = useGetTypes();
+  const { me } = useAccount();
+  const { accountId } = useWeb4Auth();
+  const { data: types = [], isLoading, isError } = useGetTypes();
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -32,13 +37,25 @@ export function SelectType({
   if (isError) {
     return <p>Failed to load types</p>;
   }
+
+  const localTypes = getTypes(me)?.map((it) => {
+    const typeData = JSON.parse(it.data);
+    return {
+      accountId,
+      id: it.id,
+      key: typeData.name,
+    };
+  }) || [];
+
+  const combinedTypes = [...types, ...localTypes];
+
   return (
     <Select onValueChange={onChange} defaultValue={value}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a type" />
       </SelectTrigger>
       <SelectContent>
-        {types?.map((type: any) => (
+        {combinedTypes?.map((type: any) => (
           <SelectItem key={type.id} value={type.id}>
             {type.key}
           </SelectItem>

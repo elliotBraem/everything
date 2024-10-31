@@ -1,9 +1,12 @@
 import { useWallet } from "@/lib/providers/near";
-import { getProviderByNetwork, view } from "@near-js/client";
-import { parseNearAmount } from "@near-js/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { NO_DEPOSIT, THIRTY_TGAS } from "@/wallets/near-wallet";
 import { queryClient } from "@/main";
+import { NO_DEPOSIT, THIRTY_TGAS } from "@/wallets/near-wallet";
+import { getProviderByNetwork, view } from "@near-js/client";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getThing, getThings, getTypes } from "./inventory";
+import { useAccount } from "./providers/jazz";
+import { Thing } from "./schema";
+import { ID } from "jazz-tools";
 
 export interface GuestBookMessage {
   premium: boolean;
@@ -38,28 +41,39 @@ function transformToThing(input) {
 
 export function useType({ typeId }: { typeId: string }) {
   const { networkId } = useWallet();
+  const { me } = useAccount();
 
   return useQuery({
     queryKey: ["get-type", typeId],
     queryFn: async () => {
-      const args = {
-        keys: [typeId, `${typeId}/metadata/**`]
-      };
+      console.log("typeId", typeId)
+      if (typeId.startsWith("type-registry.testnet")) {
+        const args = {
+          keys: [typeId, `${typeId}/metadata/**`]
+        };
 
-      const typeData = await view<number>({
-        account: GRAPH_CONTRACT[networkId],
-        method: "get",
-        deps: { rpcProvider: getProviderByNetwork(networkId) },
-        args
-      });
+        const typeData = await view<number>({
+          account: GRAPH_CONTRACT[networkId],
+          method: "get",
+          deps: { rpcProvider: getProviderByNetwork(networkId) },
+          args
+        });
 
-      return transformToThing(typeData)[0];
+        return transformToThing(typeData)[0];
+      } else {
+        const things = getThings(me);
+        const type = things.filter((thing) => {
+          return thing.id === typeId;
+        });
+        return type[0];
+      }
     }
   });
 }
 
 export function useGetTypes() {
   const { networkId } = useWallet();
+  const { me } = useAccount();
 
   return useQuery({
     queryKey: ["get-types"],
@@ -68,13 +82,13 @@ export function useGetTypes() {
         keys: ["type-registry.testnet/type/*"]
       };
 
-      const allTypes = await view<number>({
+      const publicTypes = await view<number>({
         account: GRAPH_CONTRACT[networkId],
         method: "keys",
         deps: { rpcProvider: getProviderByNetwork(networkId) },
         args
       });
-      return buildObjects(allTypes);
+      return buildObjects(publicTypes);
     }
   });
 }
