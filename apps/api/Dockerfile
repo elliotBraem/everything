@@ -7,11 +7,12 @@ WORKDIR /app
 # Install pnpm globally
 RUN npm install -g pnpm
 
-# Copy the package.json and package-lock.json files to install dependencies
-COPY package*.json ./
+COPY package.json ./
 
-# Set NODE_ENV to production to skip devDependencies
-ENV NODE_ENV=production
+# Remove workspace dependencies before installing
+RUN sed -i 's/"@repo\/.*": "workspace:\*",//g' package.json
+
+COPY pnpm-lock.yaml ./
 
 # Install only production dependencies
 RUN pnpm install --prod
