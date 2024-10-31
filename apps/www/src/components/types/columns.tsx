@@ -18,6 +18,8 @@ import { useSheetStack } from "@/hooks/use-sheet-stack";
 import { ConfirmationModal } from "@/components/confirmation-modal";
 import { InspectThing } from "../thing/inspect";
 import { useAccount } from "@/lib/providers/jazz";
+import { useType } from "@/lib/graph";
+import { InspectType } from "./inspect";
 
 export const typesColumns: ColumnDef<unknown>[] = [
   {
@@ -39,45 +41,19 @@ export const typesColumns: ColumnDef<unknown>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const thing = row.original as Thing;
+      const type = row.original;
+      console.log("type", type)
+
       const { openSheet } = useSheetStack();
       const { openModal } = useModalStack();
 
-      const handleEditClick = () => {
-        openSheet(
-          EditThing,
-          { thing },
-          {
-            title: "Edit Thing",
-            description: "Select confirm when you're done"
-          }
-        );
-      };
-
       const handleInspectClick = () => {
         openSheet(
-          InspectThing,
-          { thing },
+          InspectType,
+          { typeId: type.id },
           {
             title: "Inspect Type",
             description: "Select confirm when you're done"
-          }
-        );
-      };
-
-      const handleDeleteClick = () => {
-        console.log("deleting...");
-        openModal(
-          ConfirmationModal,
-          {
-            onConfirm: () => {
-              deleteItem(thing);
-            },
-            onCancel: () => {}
-          },
-          {
-            title: "Are you sure you want to delete this?",
-            description: "Please confirm your selection."
           }
         );
       };
@@ -93,7 +69,7 @@ export const typesColumns: ColumnDef<unknown>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(thing.id)}
+              onClick={() => navigator.clipboard.writeText(type.id)}
             >
               Copy ID
             </DropdownMenuItem>

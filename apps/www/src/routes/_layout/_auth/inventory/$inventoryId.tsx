@@ -67,7 +67,7 @@ export default function InventoryPage() {
 
   return (
     <>
-      <div className="flex gap-2">
+      <div className="flex gap-2 mb-2">
         <Button
           onClick={handleShareInventory}
           disabled={
