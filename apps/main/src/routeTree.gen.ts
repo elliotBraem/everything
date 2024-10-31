@@ -11,9 +11,9 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LoginImport } from './routes/login'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as ProfileAccountIdImport } from './routes/profile/$accountId'
+import { Route as LayoutLoginImport } from './routes/_layout/login'
 import { Route as LayoutAuthImport } from './routes/_layout/_auth'
 import { Route as LayoutlandingIndexImport } from './routes/_layout/(landing)/index'
 import { Route as LayoutAuthTypesImport } from './routes/_layout/_auth/types'
@@ -22,12 +22,6 @@ import { Route as LayoutAuthInventoryIndexImport } from './routes/_layout/_auth/
 import { Route as LayoutAuthInventoryInventoryIdImport } from './routes/_layout/_auth/inventory/$inventoryId'
 
 // Create/Update Routes
-
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LayoutRoute = LayoutImport.update({
   id: '/_layout',
@@ -38,6 +32,12 @@ const ProfileAccountIdRoute = ProfileAccountIdImport.update({
   id: '/profile/$accountId',
   path: '/profile/$accountId',
   getParentRoute: () => rootRoute,
+} as any)
+
+const LayoutLoginRoute = LayoutLoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => LayoutRoute,
 } as any)
 
 const LayoutAuthRoute = LayoutAuthImport.update({
@@ -87,18 +87,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
     '/_layout/_auth': {
       id: '/_layout/_auth'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof LayoutAuthImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/login': {
+      id: '/_layout/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LayoutLoginImport
       parentRoute: typeof LayoutImport
     }
     '/profile/$accountId': {
@@ -177,11 +177,13 @@ const LayoutAuthRouteWithChildren = LayoutAuthRoute._addFileChildren(
 
 interface LayoutRouteChildren {
   LayoutAuthRoute: typeof LayoutAuthRouteWithChildren
+  LayoutLoginRoute: typeof LayoutLoginRoute
   LayoutlandingIndexRoute: typeof LayoutlandingIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAuthRoute: LayoutAuthRouteWithChildren,
+  LayoutLoginRoute: LayoutLoginRoute,
   LayoutlandingIndexRoute: LayoutlandingIndexRoute,
 }
 
@@ -190,7 +192,7 @@ const LayoutRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '': typeof LayoutAuthRouteWithChildren
-  '/login': typeof LoginRoute
+  '/login': typeof LayoutLoginRoute
   '/profile/$accountId': typeof ProfileAccountIdRoute
   '/inventory': typeof LayoutAuthInventoryRouteWithChildren
   '/types': typeof LayoutAuthTypesRoute
@@ -200,8 +202,8 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
-  '/login': typeof LoginRoute
   '': typeof LayoutAuthRouteWithChildren
+  '/login': typeof LayoutLoginRoute
   '/profile/$accountId': typeof ProfileAccountIdRoute
   '/types': typeof LayoutAuthTypesRoute
   '/': typeof LayoutlandingIndexRoute
@@ -212,8 +214,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
-  '/login': typeof LoginRoute
   '/_layout/_auth': typeof LayoutAuthRouteWithChildren
+  '/_layout/login': typeof LayoutLoginRoute
   '/profile/$accountId': typeof ProfileAccountIdRoute
   '/_layout/_auth/inventory': typeof LayoutAuthInventoryRouteWithChildren
   '/_layout/_auth/types': typeof LayoutAuthTypesRoute
@@ -235,8 +237,8 @@ export interface FileRouteTypes {
     | '/inventory/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/login'
     | ''
+    | '/login'
     | '/profile/$accountId'
     | '/types'
     | '/'
@@ -245,8 +247,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_layout'
-    | '/login'
     | '/_layout/_auth'
+    | '/_layout/login'
     | '/profile/$accountId'
     | '/_layout/_auth/inventory'
     | '/_layout/_auth/types'
@@ -258,13 +260,11 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
-  LoginRoute: typeof LoginRoute
   ProfileAccountIdRoute: typeof ProfileAccountIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
-  LoginRoute: LoginRoute,
   ProfileAccountIdRoute: ProfileAccountIdRoute,
 }
 
@@ -281,7 +281,6 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_layout",
-        "/login",
         "/profile/$accountId"
       ]
     },
@@ -289,11 +288,9 @@ export const routeTree = rootRoute
       "filePath": "_layout.tsx",
       "children": [
         "/_layout/_auth",
+        "/_layout/login",
         "/_layout/(landing)/"
       ]
-    },
-    "/login": {
-      "filePath": "login.tsx"
     },
     "/_layout/_auth": {
       "filePath": "_layout/_auth.tsx",
@@ -302,6 +299,10 @@ export const routeTree = rootRoute
         "/_layout/_auth/inventory",
         "/_layout/_auth/types"
       ]
+    },
+    "/_layout/login": {
+      "filePath": "_layout/login.tsx",
+      "parent": "/_layout"
     },
     "/profile/$accountId": {
       "filePath": "profile/$accountId.tsx"

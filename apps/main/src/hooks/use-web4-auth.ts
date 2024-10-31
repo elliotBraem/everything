@@ -144,9 +144,9 @@ export function useWeb4Auth() {
         accountId: Cookies.get('web4_account_id'),
         // signer: authMethod?.getSigner(),
         errors: state.errors,
-        login: () => {
+        login: (callbackPath?: string) => {
             const callbackUrl = encodeURIComponent(window.origin);
-            window.location.href = `/web4/login?web4_callback_url=${callbackUrl}`;
+            window.location.href = `/web4/login?web4_callback_url=${callbackUrl}${callbackPath}`;
         },
         logout: () => {
             window.location.href = "/web4/logout";

@@ -1,3 +1,4 @@
+import { useWeb4Auth } from "@/hooks/use-web4-auth";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
@@ -6,6 +7,7 @@ import { ReactNode, useState } from "react";
 export const WindowControls = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { isSignedIn, logout } = useWeb4Auth();
 
   const menuItems = [
     { label: "Home", path: "/" },
@@ -40,6 +42,29 @@ export const WindowControls = () => {
                 {item.label}
               </button>
             ))}
+            {isSignedIn ? (
+              <button
+                key={"logout"}
+                className="w-full px-4 py-2 text-left font-mono transition-colors hover:bg-gray-100"
+                onClick={() => {
+                  logout();
+                  setIsOpen(false);
+                }}
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                key={"login"}
+                className="w-full px-4 py-2 text-left font-mono transition-colors hover:bg-gray-100"
+                onClick={() => {
+                  navigate({ to: "/login" });
+                  setIsOpen(false);
+                }}
+              >
+                Login
+              </button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -57,7 +82,7 @@ export default function WindowContainer({ children }: WindowContainerProps) {
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="mx-auto max-w-4xl border-2 border-gray-800 bg-white shadow-[4px_4px_0_rgba(0,0,0,1)] min-h-[790px]"
+      className="mx-auto min-h-[790px] max-w-4xl border-2 border-gray-800 bg-white shadow-[4px_4px_0_rgba(0,0,0,1)]"
     >
       <WindowControls />
       <div className="p-8">{children}</div>
