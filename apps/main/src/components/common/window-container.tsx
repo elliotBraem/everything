@@ -1,13 +1,14 @@
 import { useWeb4Auth } from "@/hooks/use-web4-auth";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode, useState } from "react";
+import { Button } from "../ui/button";
 
 export const WindowControls = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const { isSignedIn, logout } = useWeb4Auth();
+  const { isSignedIn, accountId, logout } = useWeb4Auth();
 
   const menuItems = [
     { label: "Home", path: "/" },
@@ -15,10 +16,22 @@ export const WindowControls = () => {
   ];
 
   return (
-    <div className="relative border-b-2 border-gray-800 px-4 pb-3 pt-3">
+    <div className="relative border-b-2 border-gray-800">
       <div className="flex items-center justify-end">
+        <div>
+          {/* <ThemeToggle /> */}
+          {isSignedIn ? (
+            <Button asChild className="h-7">
+              <Link to={`/profile/${accountId}`}>{accountId}</Link>
+            </Button>
+          ) : (
+            <Button asChild className="h-7">
+              <Link to="/login">Connect NEAR Account</Link>
+            </Button>
+          )}
+        </div>
         <div
-          className="h-4 w-4 cursor-pointer rounded-full bg-black transition-opacity hover:opacity-80"
+          className="mx-4 my-3 h-4 w-4 cursor-pointer rounded-full bg-black transition-opacity hover:opacity-80"
           onClick={() => setIsOpen(!isOpen)}
         />
       </div>
@@ -53,18 +66,7 @@ export const WindowControls = () => {
               >
                 Logout
               </button>
-            ) : (
-              <button
-                key={"login"}
-                className="w-full px-4 py-2 text-left font-mono transition-colors hover:bg-gray-100"
-                onClick={() => {
-                  navigate({ to: "/login" });
-                  setIsOpen(false);
-                }}
-              >
-                Login
-              </button>
-            )}
+            ) : null}
           </motion.div>
         )}
       </AnimatePresence>

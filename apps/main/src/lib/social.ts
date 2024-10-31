@@ -1,4 +1,4 @@
-import { NETWORK_ID } from "@/config";
+import { NETWORK_ID, SOCIAL_CONTRACT } from "@/config";
 import { queryClient } from "@/main";
 import { Wallet } from "@/wallets/near-wallet";
 import { Social, transformActions } from "@builddao/near-social-js";
@@ -13,8 +13,8 @@ export type SocialImage = {
 export type Profile = {
   name: string;
   description: string;
-  image: SocialImage;
-  backgroundImage: SocialImage;
+  image?: SocialImage;
+  backgroundImage?: SocialImage;
 };
 
 export interface Item {
@@ -32,11 +32,6 @@ export interface Post {
   };
 }
 
-export const SOCIAL_CONTRACT = {
-  mainnet: "social.near",
-  testnet: "v1.social08.testnet"
-};
-
 export const social = new Social({
   contractId: SOCIAL_CONTRACT[NETWORK_ID],
   network: NETWORK_ID
@@ -49,11 +44,14 @@ export async function getProfile(accountId: string): Promise<Profile | null> {
   if (!response) {
     throw new Error("Failed to fetch profile");
   }
-  const { profile } = (response as Record<string, { profile: Profile }>)[
-    accountId
-  ];
-
-  return profile;
+  try {
+    const { profile } = (response as Record<string, { profile: Profile }>)[
+      accountId
+    ];
+    return profile;
+  } catch {
+    throw new Error("Failed to destructure profile")
+  }
 }
 
 export async function getPost(

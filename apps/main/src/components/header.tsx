@@ -1,30 +1,23 @@
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/common/theme-toggle";
-import { useWallet } from "@/lib/providers/near";
+import { Button } from "@/components/ui/button";
+import { useWeb4Auth } from "@/hooks/use-web4-auth";
 import { Link } from "@tanstack/react-router";
 
 export default function Header() {
-  const { signedAccountId } = useWallet();
+  const { isSignedIn, accountId } = useWeb4Auth();
 
   return (
-    <header className="border shadow-md">
-      <div className="container mx-auto flex items-center justify-between px-4 py-4">
-        <Link to="/" className="font-bolds text-lg sm:text-2xl">
-          inventory management
-        </Link>
-        <nav>
-          <ThemeToggle />
-          {signedAccountId ? (
-            <Button asChild>
-              <Link to={`/profile/${signedAccountId}`}>{signedAccountId}</Link>
-            </Button>
-          ) : (
-            <Button asChild>
-              <Link to="/login">Connect NEAR Account</Link>
-            </Button>
-          )}
-        </nav>
-      </div>
-    </header>
+    <>
+      <ThemeToggle />
+      {isSignedIn ? (
+        <Button asChild>
+          <Link to={`/profile/${accountId}`}>{accountId}</Link>
+        </Button>
+      ) : (
+        <Button asChild>
+          <Link to="/login">Connect NEAR Account</Link>
+        </Button>
+      )}
+    </>
   );
 }
