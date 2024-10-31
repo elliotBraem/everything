@@ -18,16 +18,15 @@ export const GRAPH_CONTRACT = {
 
 function transformToThing(input) {
   const transformedThings = [];
-  
+
   for (const [namespace, namespaceData] of Object.entries(input)) {
     for (const [typeName, typeData] of Object.entries(namespaceData.type)) {
-      
       // Create a new Thing with the mapped fields
       const thing = {
-        id: `${namespace}/${typeName}`,  // Customize ID as needed
-        type: `${namespace}/type/${typeName}`,  // Build type path
-        metadata: JSON.stringify(typeData.metadata),  // Stringified metadata JSON
-        data: typeData[""]  // Raw data goes here
+        id: `${namespace}/${typeName}`, // Customize ID as needed
+        type: `${namespace}/type/${typeName}`, // Build type path
+        metadata: JSON.stringify(typeData.metadata), // Stringified metadata JSON
+        data: typeData[""] // Raw data goes here
       };
 
       transformedThings.push(thing);
@@ -43,9 +42,8 @@ export function useType({ typeId }: { typeId: string }) {
   return useQuery({
     queryKey: ["get-type", typeId],
     queryFn: async () => {
-
       const args = {
-        keys: [typeId, `${typeId}/metadata/**`],
+        keys: [typeId, `${typeId}/metadata/**`]
       };
 
       const typeData = await view<number>({
@@ -66,9 +64,8 @@ export function useGetTypes() {
   return useQuery({
     queryKey: ["get-types"],
     queryFn: async () => {
-
       const args = {
-        keys: ["efiz.testnet/type/*"],
+        keys: ["efiz.testnet/type/*"]
       };
 
       const allTypes = await view<number>({
@@ -98,9 +95,6 @@ export function useCreateType() {
       donationAmount?: string;
     }) => {
       try {
-
-
-
         const result = wallet?.signAndSendTransaction({
           contractId: GRAPH_CONTRACT[networkId],
           actions: [
@@ -124,51 +118,50 @@ export function useCreateType() {
   });
 }
 
-
 // This will just condense into a single path
 const getPaths = (obj) => {
   const paths = [];
 
   // Iterate over L1 keys
   for (const l1Key in obj) {
-      const l2Obj = obj[l1Key];
+    const l2Obj = obj[l1Key];
 
-      // Iterate over L2 keys
-      for (const l2Key in l2Obj) {
-          const l3Obj = l2Obj[l2Key];
+    // Iterate over L2 keys
+    for (const l2Key in l2Obj) {
+      const l3Obj = l2Obj[l2Key];
 
-          // Iterate over L3 keys
-          for (const l3Key in l3Obj) {
-              paths.push(`${l1Key}/${l2Key}/${l3Key}`);
-          }
+      // Iterate over L3 keys
+      for (const l3Key in l3Obj) {
+        paths.push(`${l1Key}/${l2Key}/${l3Key}`);
       }
+    }
   }
 
   return paths;
 };
 
-// This builds an object 
+// This builds an object
 const buildObjects = (obj) => {
   const result = [];
 
   // Iterate over L1 keys
   for (const accountId in obj) {
-      const l2Obj = obj[accountId];
+    const l2Obj = obj[accountId];
 
-      // Iterate over L2 keys
-      for (const type in l2Obj) {
-          const l3Obj = l2Obj[type];
+    // Iterate over L2 keys
+    for (const type in l2Obj) {
+      const l3Obj = l2Obj[type];
 
-          // Iterate over L3 keys
-          for (const key in l3Obj) {
-              result.push({
-                  accountId: accountId,
-                  type: type,
-                  key: key,
-                  id: `${accountId}/${type}/${key}`
-              });
-          }
+      // Iterate over L3 keys
+      for (const key in l3Obj) {
+        result.push({
+          accountId: accountId,
+          type: type,
+          key: key,
+          id: `${accountId}/${type}/${key}`
+        });
       }
+    }
   }
 
   return result;

@@ -211,9 +211,9 @@ export class Wallet {
   };
 
   /**
- * Converts wallet selector account to near-api-js Account object
- * @returns {Promise<Account>} - the resulting Account object
- */
+   * Converts wallet selector account to near-api-js Account object
+   * @returns {Promise<Account>} - the resulting Account object
+   */
   getAccount = async () => {
     const walletSelector = await this.selector;
     //const { network } = walletSelector.options;

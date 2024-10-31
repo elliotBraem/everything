@@ -21,9 +21,8 @@ it's a way to put it all together
 
 - every.near : redeploy of the social contract, stores things and types
 - near-bos-webcomponent : (thing), has the VM and definitions. Takes data and type.
-- 
-- every.near.page 
-
+-
+- every.near.page
 
 jsinrust
 
@@ -76,7 +75,6 @@ Send for feedback.
 - web4
 - final form builder demo https://github.com/final-form/builder-demo
 - tailwind rjsf https://github.com/m6io/rjsf-tailwind
-
 
 <details>
   <summary>Table of Contents</summary>
@@ -165,12 +163,11 @@ Be sure to "Store the access key in legacy keychain"!
 npx github:vgrichina/web4-deploy dist web4.MASTER_ACCOUNT.testnet --deploy-contract --nearfs
 ```
 
-Deploy shoudl be accessible and your website accessible at 
+Deploy shoudl be accessible and your website accessible at
 
 `testnet`: MASTER_ACCOUNT.testnet.page
 
 `mainnet`: MASTER_ACCOUNT.near.page
-
 
 ## Contributing
 
@@ -188,8 +185,6 @@ If you're interested in contributing to this project, please read the [contribut
 </a>
 </div>
 
-
-
 ### Checklist
 
 - favicon, title, description, open graph share link
@@ -203,29 +198,27 @@ If you're interested in contributing to this project, please read the [contribut
 - hide dev tools in production
 - edit thing, wrapper around ThingForm
 
-
-
 # Running locally
 
 1. Install [mkcert](https://mkcert.dev/).
 2. Install local certificate authority (this allows browser to trust self-signed certificates):
-    ```bash
-    mkcert -install
-    ```
+   ```bash
+   mkcert -install
+   ```
 3. Create `*.near.page` SSL certificate:
-    ```bash
-    mkcert "*.near.page"
-    ```
-3. Run `web4` man-in-the-middle proxy locally:
-    ```bash
-    IPFS_GATEWAY_URL=https://ipfs.near.social NODE_ENV=mainnet WEB4_KEY_FILE=./_wildcard.near.page-key.pem WEB4_CERT_FILE=./_wildcard.near.page.pem npx web4-near
-    ```
-4. Setup browser to use [automatic proxy configuration file](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) at `http://localhost:8080/` or to use `localhost:8080` as an HTTPS proxy server.
+   ```bash
+   mkcert "*.near.page"
+   ```
+4. Run `web4` man-in-the-middle proxy locally:
+   ```bash
+   IPFS_GATEWAY_URL=https://ipfs.near.social NODE_ENV=mainnet WEB4_KEY_FILE=./_wildcard.near.page-key.pem WEB4_CERT_FILE=./_wildcard.near.page.pem npx web4-near
+   ```
+5. Setup browser to use [automatic proxy configuration file](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) at `http://localhost:8080/` or to use `localhost:8080` as an HTTPS proxy server.
 
 I had to do:
 
 `sudo sh -c 'echo "127.0.0.1 every.near.page" >> /etc/hosts'`
 
-and 
+and
 
 `pnpm run dev --host every.near.page`

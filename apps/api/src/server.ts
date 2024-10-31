@@ -3,9 +3,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
-import axios, { AxiosError } from 'axios';
-import { config } from 'dotenv';
-import express, { json, type Express, type Request, type Response } from 'express';
+import axios, { AxiosError } from "axios";
+import { config } from "dotenv";
+import express, {
+  json,
+  type Express,
+  type Request,
+  type Response
+} from "express";
 
 config();
 
@@ -35,11 +40,15 @@ interface OpenAIError {
   };
 }
 
-app.post('/ai', async (req: Request, res: Response) => {
+app.post("/ai", async (req: Request, res: Response) => {
   const { prompt, model, schema } = req.body;
 
   if (!prompt || !model || !schema) {
-    console.error("❌ Invalid request:", { prompt: Boolean(prompt), model: Boolean(model), schema: Boolean(schema) });
+    console.error("❌ Invalid request:", {
+      prompt: Boolean(prompt),
+      model: Boolean(model),
+      schema: Boolean(schema)
+    });
     return res.status(400).json({
       error: "Invalid request",
       message: "Prompt, model, and schema are required",
@@ -58,17 +67,20 @@ app.post('/ai', async (req: Request, res: Response) => {
   try {
     // Forward the request to OpenAI
     const openAIResponse = await axios({
-      method: 'post',
-      url: 'https://api.openai.com/v1/chat/completions',
+      method: "post",
+      url: "https://api.openai.com/v1/chat/completions",
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
       },
       data: {
         model,
         messages: [
-          { role: 'system', content: `Use the following schema: ${JSON.stringify(schema)}. Populate the data object from the user's input.` },
-          { role: 'user', content: prompt }
+          {
+            role: "system",
+            content: `Use the following schema: ${JSON.stringify(schema)}. Populate the data object from the user's input.`
+          },
+          { role: "user", content: prompt }
         ],
         functions: [
           {
@@ -79,15 +91,15 @@ app.post('/ai', async (req: Request, res: Response) => {
         ],
         stream: true
       },
-      responseType: 'stream'
+      responseType: "stream"
     });
 
     console.log("✅ OpenAI connection established");
 
     // Forward the response headers
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
     let hasEnded = false;
 
     const endResponse = () => {
@@ -103,19 +115,19 @@ app.post('/ai', async (req: Request, res: Response) => {
     };
 
     // Handle stream end
-    openAIResponse.data.on('end', () => {
+    openAIResponse.data.on("end", () => {
       console.log("✅ Stream completed successfully");
       endResponse();
     });
 
     // Handle stream errors
-    openAIResponse.data.on('error', (err: Error) => {
+    openAIResponse.data.on("error", (err: Error) => {
       console.error("❌ Stream error:", err);
       endResponse();
     });
 
     // Handle client disconnect
-    req.on('close', () => {
+    req.on("close", () => {
       if (!hasEnded) {
         console.log("🔌 Client disconnected");
         hasEnded = true;
@@ -125,7 +137,6 @@ app.post('/ai', async (req: Request, res: Response) => {
 
     // Pipe the OpenAI response to our response
     openAIResponse.data.pipe(res);
-
   } catch (error) {
     const axiosError = error as AxiosError<OpenAIError>;
     console.error("❌ Error proxying request to OpenAI:", {
@@ -137,7 +148,9 @@ app.post('/ai', async (req: Request, res: Response) => {
         method: axiosError.config?.method,
         headers: {
           ...axiosError.config?.headers,
-          Authorization: axiosError.config?.headers?.Authorization ? '[REDACTED]' : undefined
+          Authorization: axiosError.config?.headers?.Authorization
+            ? "[REDACTED]"
+            : undefined
         }
       }
     });
@@ -148,11 +161,14 @@ app.post('/ai', async (req: Request, res: Response) => {
       message: axiosError.response?.data.error?.message || axiosError.message,
       type: axiosError.response?.data.error?.type,
       code: axiosError.response?.data.error?.code,
-      debug: process.env.NODE_ENV === 'development' ? {
-        apiKeyPresent: Boolean(process.env.OPENAI_API_KEY),
-        apiKeyLength: process.env.OPENAI_API_KEY?.length,
-        requestedModel: model
-      } : undefined
+      debug:
+        process.env.NODE_ENV === "development"
+          ? {
+              apiKeyPresent: Boolean(process.env.OPENAI_API_KEY),
+              apiKeyLength: process.env.OPENAI_API_KEY?.length,
+              requestedModel: model
+            }
+          : undefined
     };
 
     res.status(axiosError.response?.status || 500).json(errorResponse);

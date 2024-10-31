@@ -47,7 +47,7 @@ function RootComponent() {
       {/* <AuthDebugger /> */}
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         {/* May not need Near Provider, and Jazz Provider maybe should be combined */}
-        <NearProvider> 
+        <NearProvider>
           <JazzAuth>
             <Outlet />
           </JazzAuth>

@@ -36,7 +36,10 @@ export const useModalStack = () => {
     props: Record<string, any> = {},
     metadata: Metadata
   ) => {
-    setModalStack((prevStack) => [...prevStack, { component, props, metadata }]);
+    setModalStack((prevStack) => [
+      ...prevStack,
+      { component, props, metadata }
+    ]);
   };
 
   // Pops the top modal off the stack

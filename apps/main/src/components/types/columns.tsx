@@ -98,9 +98,7 @@ export const typesColumns: ColumnDef<unknown>[] = [
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={handleInspectClick}
-            >
+            <DropdownMenuItem onClick={handleInspectClick}>
               Inspect
             </DropdownMenuItem>
             {/* These could be enabled if id is equal */}

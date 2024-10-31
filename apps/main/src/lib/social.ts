@@ -50,7 +50,7 @@ export async function getProfile(accountId: string): Promise<Profile | null> {
     ];
     return profile;
   } catch {
-    throw new Error("Failed to destructure profile")
+    throw new Error("Failed to destructure profile");
   }
 }
 

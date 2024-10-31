@@ -47,7 +47,7 @@ export const TypeSchema: RJSFSchema = {
     },
     schema: {
       type: "string",
-      description: "JSON schema that describes the data for this type.",
+      description: "JSON schema that describes the data for this type."
     }
   },
   required: ["name", "description", "schema"],
@@ -63,14 +63,15 @@ export const ThingSchema: RJSFSchema = {
     },
     type: {
       type: "string",
-      description: "Reference to the Type schema ID defining this Thing's structure."
+      description:
+        "Reference to the Type schema ID defining this Thing's structure."
     },
     metadata: {
       type: "object",
       description: "Additional metadata about the Thing.",
       properties: {
-        name: { type: "string"  },
-        description: { type: "string" },
+        name: { type: "string" },
+        description: { type: "string" }
       },
       additionalProperties: true
     },
@@ -83,7 +84,6 @@ export const ThingSchema: RJSFSchema = {
   required: ["id", "type", "metadata", "data"],
   additionalProperties: false
 };
-
 
 export class UserAccount extends Account {
   profile = co.ref(Profile);

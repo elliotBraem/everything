@@ -1,38 +1,38 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { createInventory, getInventories } from '@/lib/inventory'
-import { useAccount } from '@/lib/providers/jazz'
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
-import { useState } from 'react'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { createInventory, getInventories } from "@/lib/inventory";
+import { useAccount } from "@/lib/providers/jazz";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { useState } from "react";
 
-export const Route = createFileRoute('/_layout/_auth/inventory')({
-  component: InventoryBrowser,
-})
+export const Route = createFileRoute("/_layout/_auth/inventory")({
+  component: InventoryBrowser
+});
 
 export default function InventoryBrowser() {
-  const { me } = useAccount()
-  const inventories = getInventories(me)
-  const navigate = Route.useNavigate()
+  const { me } = useAccount();
+  const inventories = getInventories(me);
+  const navigate = Route.useNavigate();
   const [isNewInventoryInputVisible, setIsNewInventoryInputVisible] =
-    useState(false)
-  const [newInventoryName, setNewInventoryName] = useState('')
+    useState(false);
+  const [newInventoryName, setNewInventoryName] = useState("");
 
   const handleCreateInventory = async () => {
     if (newInventoryName) {
       try {
-        const newInventory = createInventory(newInventoryName, me)
-        setNewInventoryName('')
-        setIsNewInventoryInputVisible(false)
+        const newInventory = createInventory(newInventoryName, me);
+        setNewInventoryName("");
+        setIsNewInventoryInputVisible(false);
         navigate({
-          to: '/inventory/$inventoryId',
-          params: { inventoryId: newInventory.id },
-        })
+          to: "/inventory/$inventoryId",
+          params: { inventoryId: newInventory.id }
+        });
       } catch (err) {
-        console.error(err)
+        console.error(err);
         // setError("Failed to create inventory. Please try again.");
       }
     }
-  }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -41,7 +41,7 @@ export default function InventoryBrowser() {
           <div className="flex flex-wrap gap-2">
             <Link to="/inventory">
               <Button
-                key={'inventory-all'}
+                key={"inventory-all"}
                 // variant={
                 //   selectedInventory?.name === inventory?.name
                 //     ? "default"
@@ -56,9 +56,9 @@ export default function InventoryBrowser() {
                 key={inventory.id}
                 onClick={() => {
                   navigate({
-                    to: '/inventory/$inventoryId',
-                    params: { inventoryId: inventory.id },
-                  })
+                    to: "/inventory/$inventoryId",
+                    params: { inventoryId: inventory.id }
+                  });
                 }}
                 // variant={
                 //   selectedInventory?.name === inventory?.name
@@ -88,5 +88,5 @@ export default function InventoryBrowser() {
       </div>
       <Outlet />
     </div>
-  )
+  );
 }

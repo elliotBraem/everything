@@ -58,7 +58,7 @@ const StackItem = memo(
               className="flex h-full flex-col rounded-t-xl border-2 border-gray-800 bg-white shadow-[4px_4px_0_rgba(0,0,0,1)]"
             >
               <WindowControls onClose={closeSheet} />
-              
+
               <div className="flex-1 overflow-y-auto">
                 <div className="p-6">
                   <DrawerHeader className="px-0 text-left">
@@ -77,7 +77,8 @@ const StackItem = memo(
 
               <DrawerFooter className="border-t-2 border-gray-800 p-4">
                 <DrawerClose asChild>
-                  <Button variant="outline" 
+                  <Button
+                    variant="outline"
                     className="border-2 border-gray-800 shadow-[2px_2px_0_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-[1px_1px_0_rgba(0,0,0,1)]"
                   >
                     Close
@@ -119,7 +120,8 @@ const StackItem = memo(
 
               <SheetFooter className="border-t-2 border-gray-800 p-4">
                 <SheetClose asChild>
-                  <Button variant="outline" 
+                  <Button
+                    variant="outline"
                     className="border-2 border-gray-800 shadow-[2px_2px_0_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-[1px_1px_0_rgba(0,0,0,1)]"
                   >
                     Close

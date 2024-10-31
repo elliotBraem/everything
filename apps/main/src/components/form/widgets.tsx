@@ -72,7 +72,6 @@ export const widgets: RegistryWidgetsType = {
     );
   },
   JsonEditorWidget: function (props: WidgetProps) {
-
     const [error, setError] = useState<string | null>(null);
     const formatJsonKeys = (value: string): string => {
       try {
@@ -179,13 +178,13 @@ export const widgets: RegistryWidgetsType = {
     );
   },
   SelectTypeWidget: function (props: WidgetProps) {
-    console.log("the props", props)
-    
-    const { me } = useAccountOrGuest(); 
+    console.log("the props", props);
+
+    const { me } = useAccountOrGuest();
     const things = getThings(me);
     const types = things.filter((thing) => {
-      return thing.type.toLowerCase() === "type" || []
-  });
+      return thing.type.toLowerCase() === "type" || [];
+    });
     return (
       <Select onValueChange={props.onChange} defaultValue={props.value}>
         <SelectTrigger className="w-full">

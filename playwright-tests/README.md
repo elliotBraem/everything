@@ -76,7 +76,7 @@ If you are testing a component that makes fetch requests, you can mock them usin
 await page.route("**/api/hello", (route) => {
   return route.fulfill({
     status: 200,
-    body: "Hello, World!",
+    body: "Hello, World!"
   });
 });
 ```

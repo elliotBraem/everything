@@ -17,38 +17,39 @@ export type SchemaType = {
 
 export class AIStreamParser {
   private decoder = new TextDecoder();
-  private buffer = '';
-  private jsonAccumulator = '';
+  private buffer = "";
+  private jsonAccumulator = "";
 
   parseChunk(chunk: Uint8Array): string[] {
     const text = this.decoder.decode(chunk, { stream: true });
     this.buffer += text;
 
-    const lines = this.buffer.split('\n');
-    this.buffer = lines.pop() || '';
+    const lines = this.buffer.split("\n");
+    this.buffer = lines.pop() || "";
 
     return lines
-      .filter(line => line.trim() !== '')
-      .map(line => {
-        if (line.startsWith('data: ')) {
+      .filter((line) => line.trim() !== "")
+      .map((line) => {
+        if (line.startsWith("data: ")) {
           const data = line.slice(6);
-          if (data === '[DONE]') {
+          if (data === "[DONE]") {
             // Try to parse accumulated JSON if we have any
             if (this.jsonAccumulator) {
               try {
                 const parsedJson = JSON.parse(this.jsonAccumulator);
-                this.jsonAccumulator = '';
+                this.jsonAccumulator = "";
                 return JSON.stringify(parsedJson, null, 2);
               } catch (e) {
-                console.error('Failed to parse accumulated JSON:', e);
+                console.error("Failed to parse accumulated JSON:", e);
               }
             }
-            return '';
+            return "";
           }
 
           try {
             const parsed = JSON.parse(data) as AIResponse;
-            const argChunk = parsed.choices[0]?.delta?.function_call?.arguments || '';
+            const argChunk =
+              parsed.choices[0]?.delta?.function_call?.arguments || "";
             if (argChunk) {
               this.jsonAccumulator += argChunk;
               // Try to parse accumulated JSON
@@ -57,23 +58,23 @@ export class AIStreamParser {
                 return JSON.stringify(parsedJson, null, 2);
               } catch {
                 // If we can't parse yet, it's an incomplete JSON chunk
-                return '';
+                return "";
               }
             }
-            return parsed.choices[0]?.delta?.content || '';
+            return parsed.choices[0]?.delta?.content || "";
           } catch (e) {
-            console.error('Error parsing JSON chunk:', e);
-            return '';
+            console.error("Error parsing JSON chunk:", e);
+            return "";
           }
         }
-        return '';
+        return "";
       })
       .filter(Boolean);
   }
 
   reset() {
-    this.buffer = '';
-    this.jsonAccumulator = '';
+    this.buffer = "";
+    this.jsonAccumulator = "";
   }
 }
 
@@ -82,7 +83,7 @@ export class AIClient {
     text: string,
     schema: SchemaType,
     options: {
-      onChunk?: (chunk: string) => void
+      onChunk?: (chunk: string) => void;
     }
   ) {
     const response = await fetch("/ai", {
@@ -95,11 +96,11 @@ export class AIClient {
       })
     });
 
-    if (!response.ok) throw new Error('Failed to fetch');
-    if (!response.body) throw new Error('No response body');
+    if (!response.ok) throw new Error("Failed to fetch");
+    if (!response.body) throw new Error("No response body");
 
     const reader = response.body.getReader();
-    let accumulated = '';
+    let accumulated = "";
 
     try {
       while (true) {
@@ -108,16 +109,17 @@ export class AIClient {
 
         // Parse the chunk
         const chunk = new TextDecoder().decode(value);
-        const lines = chunk.split('\n');
+        const lines = chunk.split("\n");
 
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
+          if (line.startsWith("data: ")) {
             const data = line.slice(6);
-            if (data === '[DONE]') continue;
+            if (data === "[DONE]") continue;
 
             try {
               const parsed = JSON.parse(data);
-              const content = parsed.choices[0]?.delta?.function_call?.arguments || '';
+              const content =
+                parsed.choices[0]?.delta?.function_call?.arguments || "";
               if (content) {
                 accumulated += content;
                 try {
@@ -131,7 +133,7 @@ export class AIClient {
                 }
               }
             } catch (e) {
-              console.error('Error parsing chunk:', e);
+              console.error("Error parsing chunk:", e);
             }
           }
         }

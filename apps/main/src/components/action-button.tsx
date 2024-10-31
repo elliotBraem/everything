@@ -9,7 +9,7 @@ import { AIProcessor } from "./ai-assistant";
 
 export const ActionButton = () => {
   const { openSheet, closeSheet } = useSheetStack();
-  
+
   // <div className="h-full w-full">
   //   <iframe
   //     src="https://near.social/embed/every.near/widget/thing?path=efiz.near/thing/core"

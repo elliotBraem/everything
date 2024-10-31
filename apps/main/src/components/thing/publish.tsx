@@ -26,9 +26,7 @@ export const PublishThing: React.FC<PublishThingProps> = ({ thing }) => {
           const { publicKey, accountId } = account;
 
           const data: any = {
-            type: {
-
-            }
+            type: {}
           };
 
           const transaction = await social.set({
@@ -54,7 +52,11 @@ export const PublishThing: React.FC<PublishThingProps> = ({ thing }) => {
 
   return (
     <div>
-      <FormGenerator data={thing} schema={ThingSchema} onSubmit={handleSubmit} />
+      <FormGenerator
+        data={thing}
+        schema={ThingSchema}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 };

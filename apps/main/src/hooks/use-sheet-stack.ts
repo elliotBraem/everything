@@ -31,7 +31,10 @@ export const useSheetStack = () => {
     props: Record<string, any> = {},
     metadata: Metadata
   ) => {
-    setSheetStack((prevStack) => [...prevStack, { component, props, metadata }]);
+    setSheetStack((prevStack) => [
+      ...prevStack,
+      { component, props, metadata }
+    ]);
   };
 
   // Pops the top sheet off the stack
