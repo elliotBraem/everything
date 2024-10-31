@@ -56,30 +56,8 @@ const Feature = ({
 
 export default function RootComponent() {
   return (
-    <div className="min-h-screen bg-gray-100 py-0 md:py-16">
-      <WindowContainer>
-        <div className="mb-16 p-6">
-          <LandingPage />
-        </div>
-      </WindowContainer>
-      <footer className="fixed bottom-0 right-0 m-4">
-        <div className="flex items-center gap-4">
-          <div className="w-36 text-gray-500">
-            <img src="/built-on-near.svg" alt="built on near" />
-          </div>
-          <a
-            href={"https://github.com/elliotBraem/inventory-management"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 font-mono text-gray-500 transition-colors hover:text-gray-700"
-          >
-            <span>view source</span>
-            <div className="text-gray-500 transition-colors hover:text-gray-700">
-              <GitHubLogoIcon className="h-5 w-5" />
-            </div>
-          </a>
-        </div>
-      </footer>
+    <div className="mb-16 p-6">
+      <LandingPage />
     </div>
   );
 }

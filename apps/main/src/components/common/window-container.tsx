@@ -1,12 +1,15 @@
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode, useState } from "react";
 
 export const WindowControls = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const menuItems = [
     { label: "Home", path: "/" },
-    { label: "About", path: "/about" }
+    { label: "Inventory", path: "/inventory" }
   ];
 
   return (
@@ -30,7 +33,7 @@ export const WindowControls = () => {
                 key={item.path}
                 className="w-full px-4 py-2 text-left font-mono transition-colors hover:bg-gray-100"
                 onClick={() => {
-                  // navigate({ to: `/${item.path}` });
+                  navigate({ to: `/${item.path}` });
                   setIsOpen(false);
                 }}
               >
@@ -54,10 +57,28 @@ export default function WindowContainer({ children }: WindowContainerProps) {
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="mx-auto max-w-4xl border-2 border-gray-800 bg-white shadow-[4px_4px_0_rgba(0,0,0,1)]"
+      className="mx-auto max-w-4xl border-2 border-gray-800 bg-white shadow-[4px_4px_0_rgba(0,0,0,1)] min-h-[790px]"
     >
       <WindowControls />
       <div className="p-8">{children}</div>
+      <footer className="fixed bottom-0 right-0 m-4">
+        <div className="flex items-center gap-4">
+          <div className="w-36 text-gray-500">
+            <img src="/built-on-near.svg" alt="built on near" />
+          </div>
+          <a
+            href={"https://github.com/elliotBraem/inventory-management"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 font-mono text-gray-500 transition-colors hover:text-gray-700"
+          >
+            <span>view source</span>
+            <div className="text-gray-500 transition-colors hover:text-gray-700">
+              <GitHubLogoIcon className="h-5 w-5" />
+            </div>
+          </a>
+        </div>
+      </footer>
     </motion.div>
   );
 }
