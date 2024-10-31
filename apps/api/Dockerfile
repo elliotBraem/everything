@@ -7,8 +7,11 @@ WORKDIR /app
 # Copy the package.json and package-lock.json files to install dependencies
 COPY package*.json ./
 
+# Set NODE_ENV to production to skip devDependencies
+ENV NODE_ENV=production
+
 # Install only production dependencies
-RUN npm install --only=production
+RUN npm install
 
 # Copy the rest of the application code
 COPY . .
