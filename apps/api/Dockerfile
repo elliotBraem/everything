@@ -11,7 +11,7 @@ COPY package*.json ./
 ENV NODE_ENV=production
 
 # Install only production dependencies
-RUN npm install --omit=dev
+RUN pnpm install --prod
 
 # Copy the rest of the application code
 COPY . .
@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 3005
 
 # Define the command to run the application
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
