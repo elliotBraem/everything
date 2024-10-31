@@ -77,7 +77,7 @@ export default defineConfig(({ mode }) => {
       proxy: {
         "/ai": isDevelopment
           ? "http://localhost:3005"
-          : "https://api.yourdomain.com"
+          : "https://everything-api-production.up.railway.app"
       }
     }
   };

@@ -1,21 +1,12 @@
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Thing } from "@/lib/schema";
 import { RegistryWidgetsType, WidgetProps } from "@rjsf/utils";
 import { LucideImage, LucideX } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
-import { useAccountOrGuest } from "@/lib/providers/jazz";
-import { getThings } from "@/lib/inventory";
+import { SelectType } from "./select-type";
 
 // for reference, see https://github.com/m6io/rjsf-tailwind/blob/main/src/components/rjsf/Widgets/Widgets.ts
 // usage:  "ui:widget": "VALUE" where value is the key (e.g JsonEditorWidget)
@@ -177,30 +168,6 @@ export const widgets: RegistryWidgetsType = {
       </div>
     );
   },
-  SelectTypeWidget: function (props: WidgetProps) {
-    console.log("the props", props);
-
-    const { me } = useAccountOrGuest();
-    const things = getThings(me);
-    const types = things.filter((thing) => {
-      return thing.type.toLowerCase() === "type" || [];
-    });
-    return (
-      <Select onValueChange={props.onChange} defaultValue={props.value}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select a type" />
-        </SelectTrigger>
-        <SelectContent>
-          {types.map((type: Thing) => {
-            return (
-              <SelectItem key={type.id} value={type.id}>
-                Type
-              </SelectItem>
-            );
-          })}
-        </SelectContent>
-      </Select>
-    );
-  }
+  SelectTypeWidget: SelectType
   // add the rest of your desired components here
 };

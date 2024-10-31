@@ -66,22 +66,13 @@ export const ThingSchema: RJSFSchema = {
       description:
         "Reference to the Type schema ID defining this Thing's structure."
     },
-    metadata: {
-      type: "object",
-      description: "Additional metadata about the Thing.",
-      properties: {
-        name: { type: "string" },
-        description: { type: "string" }
-      },
-      additionalProperties: true
-    },
     data: {
       type: "string",
       description: "Structured JSON following the schema defined by Type.",
       additionalProperties: true
     }
   },
-  required: ["id", "type", "metadata", "data"],
+  required: ["id", "type", "data"],
   additionalProperties: false
 };
 

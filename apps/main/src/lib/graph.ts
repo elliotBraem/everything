@@ -65,7 +65,7 @@ export function useGetTypes() {
     queryKey: ["get-types"],
     queryFn: async () => {
       const args = {
-        keys: ["efiz.testnet/type/*"]
+        keys: ["type-registry.testnet/type/*"]
       };
 
       const allTypes = await view<number>({

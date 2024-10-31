@@ -39,7 +39,7 @@ export const FormGenerator = ({
   return (
     <Form
       schema={schema}
-      formData={JSON.parse(JSON.stringify(data))}
+      formData={data && JSON.parse(JSON.stringify(data))}
       validator={validator}
       uiSchema={uiSchema}
       widgets={widgets}

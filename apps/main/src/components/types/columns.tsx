@@ -59,7 +59,7 @@ export const typesColumns: ColumnDef<unknown>[] = [
           InspectThing,
           { thing },
           {
-            title: "Inspect Thing",
+            title: "Inspect Type",
             description: "Select confirm when you're done"
           }
         );

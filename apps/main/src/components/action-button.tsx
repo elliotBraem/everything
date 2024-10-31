@@ -23,7 +23,7 @@ export const ActionButton = () => {
   const handleActionClick = () => {
     // openSheet(AIAssistantComponent);
     openSheet(
-      AIProcessor,
+      CreateThing,
       {
         onCreateCallback: () => {
           // it could toast, success or so

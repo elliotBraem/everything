@@ -12,7 +12,8 @@ export const WindowControls = () => {
 
   const menuItems = [
     { label: "Home", path: "/" },
-    { label: "Inventory", path: "/inventory" }
+    { label: "Inventory", path: "/inventory" },
+    { label: "Types", path: "/types" }
   ];
 
   return (

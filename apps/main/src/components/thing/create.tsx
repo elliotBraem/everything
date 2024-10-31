@@ -5,31 +5,32 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from "@/components/ui/collapsible";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  createItem,
-  getInventories,
-  getThing,
-  getThings
-} from "@/lib/inventory";
-import { useAccount, useAccountOrGuest } from "@/lib/providers/jazz";
+import { useType } from "@/lib/graph";
+import { createItem, getInventories } from "@/lib/inventory";
+import { useAccount } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
 import { RJSFSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
-import { CoMapInit, ID } from "jazz-tools";
-import { useEffect, useState } from "react";
+import { CoMapInit } from "jazz-tools";
+import { useState } from "react";
 
+// Types
 interface CreateThingProps {
   onCreateCallback: () => void;
 }
+
+interface FormProps {
+  type: string;
+  onSubmit: (data: any) => void;
+}
+
+// Constants
+const TABS = {
+  FORM: "form",
+  JSON: "json",
+  AI: "ai"
+} as const;
 
 const jsonEditorSchema: RJSFSchema = {
   type: "object",
@@ -40,146 +41,157 @@ const jsonEditorSchema: RJSFSchema = {
   required: ["type", "data"]
 };
 
+const LoadingState = () => (
+  <div className="flex items-center justify-center p-4">
+    <p className="text-muted-foreground">Loading...</p>
+  </div>
+);
+
+const ErrorState = ({ message }: { message: string }) => (
+  <div className="flex items-center justify-center p-4">
+    <p className="text-destructive">{message}</p>
+  </div>
+);
+
+// Validation Results Component
+const ValidationResults = ({
+  isOpen,
+  onOpenChange,
+  errors
+}: {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  errors: string;
+}) => (
+  <Collapsible open={isOpen} onOpenChange={onOpenChange} className="w-full">
+    <CollapsibleTrigger className="w-full">
+      <div className="flex items-center justify-between rounded-lg border p-2">
+        <span>Validation Results</span>
+        <span>{isOpen ? "↑" : "↓"}</span>
+      </div>
+    </CollapsibleTrigger>
+    <CollapsibleContent>
+      <Textarea readOnly value={errors} rows={5} className="mt-2" />
+    </CollapsibleContent>
+  </Collapsible>
+);
+
+// Form Components
+const ThingFormContent = ({
+  data,
+  onSubmit
+}: {
+  data: any;
+  onSubmit: FormProps["onSubmit"];
+}) => {};
+
+const ThingForm = ({ type, onSubmit }: FormProps) => {
+  const { data, isLoading, isError } = useType({ typeId: type });
+
+  if (isLoading) {
+    return <LoadingState />;
+  }
+
+  if (isError) {
+    return <ErrorState message="Failed to load form data" />;
+  }
+
+  if (!data) {
+    return <ErrorState message="No form data available" />;
+  }
+
+  const typeData = JSON.parse(data.data);
+  const schema = JSON.parse(typeData.schema);
+  if (!schema) {
+    return <ErrorState message="No schema available" />;
+  }
+  return <FormGenerator schema={schema} onSubmit={onSubmit} />;
+};
+
+// Wrapper component to handle conditional rendering
+const ThingFormWrapper = ({
+  type,
+  onSubmit
+}: {
+  type: string | undefined;
+  onSubmit: FormProps["onSubmit"];
+}) => {
+  if (!type) {
+    return null;
+  }
+
+  return <ThingForm type={type} onSubmit={onSubmit} />;
+};
+
+// Main Component
 export const CreateThing = ({ onCreateCallback }: CreateThingProps) => {
   const { me } = useAccount();
-
-  const inventories = getInventories(me);
-
-  const [selectedType, setSelectedType] = useState<Thing | null>(null);
-  const [activeTab, setActiveTab] = useState("form");
   const [validationErrors, setValidationErrors] = useState<string>("");
   const [isErrorsOpen, setIsErrorsOpen] = useState(false);
 
-  const handleSubmit = ({ data, type }) => {
+  const inventories = getInventories(me);
+
+  if (!inventories?.length) {
+    return <ErrorState message="No inventories available" />;
+  }
+
+  const handleSubmit = async ({ data, type }: { data: any; type: string }) => {
     try {
-      createItem({
-        inventory: inventories?.at(0),
+      await createItem({
+        inventory: inventories[0],
         deleted: false,
         data: JSON.stringify(data.formData),
-        type: selectedType?.type
+        type: type
       } as CoMapInit<Thing>);
-    } catch (err: any) {
-      throw new Error(err);
+
+      onCreateCallback?.();
+    } catch (error) {
+      console.error("Failed to create item:", error);
+      setValidationErrors(`Failed to create item: ${(error as Error).message}`);
+      setIsErrorsOpen(true);
     }
-    console.log("Form submitted:", data);
   };
 
-  const validateData = (data: any) => {
+  const validateData = (data: any, schema: any) => {
     try {
-      const result = validator.validateFormData(
-        data,
-        selectedType ? JSON.parse(selectedType.type) : jsonEditorSchema
+      const result = validator.validateFormData(data, schema);
+
+      setValidationErrors(
+        result.errors?.length
+          ? JSON.stringify(result.errors, null, 2)
+          : "No validation errors found!"
       );
-      if (result.errors && result.errors.length > 0) {
-        setValidationErrors(JSON.stringify(result.errors, null, 2));
-        setIsErrorsOpen(true);
-      } else {
-        setValidationErrors("No validation errors found!");
-        setIsErrorsOpen(true);
-      }
+      setIsErrorsOpen(true);
     } catch (error) {
-      setValidationErrors(`Validation error: ${error.message}`);
+      setValidationErrors(`Validation error: ${(error as Error).message}`);
       setIsErrorsOpen(true);
     }
   };
 
   return (
     <div className="flex h-full flex-grow flex-col">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="json">JSON</TabsTrigger>
-          <TabsTrigger value="form">Form</TabsTrigger>
-          <TabsTrigger value="ai">AI</TabsTrigger>
-        </TabsList>
+      <div className="flex h-full w-full flex-col space-y-4 overflow-y-auto p-4">
+        <ThingFormWrapper
+          type={"type-registry.testnet/type/Thing"}
+          onSubmit={handleSubmit}
+        />
 
-        <div className="flex h-full w-full flex-col space-y-4 overflow-y-auto p-4">
-          <TabsContent value="json" className="mt-0">
-            <FormGenerator schema={jsonEditorSchema} onSubmit={handleSubmit} />
-          </TabsContent>
+        <div className="mt-4 space-y-4">
+          {/* <Button
+            onClick={() => validateData(selectedType)}
+            className="w-full"
+            variant="outline"
+          >
+            Validate
+          </Button> */}
 
-          <TabsContent value="form" className="mt-0">
-            <ThingForm onSubmit={handleSubmit} />
-          </TabsContent>
-
-          <TabsContent value="ai" className="mt-0">
-            <ThingForm
-              type={getThing("co_zWWm9fi2qtfjmeDVyAnWELHeXPv" as ID<Thing>)} // hard coded
-              onSubmit={handleSubmit}
-            />
-          </TabsContent>
-
-          <div className="mt-4 space-y-4">
-            <Button
-              onClick={() => validateData(selectedType)}
-              className="w-full"
-              variant="outline"
-            >
-              Validate
-            </Button>
-
-            <Collapsible
-              open={isErrorsOpen}
-              onOpenChange={setIsErrorsOpen}
-              className="w-full"
-            >
-              <CollapsibleTrigger className="w-full">
-                <div className="flex items-center justify-between rounded-lg border p-2">
-                  <span>Validation Results</span>
-                  <span>{isErrorsOpen ? "↑" : "↓"}</span>
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <Textarea readOnly value={validationErrors} rows={5} />
-              </CollapsibleContent>
-            </Collapsible>
-          </div>
+          <ValidationResults
+            isOpen={isErrorsOpen}
+            onOpenChange={setIsErrorsOpen}
+            errors={validationErrors}
+          />
         </div>
-      </Tabs>
+      </div>
     </div>
-  );
-};
-
-const ThingForm = ({
-  type,
-  onSubmit
-}: {
-  type?: Thing;
-  onSubmit: (data: any) => void;
-}) => {
-  const { me } = useAccountOrGuest();
-  const things = getThings(me);
-  const types = things.filter((thing) => thing.type === "type" || []);
-
-  const [selectedType, setSelectedType] = useState(type || undefined);
-  const [schemaData, setSchemaData] = useState(null);
-
-  useEffect(() => {
-    if (selectedType) {
-      console.log("yes", selectedType);
-      const typeData = JSON.parse(selectedType.data);
-      // const schemaData = JSON.parse(typeData.schema);
-      setSchemaData(typeData);
-    }
-  }, [selectedType]);
-
-  return (
-    <>
-      <Select onValueChange={setSelectedType}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select a type" />
-        </SelectTrigger>
-        <SelectContent>
-          {types.map((type: Thing) => {
-            // const typeData = JSON.parse(type.data);
-            return (
-              <SelectItem key={type.id} value={type}>
-                Type
-              </SelectItem>
-            );
-          })}
-        </SelectContent>
-      </Select>
-      {schemaData && <FormGenerator schema={schemaData} onSubmit={onSubmit} />}
-    </>
   );
 };
