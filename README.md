@@ -8,10 +8,8 @@
 <h1 style="font-size: 2.5rem; font-weight: bold;">everything</h1>
 
   <p>
-    <strong>concepts for defining the world around us</strong>
+    <strong>apps and packages for creating and defining things</strong>
   </p>
-
-"infrastructure for the user owned internet"
 
 </div>
 
@@ -23,9 +21,8 @@ it's a way to put it all together
 
 - every.near : redeploy of the social contract, stores things and types
 - near-bos-webcomponent : (thing), has the VM and definitions. Takes data and type.
-- 
-- every.near.page 
-
+-
+- every.near.page
 
 jsinrust
 
@@ -35,6 +32,8 @@ He sounds like a cracked dev and would probably appreciate it...
 everything.dev
 everything.market
 everythingproject.org
+
+graph.every.near - deploy socialdb contract
 
 mega proposal along with the Keypom app
 
@@ -75,6 +74,7 @@ Send for feedback.
 - learn-anything
 - web4
 - final form builder demo https://github.com/final-form/builder-demo
+- tailwind rjsf https://github.com/m6io/rjsf-tailwind
 
 <details>
   <summary>Table of Contents</summary>
@@ -141,54 +141,33 @@ To learn more about NEAR, take a look at the following resources:
 
 You can check out [the NEAR repository](https://github.com/near) - your feedback and contributions are welcome!
 
-## Ethereum wallet login
+## Deploy to web4
 
-If developing in testnet and logging in with an Ethereum wallet, you will need to top up the created EVM wallet on NEAR Testnet.
-Go to [Aurora's NEAR wallet playground](https://near-wallet-playground.testnet.aurora.dev/), switch to the chain, connect to Metamask and load accounts, then Add funds.
+1. Build the project
 
-Note that you should also modify the Project IDs in [ethereum-wallet](./src/wallets/ethereum-wallet.ts) for the REOWN_PROJECT_ID.
-
-## Preparing for production
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```cmd
+pnpm run build
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Create a web4 subaccount of your master account (this will be your domain).
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```cmd
+near account create-account fund-myself web4.MASTER_ACCOUNT.testnet '1 NEAR' autogenerate-new-keypair save-to-keychain sign-as MASTER_ACCOUNT.testnet network-config testnet sign-with-keychain send`
 ```
+
+Be sure to "Store the access key in legacy keychain"!
+
+3. Run web4-deploy to upload production bundle to nearfs and deploy it to a minimum-web4 contract to your account.
+
+```cmd
+npx github:vgrichina/web4-deploy dist web4.MASTER_ACCOUNT.testnet --deploy-contract --nearfs
+```
+
+Deploy shoudl be accessible and your website accessible at
+
+`testnet`: MASTER_ACCOUNT.testnet.page
+
+`mainnet`: MASTER_ACCOUNT.near.page
 
 ## Contributing
 
@@ -205,3 +184,41 @@ If you're interested in contributing to this project, please read the [contribut
 />
 </a>
 </div>
+
+### Checklist
+
+- favicon, title, description, open graph share link
+- expand to monorepo? apps, packages (marketplace)
+- tests?
+- auth vs unauth routes
+- create thing from ai (structured outputs)
+- clearer ai environment
+- everything header
+- how to handle offline?
+- hide dev tools in production
+- edit thing, wrapper around ThingForm
+
+# Running locally
+
+1. Install [mkcert](https://mkcert.dev/).
+2. Install local certificate authority (this allows browser to trust self-signed certificates):
+   ```bash
+   mkcert -install
+   ```
+3. Create `*.near.page` SSL certificate:
+   ```bash
+   mkcert "*.near.page"
+   ```
+4. Run `web4` man-in-the-middle proxy locally:
+   ```bash
+   IPFS_GATEWAY_URL=https://ipfs.near.social NODE_ENV=mainnet WEB4_KEY_FILE=./_wildcard.near.page-key.pem WEB4_CERT_FILE=./_wildcard.near.page.pem npx web4-near
+   ```
+5. Setup browser to use [automatic proxy configuration file](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) at `http://localhost:8080/` or to use `localhost:8080` as an HTTPS proxy server.
+
+I had to do:
+
+`sudo sh -c 'echo "127.0.0.1 every.near.page" >> /etc/hosts'`
+
+and
+
+`pnpm run dev --host every.near.page`
