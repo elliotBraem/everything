@@ -12,8 +12,6 @@ COPY package.json ./
 # Remove workspace dependencies before installing
 RUN sed -i 's/"@repo\/.*": "workspace:\*",//g' package.json
 
-COPY pnpm-lock.yaml ./
-
 # Install only production dependencies
 RUN pnpm install --prod
 
