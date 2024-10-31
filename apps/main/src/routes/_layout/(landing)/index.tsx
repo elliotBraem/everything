@@ -1,8 +1,8 @@
-import WindowContainer, {
-  WindowControls
-} from "@/components/common/window-container";
+import WindowContainer from "@/components/common/window-container";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
+import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_layout/(landing)/")({
@@ -15,6 +15,7 @@ interface FeatureProps {
   description: string;
   isSelected: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 const Feature = ({
@@ -22,40 +23,62 @@ const Feature = ({
   icon,
   description,
   isSelected,
-  onClick
+  onClick,
+  disabled
 }: FeatureProps) => (
   <motion.button
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
+    whileHover={{ scale: disabled ? 1 : 1.02 }}
+    whileTap={{ scale: disabled ? 1 : 0.98 }}
     className={`relative flex flex-col items-center border border-gray-300 p-6 ${
-      isSelected
-        ? "z-20 -translate-y-1 bg-black text-white shadow-[2px_2px_0_rgba(0,0,0,1)]"
-        : "z-10 bg-white text-black shadow-[1px_1px_0_rgba(0,0,0,0.2)] hover:shadow-[2px_2px_0_rgba(0,0,0,0.3)]"
+      disabled
+        ? "cursor-not-allowed opacity-70"
+        : isSelected
+          ? "z-20 -translate-y-1 bg-black text-white shadow-[2px_2px_0_rgba(0,0,0,1)]"
+          : "z-10 bg-white text-black shadow-[1px_1px_0_rgba(0,0,0,0.2)] hover:shadow-[2px_2px_0_rgba(0,0,0,0.3)]"
     }`}
-    onClick={onClick}
+    onClick={disabled ? undefined : onClick}
   >
     <span className="mb-3 text-4xl">{icon}</span>
     <h3 className="mb-2 font-mono text-lg lowercase">{title}</h3>
     <p className="font-mono text-sm opacity-80">{description}</p>
+    {disabled && (
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-5">
+        <div className="rounded-md bg-black bg-opacity-80 px-3 py-1">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-4 w-4 text-white" />
+            <span className="font-mono text-sm text-white">tbd...</span>
+          </div>
+        </div>
+      </div>
+    )}
   </motion.button>
 );
 
 export default function RootComponent() {
   return (
-    <div className="min-h-screen bg-gray-100 py-16">
+    <div className="min-h-screen bg-gray-100 py-0 md:py-16">
       <WindowContainer>
         <div className="mb-16 p-6">
           <LandingPage />
         </div>
       </WindowContainer>
-      {/* TODO, move footer to bottom right? */}
-      <footer className="mt-8 text-center font-mono text-gray-500">
-        <a
-          href={import.meta.url.replace("esm.town", "val.town")}
-          className="transition-colors hover:text-gray-700"
-        >
-          view source
-        </a>
+      <footer className="fixed bottom-0 right-0 m-4">
+        <div className="flex items-center gap-4">
+          <div className="w-36 text-gray-500">
+            <img src="/built-on-near.svg" alt="built on near" />
+          </div>
+          <a
+            href={"https://github.com/elliotBraem/inventory-management"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 font-mono text-gray-500 transition-colors hover:text-gray-700"
+          >
+            <span>view source</span>
+            <div className="text-gray-500 transition-colors hover:text-gray-700">
+              <GitHubLogoIcon className="h-5 w-5" />
+            </div>
+          </a>
+        </div>
       </footer>
     </div>
   );
@@ -67,19 +90,23 @@ function LandingPage() {
   const features = {
     create: {
       icon: "🤖",
-      description: "ai agent to create typed data from natural language"
+      description: "ai agent to create typed data from natural language",
+      disabled: false
     },
     store: {
       icon: "💾",
-      description: "local-first, decentralized data storage"
+      description: "local-first, decentralized data storage",
+      disabled: false
     },
     ask: {
       icon: "❓",
-      description: "ai agent to ask questions about your inventory"
+      description: "ai agent to ask questions about your inventory",
+      disabled: true
     },
     generate: {
       icon: "✨",
-      description: "ai agent to generate ui for your data structures"
+      description: "ai agent to generate ui for your data structures",
+      disabled: true
     }
   };
 
@@ -100,7 +127,7 @@ function LandingPage() {
           everything
         </motion.h1>
         <motion.p className="font-mono text-xl text-gray-600">
-          apps and packages for creating and defining things
+          your personal inventory for the user-owned internet
         </motion.p>
       </motion.div>
 
@@ -119,6 +146,7 @@ function LandingPage() {
                 description={value.description}
                 isSelected={selectedFeature === key}
                 onClick={() => setSelectedFeature(key)}
+                disabled={value.disabled}
               />
             </motion.div>
           ))}
