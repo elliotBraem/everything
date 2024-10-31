@@ -16,6 +16,7 @@
     "test:ui": "npx playwright test --ui"
   },
   "dependencies": {
+    "@builddao/near-social-js": "^1.1.0",
     "@hookform/resolvers": "^3.9.0",
     "@mintbase-js/sdk": "^0.6.5",
     "@mintbase-js/storage": "^0.6.5",
@@ -81,10 +82,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.46.1",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@tanstack/router-devtools": "^1.69.1",
     "@tanstack/router-plugin": "^1.69.1",
-    "@repo/typescript-config": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.7.5",
     "@types/react": "^18.3.3",

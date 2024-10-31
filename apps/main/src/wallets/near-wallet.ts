@@ -209,4 +209,17 @@ export class Wallet {
     const transaction = await provider.txStatus(txhash, "unnused");
     return getTransactionLastResult(transaction);
   };
+
+  /**
+ * Converts wallet selector account to near-api-js Account object
+ * @returns {Promise<Account>} - the resulting Account object
+ */
+  getAccount = async () => {
+    const walletSelector = await this.selector;
+    //const { network } = walletSelector.options;
+    const accounts = walletSelector.store.getState().accounts;
+    if (!accounts.length) throw new Error("No signed-in accounts found");
+
+    return accounts[0];
+  };
 }

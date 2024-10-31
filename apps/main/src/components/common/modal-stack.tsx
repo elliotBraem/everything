@@ -2,6 +2,7 @@
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { useModalStack } from "@/hooks/use-modal-stack";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import WindowContainer from "./window-container";
 
 export const ModalStack = () => {
   const { modalStack, closeModal } = useModalStack();
@@ -19,6 +20,7 @@ export const ModalStack = () => {
                 <DialogDescription>{metadata.description}</DialogDescription>
               </DialogHeader>
             </div>
+
             <Component {...props} />
           </DialogContent>
         </Dialog>
