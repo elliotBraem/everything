@@ -12,14 +12,12 @@ import { JsonRpcProvider } from "@near-js/providers";
 import { getTransactionLastResult } from "@near-js/utils";
 
 // wallet selector
-import { transformedWeb3Modal, wagmiConfig } from "@/wallets/ethereum-wallet";
 import { setupBitteWallet } from "@near-wallet-selector/bitte-wallet";
 import {
   Action,
   NetworkId,
   setupWalletSelector
 } from "@near-wallet-selector/core";
-import { setupEthereumWallets } from "@near-wallet-selector/ethereum-wallets";
 import { setupHereWallet } from "@near-wallet-selector/here-wallet";
 import { setupLedger } from "@near-wallet-selector/ledger";
 import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
@@ -99,11 +97,6 @@ export class Wallet {
         setupOKXWallet(),
         // @ts-expect-error - "property does not exist", ya whatever
         setupMeteorWallet(),
-        // This configuration comes from wallets/evm
-        setupEthereumWallets({
-          wagmiConfig: wagmiConfig,
-          web3Modal: transformedWeb3Modal
-        }),
         // @ts-expect-error - "property does not exist", ya whatever
         setupLedger(),
         // @ts-expect-error - "property does not exist", ya whatever
