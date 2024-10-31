@@ -30,6 +30,15 @@ export const getThings = (me: UserAccount) => {
   );
 };
 
+export const getTypes = (me: UserAccount) => {
+  me.root?.inventories?.flatMap(
+    (inventory) =>
+      inventory?.things?.filter(
+        (thing): thing is Exclude<typeof thing, null> => thing
+      ) || []
+  ) || []
+}
+
 export const getThing = (thingId: ID<Thing>) => {
   return useCoState(Thing, thingId);
 };

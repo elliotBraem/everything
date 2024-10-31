@@ -6,9 +6,23 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { useGetTypes } from "@/lib/graph";
-import { WidgetProps } from "@rjsf/utils";
+import { ErrorSchema, WidgetProps } from "@rjsf/utils";
 
-export function SelectType(props: WidgetProps) {
+export function SelectTypeWidget(props: WidgetProps) {
+  return <SelectType value={props.value} onChange={props.onChange} />;
+}
+
+export function SelectType({
+  value,
+  onChange
+}: {
+  value: string;
+  onChange: (
+    value: any,
+    es?: ErrorSchema<any> | undefined,
+    id?: string | undefined
+  ) => void;
+}) {
   const { data: types, isLoading, isError } = useGetTypes();
 
   if (isLoading) {
@@ -19,7 +33,7 @@ export function SelectType(props: WidgetProps) {
     return <p>Failed to load types</p>;
   }
   return (
-    <Select onValueChange={props.onChange} defaultValue={props.value}>
+    <Select onValueChange={onChange} defaultValue={value}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a type" />
       </SelectTrigger>

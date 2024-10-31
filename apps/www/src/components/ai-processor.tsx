@@ -46,8 +46,6 @@ export const AIProcessor: React.FC<{ schema: any; onCreate: any }> = ({
         <Button
           className="w-full"
           onClick={(type) => {
-            console.log("calling on submit with type", type);
-            console.log("and data", streamedResponse);
             onCreate(streamedResponse);
           }}
           disabled={isProcessing || !streamedResponse}
