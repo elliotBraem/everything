@@ -3,7 +3,7 @@
   "compilerOptions": {
     "composite": false,
     "declaration": false,
-    "declarationMap": true,
+    "declarationMap": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "allowImportingTsExtensions": true,
