@@ -8,14 +8,15 @@ import { useType } from "@/lib/graph";
 import { createItem, getInventories } from "@/lib/inventory";
 import { useAccount } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
+import { safeJsonParse } from "@/lib/utils";
 import { RJSFSchema } from "@rjsf/utils";
 import { CoMapInit } from "jazz-tools";
 import { useState } from "react";
 import { AIProcessor } from "../ai-processor";
 import { FormGenerator } from "../form/generator";
-import { SelectType } from "../form/select-type";
+import { SelectInventory } from "../form/widgets/select-inventory";
+import { SelectType } from "../form/widgets/select-type";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { safeJsonParse } from "@/lib/utils";
 
 // Types
 interface CreateThingProps {
@@ -164,6 +165,8 @@ export const CreateThing = ({ onCreateCallback }: CreateThingProps) => {
     "type-registry.testnet/type/Thing"
   );
 
+  const [selectedInventory, setSelectedInventory] = useState(null);
+
   const inventories = getInventories(me);
 
   if (!inventories?.length) {
@@ -173,7 +176,7 @@ export const CreateThing = ({ onCreateCallback }: CreateThingProps) => {
   const handleSubmit = async ({ data, type }: { data: any; type: string }) => {
     try {
       await createItem({
-        inventory: inventories[0],
+        inventory: selectedInventory ?? inventories[0],
         deleted: false,
         data: data,
         type: type
@@ -188,6 +191,10 @@ export const CreateThing = ({ onCreateCallback }: CreateThingProps) => {
   return (
     <div className="flex h-full flex-grow flex-col">
       <div className="flex h-full w-full flex-col space-y-4 overflow-y-auto p-4">
+        <SelectInventory
+          value={selectedInventory}
+          onChange={(val) => setSelectedInventory(val)}
+        />
         <SelectType
           value={selectedType}
           onChange={(val) => setSelectedType(val)}

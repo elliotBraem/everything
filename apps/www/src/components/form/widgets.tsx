@@ -6,7 +6,7 @@ import { RegistryWidgetsType, WidgetProps } from "@rjsf/utils";
 import { LucideImage, LucideX } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { SelectType } from "./select-type";
+import { SelectType } from "./widgets/select-type";
 
 // for reference, see https://github.com/m6io/rjsf-tailwind/blob/main/src/components/rjsf/Widgets/Widgets.ts
 // usage:  "ui:widget": "VALUE" where value is the key (e.g JsonEditorWidget)

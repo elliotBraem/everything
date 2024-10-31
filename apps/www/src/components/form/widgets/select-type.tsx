@@ -1,3 +1,4 @@
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -38,29 +39,33 @@ export function SelectType({
     return <p>Failed to load types</p>;
   }
 
-  const localTypes = getTypes(me)?.map((it) => {
-    const typeData = JSON.parse(it.data);
-    return {
-      accountId,
-      id: it.id,
-      key: typeData.name,
-    };
-  }) || [];
+  const localTypes =
+    getTypes(me)?.map((it) => {
+      const typeData = JSON.parse(it.data);
+      return {
+        accountId,
+        id: it.id,
+        key: typeData.name
+      };
+    }) || [];
 
   const combinedTypes = [...types, ...localTypes];
 
   return (
-    <Select onValueChange={onChange} defaultValue={value}>
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a type" />
-      </SelectTrigger>
-      <SelectContent>
-        {combinedTypes?.map((type: any) => (
-          <SelectItem key={type.id} value={type.id}>
-            {type.key}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <>
+      <Label htmlFor="type-select">Type</Label>
+      <Select id="type-select" onValueChange={onChange} defaultValue={value}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select a type" />
+        </SelectTrigger>
+        <SelectContent>
+          {combinedTypes?.map((type: any) => (
+            <SelectItem key={type.id} value={type.id}>
+              {type.key}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
   );
 }
