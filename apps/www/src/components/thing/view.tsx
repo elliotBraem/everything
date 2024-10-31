@@ -9,7 +9,7 @@ interface ViewThingProps {
 // We assume that we already have the data available and being passed to it
 export const ViewThing: React.FC<ViewThingProps> = ({ thing }) => {
   const { data, isLoading, isError } = useType({
-    typeId: "efiz.testnet/type/Event"
+    typeId: thing.type
   });
 
   if (isLoading) return <p>Loading...</p>;

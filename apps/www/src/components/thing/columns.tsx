@@ -21,7 +21,7 @@ import { InspectThing } from "../thing/inspect";
 export const columns: ColumnDef<unknown>[] = [
   {
     accessorKey: "id",
-    header: "ID"
+    header: "ID",
   },
   {
     accessorKey: "type",
@@ -29,7 +29,12 @@ export const columns: ColumnDef<unknown>[] = [
   },
   {
     accessorKey: "data",
-    header: "Data"
+    header: "Data",
+    cell: ({ getValue }) => (
+      <div className="truncate" title={String(getValue())}>
+        {getValue()}
+      </div>
+    ),
   },
   {
     id: "actions",

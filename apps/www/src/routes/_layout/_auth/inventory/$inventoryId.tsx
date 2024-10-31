@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/common/data-table";
 import { ConfirmationModal } from "@/components/confirmation-modal";
 import InviteModal from "@/components/invite-modal";
-import { columns } from "@/components/things/columns";
+import { columns } from "@/components/thing/columns";
 import { Button } from "@/components/ui/button";
 import { useModalStack } from "@/hooks/use-modal-stack";
 import {
