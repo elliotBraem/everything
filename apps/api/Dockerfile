@@ -4,6 +4,9 @@ FROM node:18-alpine
 # Set the working directory in the container
 WORKDIR /app
 
+# Install pnpm globally
+RUN npm install -g pnpm
+
 # Copy the package.json and package-lock.json files to install dependencies
 COPY package*.json ./
 
