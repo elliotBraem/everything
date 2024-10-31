@@ -46,7 +46,7 @@ export const FormGenerator = ({
       templates={templates}
       readonly={readonly}
       onChange={() => onChange?.()}
-      onSubmit={() => onSubmit?.()}
+      onSubmit={(e) => onSubmit?.(e.formData)}
       onError={() => onError?.()}
       showErrorList="top"
     />

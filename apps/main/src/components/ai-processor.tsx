@@ -1,26 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useAIProcessor } from "@/hooks/use-ai-processor";
-import { useType } from "@/lib/graph";
-import { TypeSchema } from "@/lib/schema";
+import React, { useEffect, useState } from "react";
 
-export const AIProcessor: React.FC<{ typeId: string }> = ({ typeId }) => {
+export const AIProcessor: React.FC<{ schema: any; onCreate: any }> = ({
+  schema,
+  onCreate
+}) => {
   const [input, setInput] = useState("");
-  // const { data: type, isLoading, isError } = useType({ typeId });
   const { processText, streamedResponse, isProcessing, error, reset } =
-    useAIProcessor(TypeSchema);
+    useAIProcessor(schema);
 
   useEffect(() => {
     reset();
   }, [input, reset]);
 
-  // if (isLoading) return <div>Loading schema...</div>;
-  // if (isError) return <div>Error loading schema</div>;
-
   return (
-    <div className="mx-auto max-w-md p-4">
-      <h1 className="mb-4 text-2xl font-bold">Natural Language Processor</h1>
+    <div className="w-full mx-auto p-4">
+      <h1 className="mb-4 text-2xl font-bold">Natural Language</h1>
 
       <div className="space-y-4">
         <Textarea
@@ -45,6 +42,18 @@ export const AIProcessor: React.FC<{ typeId: string }> = ({ typeId }) => {
             {streamedResponse || "No output yet"}
           </pre>
         </div>
+
+        <Button
+          className="w-full"
+          onClick={(type) => {
+            console.log("calling on submit with type", type);
+            console.log("and data", streamedResponse);
+            onCreate(streamedResponse);
+          }}
+          disabled={isProcessing || !streamedResponse}
+        >
+          Create
+        </Button>
 
         {error && (
           <div className="mt-2 text-red-500">

@@ -1,5 +1,3 @@
-import { FormGenerator } from "@/components/form/generator";
-import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -11,9 +9,12 @@ import { createItem, getInventories } from "@/lib/inventory";
 import { useAccount } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
 import { RJSFSchema } from "@rjsf/utils";
-import validator from "@rjsf/validator-ajv8";
 import { CoMapInit } from "jazz-tools";
 import { useState } from "react";
+import { AIProcessor } from "../ai-processor";
+import { FormGenerator } from "../form/generator";
+import { SelectType } from "../form/select-type";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 // Types
 interface CreateThingProps {
@@ -76,18 +77,26 @@ const ValidationResults = ({
   </Collapsible>
 );
 
-// Form Components
-const ThingFormContent = ({
-  data,
-  onSubmit
-}: {
-  data: any;
-  onSubmit: FormProps["onSubmit"];
-}) => {};
+interface FormProps {
+  type: string;
+  onSubmit: (data: any) => void;
+}
+
+// Creation method tabs constant
+const CREATION_METHODS = {
+  AI: "ai",
+  FORM: "form"
+} as const;
+
+type CreationMethod = (typeof CREATION_METHODS)[keyof typeof CREATION_METHODS];
 
 const ThingForm = ({ type, onSubmit }: FormProps) => {
   const { data, isLoading, isError } = useType({ typeId: type });
+  const [creationMethod, setCreationMethod] = useState<CreationMethod>(
+    CREATION_METHODS.AI
+  );
 
+  // Loading and error states remain the same
   if (isLoading) {
     return <LoadingState />;
   }
@@ -100,34 +109,58 @@ const ThingForm = ({ type, onSubmit }: FormProps) => {
     return <ErrorState message="No form data available" />;
   }
 
-  const typeData = JSON.parse(data.data);
-  const schema = JSON.parse(typeData.schema);
-  if (!schema) {
-    return <ErrorState message="No schema available" />;
-  }
-  return <FormGenerator schema={schema} onSubmit={onSubmit} />;
-};
-
-// Wrapper component to handle conditional rendering
-const ThingFormWrapper = ({
-  type,
-  onSubmit
-}: {
-  type: string | undefined;
-  onSubmit: FormProps["onSubmit"];
-}) => {
-  if (!type) {
-    return null;
+  // Parse the data and handle potential errors
+  let schema;
+  try {
+    const typeData = JSON.parse(data.data);
+    schema = JSON.parse(typeData.schema);
+    if (!schema) {
+      return <ErrorState message="No schema available" />;
+    }
+  } catch (error) {
+    return <ErrorState message="Invalid schema format" />;
   }
 
-  return <ThingForm type={type} onSubmit={onSubmit} />;
+  return (
+    <div className="space-y-4">
+      <Tabs
+        value={creationMethod}
+        onValueChange={(value: CreationMethod) => setCreationMethod(value)}
+        className="w-full"
+      >
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value={CREATION_METHODS.FORM}>Form</TabsTrigger>
+          <TabsTrigger value={CREATION_METHODS.AI}>AI Assistant</TabsTrigger>
+        </TabsList>
+
+        <div className="mt-4">
+          <TabsContent value={CREATION_METHODS.FORM} className="mt-0">
+            <FormGenerator
+              schema={schema}
+              onSubmit={(data) => {
+                onSubmit({ type, data: JSON.stringify(data) });
+              }}
+            />
+          </TabsContent>
+
+          <TabsContent value={CREATION_METHODS.AI} className="mt-0">
+            <AIProcessor
+              schema={schema}
+              onCreate={(data) => onSubmit({ type, data })}
+            />
+          </TabsContent>
+        </div>
+      </Tabs>
+    </div>
+  );
 };
 
 // Main Component
 export const CreateThing = ({ onCreateCallback }: CreateThingProps) => {
   const { me } = useAccount();
-  const [validationErrors, setValidationErrors] = useState<string>("");
-  const [isErrorsOpen, setIsErrorsOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState(
+    "type-registry.testnet/type/Thing"
+  );
 
   const inventories = getInventories(me);
 
@@ -140,57 +173,24 @@ export const CreateThing = ({ onCreateCallback }: CreateThingProps) => {
       await createItem({
         inventory: inventories[0],
         deleted: false,
-        data: JSON.stringify(data.formData),
+        data: data,
         type: type
       } as CoMapInit<Thing>);
 
       onCreateCallback?.();
     } catch (error) {
       console.error("Failed to create item:", error);
-      setValidationErrors(`Failed to create item: ${(error as Error).message}`);
-      setIsErrorsOpen(true);
-    }
-  };
-
-  const validateData = (data: any, schema: any) => {
-    try {
-      const result = validator.validateFormData(data, schema);
-
-      setValidationErrors(
-        result.errors?.length
-          ? JSON.stringify(result.errors, null, 2)
-          : "No validation errors found!"
-      );
-      setIsErrorsOpen(true);
-    } catch (error) {
-      setValidationErrors(`Validation error: ${(error as Error).message}`);
-      setIsErrorsOpen(true);
     }
   };
 
   return (
     <div className="flex h-full flex-grow flex-col">
       <div className="flex h-full w-full flex-col space-y-4 overflow-y-auto p-4">
-        <ThingFormWrapper
-          type={"type-registry.testnet/type/Thing"}
-          onSubmit={handleSubmit}
+        <SelectType
+          value={selectedType}
+          onChange={(val) => setSelectedType(val)}
         />
-
-        <div className="mt-4 space-y-4">
-          {/* <Button
-            onClick={() => validateData(selectedType)}
-            className="w-full"
-            variant="outline"
-          >
-            Validate
-          </Button> */}
-
-          <ValidationResults
-            isOpen={isErrorsOpen}
-            onOpenChange={setIsErrorsOpen}
-            errors={validationErrors}
-          />
-        </div>
+        <ThingForm type={selectedType} onSubmit={handleSubmit} />
       </div>
     </div>
   );
