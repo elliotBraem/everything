@@ -88,34 +88,43 @@ app.post('/ai', async (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
+    let hasEnded = false;
 
-    // Handle stream end before piping
+    const endResponse = () => {
+      if (!hasEnded) {
+        hasEnded = true;
+        try {
+          res.write("data: [DONE]\n\n");
+          res.end();
+        } catch (err) {
+          console.error("Error ending response:", err);
+        }
+      }
+    };
+
+    // Handle stream end
     openAIResponse.data.on('end', () => {
       console.log("✅ Stream completed successfully");
-      // Only write DONE if the response hasn't been sent yet
-      if (!res.writableEnded) {
-        res.write("data: [DONE]\n\n");
-        res.end();
-      }
+      endResponse();
     });
 
     // Handle stream errors
-    openAIResponse.data.on('error', (err: any) => {
+    openAIResponse.data.on('error', (err: Error) => {
       console.error("❌ Stream error:", err);
-      if (!res.writableEnded) {
+      endResponse();
+    });
+
+    // Handle client disconnect
+    req.on('close', () => {
+      if (!hasEnded) {
+        console.log("🔌 Client disconnected");
+        hasEnded = true;
         res.end();
       }
     });
 
-    // Pipe the OpenAI response directly to our response
+    // Pipe the OpenAI response to our response
     openAIResponse.data.pipe(res);
-
-    // Handle the end of the stream
-    openAIResponse.data.on('end', () => {
-      console.log("✅ Stream completed successfully");
-      res.write("data: [DONE]\n\n");
-      res.end();
-    });
 
   } catch (error) {
     const axiosError = error as AxiosError<OpenAIError>;
@@ -139,8 +148,6 @@ app.post('/ai', async (req: Request, res: Response) => {
       message: axiosError.response?.data.error?.message || axiosError.message,
       type: axiosError.response?.data.error?.type,
       code: axiosError.response?.data.error?.code,
-
-      // Add debugging information for development
       debug: process.env.NODE_ENV === 'development' ? {
         apiKeyPresent: Boolean(process.env.OPENAI_API_KEY),
         apiKeyLength: process.env.OPENAI_API_KEY?.length,

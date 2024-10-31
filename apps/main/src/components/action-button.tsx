@@ -5,7 +5,7 @@ import { createItem, getInventories } from "@/lib/inventory";
 import { useAccountOrGuest } from "@/lib/providers/jazz";
 import { Thing } from "@/lib/schema";
 import { CoMapInit } from "jazz-tools";
-import AIAssistantComponent from "./ai-assistant";
+import { AIProcessor } from "./ai-assistant";
 
 export const ActionButton = () => {
   const { openSheet, closeSheet } = useSheetStack();
@@ -23,7 +23,7 @@ export const ActionButton = () => {
   const handleActionClick = () => {
     // openSheet(AIAssistantComponent);
     openSheet(
-      AIAssistantComponent,
+      AIProcessor,
       {
         onCreateCallback: () => {
           // it could toast, success or so
