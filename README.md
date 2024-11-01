@@ -107,7 +107,7 @@ You can check out [the NEAR repository](https://github.com/near) - your feedback
    mkcert -install
    ```
 
-3. Create `*.near.page` SSL certificate:
+3. Create `*.near.page` SSL certificate and store these at the project root:
 
    ```bash
    mkcert "*.near.page"

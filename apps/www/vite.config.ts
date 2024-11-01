@@ -21,8 +21,8 @@ export default defineConfig(({ mode }) => {
       // Local development server settings
       host: "every.near.page",
       https: {
-        key: fs.readFileSync("./_wildcard.near.page-key.pem"),
-        cert: fs.readFileSync("./_wildcard.near.page.pem")
+        key: fs.readFileSync("../../_wildcard.near.page-key.pem"),
+        cert: fs.readFileSync("../../_wildcard.near.page.pem")
       },
       proxy: {
         "/web4": {
