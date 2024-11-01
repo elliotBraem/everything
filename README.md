@@ -22,8 +22,6 @@
   - [Building for production](#building-for-production)
   - [Running tests](#running-tests)
 - [Learn more about NEAR](#learn-more-about-near)
-- [Ethereum wallet login](#ethereum-wallet-login)
-- [Preparing for production](#preparing-for-production)
 - [Contributing](#contributing)
 
 </details>
@@ -38,7 +36,13 @@ pnpm install
 
 ### Running the app
 
-First, run the development server:
+First, make sure a web4 proxy server is running (see [setup](#running-web4-locally)):
+
+```bash
+pnpm run web4:start:testnet
+```
+
+Then start the dev server. This will run the app and the express proxy server.
 
 ```bash
 pnpm run dev
@@ -54,12 +58,6 @@ pnpm run build
 
 ```bash
 pnpm run test
-```
-
-### Load shadcn component
-
-```bash
-pnpm dlx shadcn@latest add <component-name>
 ```
 
 See the full [testing guide](./playwright-tests/README.md).
@@ -100,33 +98,38 @@ To learn more about NEAR, take a look at the following resources:
 
 You can check out [the NEAR repository](https://github.com/near) - your feedback and contributions are welcome!
 
-## Running locally
+## Running web4 locally
 
 1. Install [mkcert](https://mkcert.dev/).
 2. Install local certificate authority (this allows browser to trust self-signed certificates):
+
    ```bash
    mkcert -install
    ```
+
 3. Create `*.near.page` SSL certificate:
+
    ```bash
    mkcert "*.near.page"
    ```
+
 4. Run `web4` man-in-the-middle proxy locally:
+
    ```bash
    IPFS_GATEWAY_URL=https://ipfs.near.social NODE_ENV=mainnet WEB4_KEY_FILE=./_wildcard.near.page-key.pem WEB4_CERT_FILE=./_wildcard.near.page.pem npx web4-near
    ```
+
 5. Setup browser to use [automatic proxy configuration file](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) at `http://localhost:8080/` or to use `localhost:8080` as an HTTPS proxy server.
 
-I had to do:
+6. May have to configure hosts on MacOS:
 
-`sudo sh -c 'echo "127.0.0.1 every.near.page" >> /etc/hosts'`
-
-and
-
-`pnpm run dev --host every.near.page`
-
+```bash
+sudo sh -c 'echo "127.0.0.1 every.near.page" >> /etc/hosts'
+```
 
 ## Deploy to web4
+
+To deploy the main app, go to `/apps/www`, then follow the below:
 
 1. Build the project
 
