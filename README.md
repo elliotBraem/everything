@@ -119,12 +119,16 @@ You can check out [the NEAR repository](https://github.com/near) - your feedback
    IPFS_GATEWAY_URL=https://ipfs.near.social NODE_ENV=mainnet WEB4_KEY_FILE=./_wildcard.near.page-key.pem WEB4_CERT_FILE=./_wildcard.near.page.pem npx web4-near
    ```
 
-5. Setup browser to use [automatic proxy configuration file](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) at `http://localhost:8080/` or to use `localhost:8080` as an HTTPS proxy server.
-
-6. May have to configure hosts on MacOS:
+5. May have to configure hosts on MacOS:
 
 ```bash
 sudo sh -c 'echo "127.0.0.1 every.near.page" >> /etc/hosts'
+```
+
+6. Run the web4 proxy server for designated network
+
+```bash
+pnpm run web4:start:testnet
 ```
 
 ## Deploy to web4
