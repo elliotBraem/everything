@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           ws: true,
           configure: (proxy, options) => {
-            console.log("RUNNING?")
+            console.log("RUNNING?");
             // Add error logging for /web4 proxy
             proxy.on("error", (err, req, res) => {
               console.error("proxy error", err);
@@ -73,5 +73,5 @@ export default defineConfig(({ mode }) => {
         "/ai": "http://localhost:3005"
       }
     }
-  }
+  };
 });

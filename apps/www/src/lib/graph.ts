@@ -46,7 +46,7 @@ export function useType({ typeId }: { typeId: string }) {
   return useQuery({
     queryKey: ["get-type", typeId],
     queryFn: async () => {
-      console.log("typeId", typeId)
+      console.log("typeId", typeId);
       if (typeId.startsWith("type-registry.testnet")) {
         const args = {
           keys: [typeId, `${typeId}/metadata/**`]

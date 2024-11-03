@@ -64,7 +64,7 @@ See the full [testing guide](./playwright-tests/README.md).
 
 ## Project Structure
 
-This project is a structured as a monorepo with [Turborepo](https://github.com/vercel/turborepo). 
+This project is a structured as a monorepo with [Turborepo](https://github.com/vercel/turborepo).
 
 ```cmd
 .

@@ -42,7 +42,7 @@ export const typesColumns: ColumnDef<unknown>[] = [
     id: "actions",
     cell: ({ row }) => {
       const type = row.original;
-      console.log("type", type)
+      console.log("type", type);
 
       const { openSheet } = useSheetStack();
       const { openModal } = useModalStack();

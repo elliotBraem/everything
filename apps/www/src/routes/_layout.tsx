@@ -16,8 +16,7 @@ function LayoutComponent() {
         href="https://github.com/elliotBraem/everything"
         data-ribbon="Fork me on GitHub"
         title="Fork me on GitHub"
-      >
-      </a>
+      ></a>
       <div className="min-h-screen bg-gray-100 py-0 md:py-16">
         <WindowContainer>
           <Outlet />

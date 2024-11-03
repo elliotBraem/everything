@@ -16,7 +16,7 @@ export const AIProcessor: React.FC<{ schema: any; onCreate: any }> = ({
   }, [input, reset]);
 
   return (
-    <div className="w-full mx-auto p-4">
+    <div className="mx-auto w-full p-4">
       <h1 className="mb-4 text-2xl font-bold">Natural Language</h1>
 
       <div className="space-y-4">
