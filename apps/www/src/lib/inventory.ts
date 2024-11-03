@@ -36,7 +36,7 @@ export const getTypes = (me: UserAccount) => {
     return thing.type.startsWith("type-registry.testnet/type/Type");
   });
   return types;
-}
+};
 
 export const getThing = (thingId: ID<Thing>) => {
   return useCoState(Thing, thingId);
@@ -46,8 +46,8 @@ export const getThingsByInventory = (me: UserAccount, inventory: Inventory) => {
   const things = getThings(me);
   return inventory
     ? things?.filter(
-      (item) => item?.inventory?.id === inventory.id && !item.deleted
-    )
+        (item) => item?.inventory?.id === inventory.id && !item.deleted
+      )
     : things?.filter((item) => !item?.deleted);
 };
 
@@ -80,7 +80,7 @@ export const deleteItem = (item: Thing) => {
     item.inventory?.things?.splice(found, 1);
 };
 
-export const mintItem = (item: Thing) => { };
+export const mintItem = (item: Thing) => {};
 
 export const getInventories = (me: UserAccount) => {
   return useCoState(InventoryList, me.root?._refs.inventories?.id, [
