@@ -1,7 +1,6 @@
 import { ModalStack } from "@/components/common/modal-stack";
 import { SheetStack } from "@/components/common/sheet-stack";
 import WindowContainer from "@/components/common/window-container";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout")({
