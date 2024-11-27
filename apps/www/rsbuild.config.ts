@@ -71,6 +71,10 @@ export default defineConfig({
         new ModuleFederationPlugin({
           name: 'www',
           filename: 'remoteEntry.js',
+          remotes: {
+            viteRemote: 'http://localhost:5170/dd/remoteEntry.js',
+          },
+          remoteType: 'module',
           exposes: {
             './App': './src/App.tsx'
           },

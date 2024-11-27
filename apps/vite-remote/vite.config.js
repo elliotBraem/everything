@@ -7,9 +7,9 @@ import topLevelAwait from 'vite-plugin-top-level-await';
 export default defineConfig({
   server: {
     open: true,
-    port: 5173,
+    port: 5170,
   },
-  base: 'http://localhost:5173',
+  base: 'http://localhost:5170',
   plugins: [
     react(),
     federation({
