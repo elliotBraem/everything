@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noCheck && vite build",
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "rsbuild preview",
     "nearfs:publish-library:create:car": "ipfs-car pack dist/ --output dist.car",
     "nearfs:publish-library:upload:car": "node ./node_modules/nearfs/scripts/upload-car.js dist.car",
     "fmt": "prettier --write '**/*.{js,jsx,ts,tsx,json}'",
@@ -81,24 +81,25 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@module-federation/enhanced": "^0.2.5",
     "@playwright/test": "^1.46.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@rsbuild/core": "^0.7.10",
+    "@rsbuild/plugin-node-polyfill": "^1.2.0",
+    "@rsbuild/plugin-react": "^0.7.10",
     "@tanstack/router-devtools": "^1.69.1",
     "@tanstack/router-plugin": "^1.69.1",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.7.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react-swc": "^3.7.1",
     "autoprefixer": "^10.4.20",
+    "ipfs-car": "^1.2.0",
+    "nearfs": "github:vgrichina/nearfs#main",
     "postcss": "^8.4.47",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.8",
-    "tailwindcss": "^3.4.13",
-    "vite": "^5.4.8",
-    "vite-plugin-node-polyfills": "^0.22.0",
-    "ipfs-car": "^1.2.0",
-    "nearfs": "github:vgrichina/nearfs#main"
+    "tailwindcss": "^3.4.13"
   }
 }
