@@ -1,5 +1,5 @@
 import { NETWORK_ID, SOCIAL_CONTRACT } from "@/config";
-import { queryClient } from "@/main";
+import { queryClient } from "@/App";
 import { Wallet } from "@/wallets/near-wallet";
 import { Social, transformActions } from "@builddao/near-social-js";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";

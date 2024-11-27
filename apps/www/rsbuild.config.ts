@@ -72,12 +72,24 @@ export default defineConfig({
           name: 'www',
           filename: 'remoteEntry.js',
           exposes: {
-            './App': './src/routes/__root.tsx'
+            './App': './src/App.tsx'
           },
           shared: {
-            react: { singleton: true },
-            'react-dom': { singleton: true },
-            '@tanstack/react-router': { singleton: true }
+            react: { 
+              singleton: true,
+              eager: true,
+              requiredVersion: false
+            },
+            'react-dom': { 
+              singleton: true,
+              eager: true,
+              requiredVersion: false
+            },
+            '@tanstack/react-router': { 
+              singleton: true,
+              eager: true,
+              requiredVersion: false
+            }
           }
         })
       ]);

@@ -3,7 +3,7 @@ import { getProviderByNetwork, view } from "@near-js/client";
 import { parseNearAmount } from "@near-js/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { NO_DEPOSIT, THIRTY_TGAS } from "@/wallets/near-wallet";
-import { queryClient } from "@/main";
+import { queryClient } from "@/App";
 
 export interface GuestBookMessage {
   premium: boolean;
