@@ -72,11 +72,11 @@ export default defineConfig({
           name: 'www',
           filename: 'remoteEntry.js',
           remotes: {
-            viteRemote: 'http://localhost:5170/dd/remoteEntry.js',
+            profile: 'http://localhost:5170/profile/remoteEntry.js',
           },
           remoteType: 'module',
           exposes: {
-            './App': './src/App.tsx'
+            'App': './src/App.tsx' // isn't used
           },
           shared: {
             react: { 
