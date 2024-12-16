@@ -25,9 +25,6 @@ export default defineConfig({
       }
     }),
     nodePolyfills({ globals: { global: true } }),
-    false && topLevelAwait()
+    topLevelAwait()
   ],
-  build: {
-    target: "chrome89",
-  },
 });

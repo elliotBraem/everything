@@ -3,7 +3,7 @@ declare module "profile/App" {
   import type { Profile } from "@/lib/social";
   
   interface ProfileProps {
-    profile: Profile;
+    profile?: Profile;
   }
   
   const Component: ComponentType<ProfileProps>;

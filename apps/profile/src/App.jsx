@@ -33,7 +33,7 @@ function getSocialIcon(platform) {
   return icons[platform] || "🔗";
 }
 
-export default function App({ profile }) {
+export default function({ profile }) {
   if (!profile) {
     return (
       <div className="p-8 text-center text-xl text-red-500">
