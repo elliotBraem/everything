@@ -1,8 +1,40 @@
-import { lazy, Suspense } from "react";
-const Profile = lazy(() => import("profile/App"));
 import { useWeb4Auth } from "@/hooks/use-web4-auth";
-import { getImageUrl, getProfile, Profile as ProfileType } from "@/lib/social";
+import { getProfile, Profile as ProfileType } from "@/lib/social";
 import { createFileRoute } from "@tanstack/react-router";
+import { Component, lazy, Suspense } from "react";
+
+const Profile = lazy(() => import("profile/App"));
+
+class ProfileErrorBoundary extends Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("Profile error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-4 text-center">
+          <h2 className="text-lg font-semibold mb-2">Something went wrong</h2>
+          <p>Unable to load profile. Please try again later.</p>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 export const Route = createFileRoute("/_layout/profile/$accountId")({
   loader: async ({ params }) => {
@@ -17,7 +49,6 @@ export const Route = createFileRoute("/_layout/profile/$accountId")({
 });
 
 export function ProfilePage() {
-  
   const { accountId } = useWeb4Auth();
   const data = Route.useLoaderData();
 
@@ -32,20 +63,10 @@ export function ProfilePage() {
   return <ProfileView profile={data || fallbackProfile} />;
 }
 
-const fallbackUrl =
-  "https://ipfs.near.social/ipfs/bafkreibmiy4ozblcgv3fm3gc6q62s55em33vconbavfd2ekkuliznaq3zm";
-
-const Avatar: React.FC<{ url?: string; alt: string }> = ({ url, alt }) => (
-  <img
-    src={url ?? fallbackUrl}
-    alt={alt}
-    className="h-full w-full rounded-full border-4 border-white object-cover"
-  />
-);
-
 const ProfileView: React.FC<{ profile: ProfileType }> = ({ profile }) => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <Profile profile={profile} />
-  </Suspense>
-
+  <ProfileErrorBoundary>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Profile profile={profile} />
+    </Suspense>
+  </ProfileErrorBoundary>
 );

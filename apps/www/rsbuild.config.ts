@@ -75,25 +75,13 @@ export default defineConfig({
             profile: 'http://localhost:5170/profile/remoteEntry.js',
           },
           remoteType: 'module',
-          exposes: {
-            'App': './src/App.tsx' // isn't used
+          manifest: {
+            filePath: 'manifestpath',
           },
           shared: {
-            react: { 
-              singleton: true,
-              eager: true,
-              requiredVersion: false
-            },
-            'react-dom': { 
-              singleton: true,
-              eager: true,
-              requiredVersion: false
-            },
-            '@tanstack/react-router': { 
-              singleton: true,
-              eager: true,
-              requiredVersion: false
-            }
+            'react': { eager: true },
+            'react-dom': { eager: true },
+            '@tanstack/react-router': { eager: true }
           }
         })
       ]);

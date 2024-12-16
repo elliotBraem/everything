@@ -1,37 +1,33 @@
-import { federation } from '@module-federation/vite';
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
-import topLevelAwait from 'vite-plugin-top-level-await';
+import { federation } from "@module-federation/vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+import topLevelAwait from "vite-plugin-top-level-await";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    open: true,
-    port: 5170,
+    port: 5170
   },
-  base: 'http://localhost:5170',
+  base: "http://localhost:5170",
   plugins: [
     react(),
     federation({
-      name: 'profile',
-      remotes: {
-      },
+      name: "profile",
       exposes: {
-        './App': './src/App.jsx',
+        "./App": "./src/App.jsx"
       },
-      filename: 'profile/remoteEntry.js',
+      filename: "profile/remoteEntry.js",
       shared: {
-        vue: {},
         react: {
-          requiredVersion: '18',
+          requiredVersion: "18"
         },
-        'react-dom': {},
-      },
+        "react-dom": {}
+      }
     }),
-    // If you set build.target: "chrome89", you can remove this plugin
-    false && topLevelAwait(),
+    nodePolyfills({ globals: { global: true } }),
+    false && topLevelAwait()
   ],
   build: {
-    target: 'chrome89',
+    target: "chrome89",
   },
 });
