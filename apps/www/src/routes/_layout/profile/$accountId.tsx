@@ -60,13 +60,13 @@ export function ProfilePage() {
     backgroundImage: undefined
   };
 
-  return <ProfileView profile={data || fallbackProfile} />;
+  return <ProfileView accountId={accountId || "Anonymous"} profile={data || fallbackProfile} />;
 }
 
-const ProfileView: React.FC<{ profile: ProfileType }> = ({ profile }) => (
+const ProfileView: React.FC<{ accountId: string, profile: ProfileType }> = ({ accountId, profile }) => (
   <ProfileErrorBoundary>
     <Suspense fallback={<div>Loading...</div>}>
-      <Profile profile={profile} />
+      <Profile accountId={accountId} profile={profile} />
     </Suspense>
   </ProfileErrorBoundary>
 );

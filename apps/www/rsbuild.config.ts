@@ -72,7 +72,12 @@ export default defineConfig({
           name: 'www',
           filename: 'remoteEntry.js',
           remotes: {
-            profile: 'http://localhost:5170/profile/remoteEntry.js',
+            profile: process.env.NODE_ENV === 'production' 
+              ? 'https://unpkg.com/@near-everything/profile@0.0.4/dist/profile/remoteEntry.js'
+              : 'http://localhost:5170/profile/remoteEntry.js',
+          },
+          experiments: {
+            federationRuntime: 'hoisted'
           },
           remoteType: 'module',
           manifest: {

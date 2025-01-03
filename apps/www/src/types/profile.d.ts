@@ -3,6 +3,7 @@ declare module "profile/App" {
   import type { Profile } from "@/lib/social";
   
   interface ProfileProps {
+    accountId?: string;
     profile?: Profile;
   }
   

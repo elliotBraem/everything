@@ -1,5 +1,5 @@
 {
-  "name": "inventory-management",
+  "name": "@near-everything/www",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -81,7 +81,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "@module-federation/enhanced": "^0.2.5",
+    "@module-federation/enhanced": "^0.8.7",
     "@playwright/test": "^1.46.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",

@@ -33,7 +33,7 @@ function getSocialIcon(platform) {
   return icons[platform] || "🔗";
 }
 
-export default function({ profile }) {
+export default ({ accountId, profile }) => {
   if (!profile) {
     return (
       <div className="p-8 text-center text-xl text-red-500">
@@ -59,7 +59,7 @@ export default function({ profile }) {
           <h1 className="mb-1 text-5xl font-bold text-gray-800">
             {profile?.name}
           </h1>
-          {/* <p className="text-gray-600 mb-4">@{accountId}</p> */}
+          <p className="text-gray-600 mb-4">@{accountId}</p>
           <div className="markdown-content mb-6 rounded-lg bg-gray-50 p-4 text-left text-gray-700 shadow-inner">
             <ReactMarkdown>{profile?.description || ""}</ReactMarkdown>
           </div>
