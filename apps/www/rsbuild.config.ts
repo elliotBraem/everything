@@ -1,11 +1,14 @@
 import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack';
 import { defineConfig } from '@rsbuild/core';
-import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
+import { pluginReact } from '@rsbuild/plugin-react';
 import fs from 'fs';
 import path from 'path';
 
 export default defineConfig({
+  html: {
+    title: 'everything',
+  },
   source: {
     entry: {
       index: './src/main.tsx'
@@ -72,8 +75,8 @@ export default defineConfig({
           name: 'www',
           filename: 'remoteEntry.js',
           remotes: {
-            profile: process.env.NODE_ENV === 'production' 
-              ? 'https://unpkg.com/@near-everything/profile@0.0.4/dist/profile/remoteEntry.js'
+            profile: process.env.NODE_ENV === 'production'
+              ? 'https://unpkg.com/@near-everything/profile@0.0.5/dist/profile/remoteEntry.js'
               : 'http://localhost:5170/profile/remoteEntry.js',
           },
           experiments: {
@@ -84,9 +87,9 @@ export default defineConfig({
             filePath: 'manifestpath',
           },
           shared: {
-            'react': { singleton: true, },
-            'react-dom': { singleton: true },
-            '@tanstack/react-router': { singleton: true }
+            'react': { singleton: true, eager: true },
+            'react-dom': { singleton: true, eager: true },
+            '@tanstack/react-router': { singleton: true, eager: true }
           }
         })
       ]);

@@ -37,7 +37,6 @@ export default defineConfig(({ command, mode }) => {
     server: {
       port: 5170
     },
-    base: "http://localhost:5170",
     plugins: basePlugins,
     build: {
       target: "chrome89"
