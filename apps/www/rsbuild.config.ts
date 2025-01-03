@@ -84,9 +84,9 @@ export default defineConfig({
             filePath: 'manifestpath',
           },
           shared: {
-            'react': { eager: true },
-            'react-dom': { eager: true },
-            '@tanstack/react-router': { eager: true }
+            'react': { singleton: true, },
+            'react-dom': { singleton: true },
+            '@tanstack/react-router': { singleton: true }
           }
         })
       ]);
