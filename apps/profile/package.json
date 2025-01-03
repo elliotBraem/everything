@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@builddao/near-social-js": "^1.1.0",
-    "@module-federation/vite": "^2.0.0",
+    "@module-federation/vite": "^1.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.2.0",
     "react-markdown": "^9.0.1"
