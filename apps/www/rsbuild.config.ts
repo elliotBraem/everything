@@ -1,4 +1,4 @@
-import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { defineConfig } from '@rsbuild/core';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -34,7 +34,7 @@ export default defineConfig({
           proxyReq.setHeader('Host', 'every.near.page');
           console.log('Outgoing cookies:', req.headers.cookie);
         },
-        onProxyRes: (proxyRes: any, req: any, res: any) => {
+        onProxyRes: (proxyRes: any, _: any, __: any) => {
           console.log('Incoming cookies:', proxyRes.headers['set-cookie']);
 
           if (proxyRes.headers['set-cookie']) {
@@ -67,41 +67,22 @@ export default defineConfig({
       }
     }
   },
-  tools: {
-    rspack: (config, { appendPlugins }) => {
-      config.output!.uniqueName = 'www';
-      
-      appendPlugins([
-        new ModuleFederationPlugin({
-          name: 'www',
-          filename: 'remoteEntry.js',
-          remotes: {
-            profile: process.env.NODE_ENV === 'production'
-              ? 'https://unpkg.com/@near-everything/profile@0.0.9/dist/profile/remoteEntry.js'
-              : 'http://localhost:5170/profile/remoteEntry.js',
-          },
-          experiments: {
-            federationRuntime: 'hoisted'
-          },
-          remoteType: 'module',
-          manifest: {
-            filePath: 'manifestpath',
-          },
-          shared: {
-            'react': { singleton: true, eager: true },
-            'react-dom': { singleton: true, eager: true },
-            '@tanstack/react-router': { singleton: true, eager: true }
-          }
-        })
-      ]);
-    }
-  },
   plugins: [
-    pluginReact({
-      // Disable chunk splitting for React to ensure proper module federation
-      splitChunks: {
-        react: false,
-        router: false
+    pluginReact(),
+    pluginModuleFederation({
+      name: 'www',
+      remotes: {
+        profile: process.env.NODE_ENV === 'production'
+          ? 'profile@https://unpkg.com/@near-everything/profile@0.0.17/dist/profile/remoteEntry.js'
+          : 'profile@http://localhost:5170/profile/remoteEntry.js'
+      },
+      experiments: {
+        federationRuntime: 'hoisted'
+      },
+      shared: {
+        'react': { singleton: true, eager: true, requiredVersion: '^18.0.0' },
+        'react-dom': { singleton: true, eager: true, requiredVersion: '^18.0.0' },
+        '@tanstack/react-router': { singleton: true, eager: true }
       }
     }),
     pluginNodePolyfill()

@@ -1,4 +1,4 @@
-export const NETWORK_ID = "testnet";
+export const NETWORK_ID = "mainnet";
 
 export const SOCIAL_CONTRACT = {
   mainnet: "social.near",

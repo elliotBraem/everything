@@ -82,6 +82,7 @@
   },
   "devDependencies": {
     "@module-federation/enhanced": "^0.8.7",
+    "@module-federation/rsbuild-plugin": "^0.8.7",
     "@playwright/test": "^1.46.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
