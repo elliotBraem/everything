@@ -152,7 +152,7 @@ Be sure to "Store the access key in legacy keychain"!
 3. Run web4-deploy to upload production bundle to nearfs and deploy it to a minimum-web4 contract to your account.
 
 ```cmd
-npx github:vgrichina/web4-deploy dist web4.MASTER_ACCOUNT.testnet --deploy-contract --nearfs
+bunx github:vgrichina/web4-deploy dist web4.every.near --deploy-contract --nearfs
 ```
 
 Deploy shoudl be accessible and your website accessible at

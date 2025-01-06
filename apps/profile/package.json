@@ -1,6 +1,6 @@
 {
   "name": "@near-everything/profile",
-  "version": "0.0.9",
+  "version": "0.0.17",
   "type": "module",
   "private": false,
   "publishConfig": {
@@ -10,24 +10,21 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite --force",
-    "build": "NODE_ENV=production vite build",
-    "preview": "vite build && http-server --cors -p 5173 dist"
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview"
   },
   "dependencies": {
-    "@module-federation/vite": "^1.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.2.0",
+    "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1"
   },
   "devDependencies": {
-    "@swc/core": "~1.6.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.20",
-    "http-server": "^14.1.1",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
-    "vite": "^5.3.1",
-    "vite-plugin-node-polyfills": "^0.22.0"
+    "@module-federation/enhanced": "^0.8.7",
+    "@module-federation/rsbuild-plugin": "^0.8.7",
+    "@rsbuild/core": "^1.1.13",
+    "@rsbuild/plugin-react": "^1.1.0"
   }
 }
