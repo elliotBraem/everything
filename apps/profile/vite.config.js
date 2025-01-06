@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig(({ command, mode }) => {
-  // Base plugins that are always needed
+  const isProduction = mode === 'production';
   const basePlugins = [
     react(),
     federation({
@@ -17,14 +17,17 @@ export default defineConfig(({ command, mode }) => {
       filename: "profile/remoteEntry.js",
       shared: {
         react: {
-          requiredVersion: "18"
+          requiredVersion: "18",
+          singleton: true
         },
-        "react-dom": {}
+        "react-dom": {
+          singleton: true
+        }
       }
     })
   ];
 
-  if (!process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV !== 'development') {
     basePlugins.push(
       nodePolyfills({
         globals: { global: true },
@@ -34,12 +37,14 @@ export default defineConfig(({ command, mode }) => {
   }
 
   return {
+    base: isProduction ? 'https://unpkg.com/@near-everything/profile@0.0.6/dist/' : '/',
     server: {
       port: 5170
     },
     plugins: basePlugins,
     build: {
-      target: "chrome89"
+      target: "chrome89",
+      cssCodeSplit: false,
     }
   };
 });

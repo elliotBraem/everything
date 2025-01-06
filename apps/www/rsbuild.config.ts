@@ -70,13 +70,14 @@ export default defineConfig({
   tools: {
     rspack: (config, { appendPlugins }) => {
       config.output!.uniqueName = 'www';
+      
       appendPlugins([
         new ModuleFederationPlugin({
           name: 'www',
           filename: 'remoteEntry.js',
           remotes: {
             profile: process.env.NODE_ENV === 'production'
-              ? 'https://unpkg.com/@near-everything/profile@0.0.5/dist/profile/remoteEntry.js'
+              ? 'https://unpkg.com/@near-everything/profile@0.0.9/dist/profile/remoteEntry.js'
               : 'http://localhost:5170/profile/remoteEntry.js',
           },
           experiments: {

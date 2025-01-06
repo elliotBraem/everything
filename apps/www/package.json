@@ -94,7 +94,6 @@
     "@types/node": "^22.7.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.20",
     "ipfs-car": "^1.2.0",
     "nearfs": "github:vgrichina/nearfs#main",
     "postcss": "^8.4.47",

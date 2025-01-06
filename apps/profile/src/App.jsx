@@ -1,6 +1,6 @@
 import React from "react";
-import "./index.css";
 import ReactMarkdown from "react-markdown";
+import "./index.css";
 
 const fallbackUrl =
   "https://ipfs.near.social/ipfs/bafkreibmiy4ozblcgv3fm3gc6q62s55em33vconbavfd2ekkuliznaq3zm";
